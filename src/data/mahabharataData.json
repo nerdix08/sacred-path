@@ -1,0 +1,335 @@
+{
+  "title": "Mahabharata",
+  "titleSanskrit": "महाभारतम्",
+  "author": "Vyasa",
+  "description": "The greatest epic of dharma, duty, and the eternal struggle between good and evil.",
+  "totalParvas": 18,
+  "source": "Project Gutenberg, Wikisource (Ganguli translation), Sacred-Texts",
+  "characters": [
+    {
+      "id": "krishna",
+      "name": "Lord Krishna",
+      "nameSanskrit": "श्री कृष्ण",
+      "role": "Divine Guide, King of Dwaraka",
+      "description": "The eighth avatar of Lord Vishnu, Krishna is the central figure who guides the Pandavas through their struggles. As Arjuna's charioteer, he delivers the Bhagavad Gita on the battlefield. His divine wisdom, playful nature, and ultimate revelation of cosmic truth make him the heart of the Mahabharata.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Bhagavad_Gita%2C_Krishna%2C_Arjuna.jpg/440px-Bhagavad_Gita%2C_Krishna%2C_Arjuna.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "arjuna",
+      "name": "Arjuna",
+      "nameSanskrit": "अर्जुन",
+      "role": "Third Pandava, Greatest Archer",
+      "description": "The son of Indra and Kunti, Arjuna is the greatest warrior of his age. His skill with the bow Gandiva is unmatched. His moment of doubt before the great battle leads to Krishna's discourse—the Bhagavad Gita. He represents the ideal devotee who surrenders to divine guidance.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Prince_Arjuna.jpg/440px-Prince_Arjuna.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "yudhishthira",
+      "name": "Yudhishthira",
+      "nameSanskrit": "युधिष्ठिर",
+      "role": "Eldest Pandava, King of Dharma",
+      "description": "Born of Dharma (the god of righteousness) and Kunti, Yudhishthira is known for his unwavering truthfulness. His one weakness—gambling—leads to the Pandavas' exile. Despite immense provocation, he remains committed to righteousness, earning him the epithet 'Dharmaraja.'",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Yudhishthira.jpg/440px-Yudhishthira.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "bhima",
+      "name": "Bhima",
+      "nameSanskrit": "भीम",
+      "role": "Second Pandava, Mighty Warrior",
+      "description": "Son of Vayu (the wind god) and Kunti, Bhima possesses the strength of ten thousand elephants. His mace is the most feared weapon on the battlefield. He fulfills his vow to kill all hundred Kauravas and avenge Draupadi's humiliation.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Bhima_LACMA_M.2012.75.2.jpg/440px-Bhima_LACMA_M.2012.75.2.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "draupadi",
+      "name": "Draupadi",
+      "nameSanskrit": "द्रौपदी",
+      "role": "Queen of Pandavas",
+      "description": "Born from sacred fire, Draupadi is the common wife of the five Pandavas. Her humiliation in the Kaurava court—when Dushasana tried to disrobe her—becomes the pivotal event leading to war. Her devotion to Krishna and her fierce spirit make her one of the epic's most powerful figures.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Draupadi_and_Pandavas.jpg/440px-Draupadi_and_Pandavas.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "karna",
+      "name": "Karna",
+      "nameSanskrit": "कर्ण",
+      "role": "Tragic Hero, Friend of Duryodhana",
+      "description": "The secret firstborn of Kunti by the Sun god, abandoned at birth and raised by a charioteer. Despite his divine origin, he faces discrimination. His loyalty to Duryodhana, who accepted him when others rejected him, leads him to fight against his own brothers. He represents the tragedy of misplaced loyalty.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Karna.jpg/440px-Karna.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "duryodhana",
+      "name": "Duryodhana",
+      "nameSanskrit": "दुर्योधन",
+      "role": "Eldest Kaurava, Primary Antagonist",
+      "description": "The eldest of the hundred Kaurava brothers, Duryodhana's jealousy of his cousins the Pandavas drives the epic's conflict. Despite being a capable ruler and warrior, his pride, envy, and refusal to share even 'five villages' leads to the destruction of his entire clan.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Duryodhana.jpg/440px-Duryodhana.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "bhishma",
+      "name": "Bhishma",
+      "nameSanskrit": "भीष्म",
+      "role": "Grand Patriarch, Invincible Warrior",
+      "description": "Born Devavrata, he took a terrible vow of lifelong celibacy to enable his father's marriage, earning the name Bhishma ('he of the terrible vow'). Blessed with choosing the time of his death, he lies on a bed of arrows after the battle, teaching wisdom to Yudhishthira.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Bhisma.jpg/440px-Bhisma.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "drona",
+      "name": "Dronacharya",
+      "nameSanskrit": "द्रोणाचार्य",
+      "role": "Royal Guru, Master Warrior",
+      "description": "The supreme teacher of martial arts who trained both Pandavas and Kauravas. His love for Arjuna was legendary. Though bound by duty to fight for Hastinapura, his heart was with the Pandavas. His death by deception remains one of the epic's tragic moments.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Dronacharya.jpg/440px-Dronacharya.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    }
+  ],
+  "parvas": [
+    {
+      "id": "adi-parva",
+      "number": 1,
+      "name": "Adi Parva",
+      "nameSanskrit": "आदिपर्व",
+      "meaning": "Book of the Beginning",
+      "chapters": 227,
+      "summary": "The Adi Parva introduces the lineage of the Kuru dynasty, the birth of the Pandavas and Kauravas, and their childhood. It includes the story of Shakuntala, the churning of the ocean, and establishes the foundations of the great conflict to come.",
+      "fullContent": [
+        "Long ago, in the city of Hastinapura, the Kuru dynasty flourished under righteous kings. King Shantanu, the great-grandfather of both Pandavas and Kauravas, fell in love with the river goddess Ganga, who bore him a son destined for greatness—Devavrata, later known as Bhishma.",
+        "Shantanu later wished to marry Satyavati, a fisherman's daughter. Her father demanded that her sons inherit the throne. Devavrata, to fulfill his father's desire, took a terrible vow: he would never marry and would serve whoever sat on the throne. The gods showered flowers at this sacrifice, and he became Bhishma.",
+        "Satyavati's sons died young. Through Niyoga, the sage Vyasa fathered three children: Dhritarashtra, born blind; Pandu, born pale; and Vidura, born of wisdom. Dhritarashtra married Gandhari (who blindfolded herself in solidarity with her husband), while Pandu married Kunti and Madri.",
+        "Due to a curse, Pandu could not have children naturally. Kunti had received a boon from sage Durvasa allowing her to invoke any god. She bore Yudhishthira (from Dharma), Bhima (from Vayu), and Arjuna (from Indra). She shared the mantra with Madri, who bore the twins Nakula and Sahadeva (from the Ashwini twins).",
+        "Meanwhile, Gandhari gave birth to a ball of flesh that Vyasa divided into 101 pieces, which became the hundred Kauravas and their sister Dushala. The eldest was Duryodhana, born with ill omens.",
+        "The children grew up together in Hastinapura. Bhima's strength made him the natural enemy of Duryodhana, who attempted to kill him multiple times. Drona, the great weapons master, became their guru, teaching them the arts of war.",
+        "Arjuna emerged as Drona's favorite student, his dedication and skill surpassing all others. In a tournament to display their prowess, Karna appeared and challenged Arjuna. When asked his lineage, Duryodhana crowned him king of Anga, earning Karna's eternal friendship and loyalty."
+      ],
+      "keyEvents": [
+        "Bhishma's terrible vow",
+        "Birth of Dhritarashtra, Pandu, and Vidura",
+        "Birth of Pandavas through divine fathers",
+        "Birth of 100 Kauravas",
+        "Education under Drona",
+        "Arjuna's emergence as greatest archer",
+        "Karna's arrival and friendship with Duryodhana"
+      ],
+      "moralTakeaways": [
+        "Great sacrifices have profound consequences",
+        "Jealousy sown in childhood bears bitter fruit",
+        "One's birth does not determine one's worth",
+        "Every choice shapes destiny"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 1, "verse": 1, "connection": "The field of Dharma where these characters will clash" },
+        { "chapter": 2, "verse": 31, "connection": "The dharma of a warrior that all these princes were trained in" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Kurukshetra.jpg/600px-Kurukshetra.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "sabha-parva",
+      "number": 2,
+      "name": "Sabha Parva",
+      "nameSanskrit": "सभापर्व",
+      "meaning": "Book of the Assembly Hall",
+      "chapters": 72,
+      "summary": "The Sabha Parva describes the building of the magnificent assembly hall at Indraprastha and the Rajasuya sacrifice that establishes Yudhishthira as emperor. It culminates in the fateful game of dice where Yudhishthira loses everything, including Draupadi, leading to her humiliation and the Pandavas' exile.",
+      "fullContent": [
+        "After the Pandavas escaped the house of lac (a trap set by Duryodhana), they won Draupadi in her swayamvara and married her. Later, they built the magnificent city of Indraprastha on land given by Dhritarashtra.",
+        "Maya, the divine architect, built them an assembly hall of unparalleled beauty and magical properties. Pools appeared as solid ground, solid ground appeared as pools. When Duryodhana visited, he fell into a pool, and Draupadi laughed, saying 'the blind son of a blind father.' This insult burned in Duryodhana's heart.",
+        "Yudhishthira performed the Rajasuya sacrifice, establishing himself as emperor. Kings from all directions paid tribute. At the ceremony, Krishna was honored as the guest of highest merit, angering Shishupala, who was slain by Krishna after exceeding the limit of his pardoned offenses.",
+        "Burning with jealousy at the Pandavas' glory, Duryodhana plotted with his uncle Shakuni, a master of dice. They invited Yudhishthira to a game of dice, knowing his weakness for gambling.",
+        "The game began in the great assembly. Shakuni's enchanted dice always fell as he wished. Yudhishthira lost his wealth, his kingdom, his brothers, himself, and finally—in a moment of madness—he wagered Draupadi.",
+        "When Yudhishthira lost, Duryodhana sent Dushasana to drag Draupadi into the assembly. She was in her monthly period, wearing a single garment. Dushasana seized her by the hair and brought her before the court.",
+        "In the most horrific scene of the epic, Dushasana attempted to disrobe Draupadi in the open court while Duryodhana exposed his thigh, inviting her to sit there. Draupadi prayed to Krishna, who miraculously provided endless cloth, protecting her honor.",
+        "Bhima swore two terrible oaths: to drink Dushasana's blood and to break Duryodhana's thighs. Draupadi left her hair unbound, vowing not to tie it until it was washed in Dushasana's blood.",
+        "Seeing ill omens, Dhritarashtra granted Draupadi boons. She asked for the freedom of her husbands. The Pandavas were given back their kingdom, but Duryodhana insisted on another game. If they lost, they would go into exile for thirteen years, the final year incognito. Yudhishthira lost again."
+      ],
+      "keyEvents": [
+        "Building of Indraprastha",
+        "Duryodhana's humiliation at Maya Sabha",
+        "Rajasuya sacrifice",
+        "The game of dice",
+        "Draupadi wagered and lost",
+        "Attempted disrobing of Draupadi",
+        "Bhima's oaths",
+        "Exile of Pandavas for 13 years"
+      ],
+      "moralTakeaways": [
+        "Gambling destroys even the greatest",
+        "Insults have far-reaching consequences",
+        "Divine protection comes to those who surrender",
+        "Adharma in victory leads to ultimate defeat"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 62, "connection": "Attachment leads to desire, desire to anger - Duryodhana's jealousy" },
+        { "chapter": 16, "verse": 4, "connection": "Pride, arrogance, and conceit - marks of the demonic nature" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Draupadi_humiliated.jpg/600px-Draupadi_humiliated.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "vana-parva",
+      "number": 3,
+      "name": "Vana Parva",
+      "nameSanskrit": "वनपर्व",
+      "meaning": "Book of the Forest",
+      "chapters": 313,
+      "summary": "The Vana Parva chronicles the Pandavas' twelve years of forest exile. It contains many sub-stories including the tale of Nala and Damayanti, the story of Savitri, and Arjuna's journey to obtain divine weapons. The Pandavas face many trials while preparing for their eventual return.",
+      "fullContent": [
+        "The Pandavas, accompanied by Draupadi and loyal followers, entered the forest of Kamyaka. Their life of luxury was replaced by simple hermit existence. Brahmins and sages accompanied them, and Yudhishthira worried about feeding them all until the Sun god gave Draupadi the Akshaya Patra, an inexhaustible vessel.",
+        "During their exile, many ancient stories were narrated to teach wisdom. The sage Brihadaswa told the story of King Nala, who lost his kingdom to gambling but eventually regained it through perseverance and wisdom. Markandeya narrated the tale of Savitri, whose devotion defeated Death himself.",
+        "Arjuna undertook a journey to obtain divine weapons. He performed severe penance to please Lord Shiva, who tested him in the guise of a hunter. After a fierce battle, Shiva, pleased with Arjuna's valor, granted him the Pashupatastra. He then visited Indra's heaven and learned celestial weapons.",
+        "In Indra's court, the apsara Urvashi cursed Arjuna to become a eunuch when he rejected her advances. Indra modified the curse to last only one year, which would prove useful during their year of hiding.",
+        "The Kauravas attempted to humiliate the Pandavas in exile. Duryodhana organized a cattle inspection near their camp, but was captured by Gandharvas. The Pandavas, honoring warrior dharma, rescued their cousin.",
+        "As the twelve years ended, the Pandavas prepared for their thirteenth year of incognito living. Detection would mean another twelve years of exile. They chose the kingdom of Matsya, ruled by King Virata, adopting disguises.",
+        "Yudhishthira became Kanka, a dice-playing brahmin. Bhima became Ballava the cook. Arjuna, using Urvashi's curse, became Brihannala the dance teacher. Nakula and Sahadeva became horse and cattle keepers. Draupadi became Sairandhri, a maid to Queen Sudeshna."
+      ],
+      "keyEvents": [
+        "Receiving the Akshaya Patra",
+        "Stories of Nala-Damayanti and Savitri",
+        "Arjuna obtains divine weapons",
+        "Urvashi's curse",
+        "Rescue of Duryodhana from Gandharvas",
+        "Planning for the incognito year",
+        "Disguises adopted for Virata's kingdom"
+      ],
+      "moralTakeaways": [
+        "Exile can be a time of growth and preparation",
+        "Ancient stories carry wisdom for present struggles",
+        "Even enemies must be protected under dharma",
+        "Patience and faith see one through hardship"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 14, "connection": "Enduring pleasure and pain with equanimity" },
+        { "chapter": 6, "verse": 17, "connection": "Regulation in habits - disciplined life in exile" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Pandavas_in_the_forest.jpg/600px-Pandavas_in_the_forest.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "bhishma-parva",
+      "number": 6,
+      "name": "Bhishma Parva",
+      "nameSanskrit": "भीष्मपर्व",
+      "meaning": "Book of Bhishma",
+      "chapters": 117,
+      "summary": "The Bhishma Parva contains the Bhagavad Gita and describes the first ten days of the war when Bhishma commanded the Kaurava forces. It includes Arjuna's moral crisis, Krishna's divine teachings, and the fierce battles. It ends with Bhishma's fall.",
+      "fullContent": [
+        "After thirteen years of exile and the failure of peace negotiations, war became inevitable. Eleven akshauhinis (army divisions) assembled under Duryodhana; seven under the Pandavas. The armies faced each other on the field of Kurukshetra.",
+        "Bhishma, the invincible patriarch, was appointed commander of the Kaurava forces. Though fighting for Duryodhana by his vow, his heart was with the Pandavas.",
+        "As the conches blew and the war was about to begin, Arjuna asked Krishna to drive their chariot between the two armies. Seeing his teachers, grandfathers, uncles, and cousins arrayed for battle, Arjuna was overcome with grief and moral confusion.",
+        "'I will not fight,' he declared, his bow slipping from his hands. 'What use is victory if it means killing those I love? Better that I become a beggar than rule a kingdom won through their blood.'",
+        "Thus began the Bhagavad Gita—Krishna's divine discourse that addressed Arjuna's confusion and revealed the highest truths of existence. Krishna taught about the eternal nature of the soul, the importance of performing one's duty without attachment, and the various paths to liberation.",
+        "The climax came when Krishna revealed His cosmic form—the Vishvarupa—showing that He is Time, the destroyer of all, and that the warriors assembled were already slain by destiny. Arjuna was merely an instrument.",
+        "Strengthened by divine knowledge, Arjuna took up his bow. The war began. For ten days, Bhishma commanded the Kauravas, devastating the Pandava army. Each evening, the Pandavas begged Bhishma to reveal how he could be defeated.",
+        "Finally, Bhishma revealed: 'I will not fight one who was born a woman or bears a woman's name.' Shikhandi, born as a woman but living as a man, had sworn to kill Bhishma from a previous life's enmity.",
+        "On the tenth day, Arjuna positioned Shikhandi before him. Bhishma lowered his weapons. Arjuna's arrows pierced Bhishma until he fell, his body held aloft by the arrows themselves, forming a bed. Bhishma chose to wait for the auspicious moment of Uttarayana to leave his body."
+      ],
+      "keyEvents": [
+        "Armies assemble at Kurukshetra",
+        "Arjuna's moral crisis",
+        "Krishna's teachings (Bhagavad Gita)",
+        "Revelation of Vishvarupa",
+        "Ten days of battle under Bhishma",
+        "Shikhandi shields Arjuna",
+        "Fall of Bhishma"
+      ],
+      "moralTakeaways": [
+        "Confusion can be the doorway to wisdom",
+        "Duty must be performed regardless of personal attachment",
+        "The soul is eternal; the body temporary",
+        "Surrender to the divine will brings peace",
+        "Even the greatest warriors must face their destiny"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 11, "connection": "Krishna's first teaching: the wise grieve neither for the living nor the dead" },
+        { "chapter": 11, "verse": 32, "connection": "I am Time, destroyer of all" },
+        { "chapter": 18, "verse": 66, "connection": "Surrender unto Me alone" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Bhagavad_Gita%2C_Krishna%2C_Arjuna.jpg/600px-Bhagavad_Gita%2C_Krishna%2C_Arjuna.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "drona-parva",
+      "number": 7,
+      "name": "Drona Parva",
+      "nameSanskrit": "द्रोणपर्व",
+      "meaning": "Book of Drona",
+      "chapters": 170,
+      "summary": "After Bhishma's fall, Drona becomes the Kaurava commander. The war intensifies with the death of Abhimanyu in the Chakravyuha formation. Arjuna kills Jayadratha in revenge. The parva ends with Drona's death through a deception about his son's death.",
+      "fullContent": [
+        "With Bhishma lying on his arrow bed, Drona took command of the Kaurava army. Duryodhana demanded that Yudhishthira be captured alive. Drona formed complex battle formations to achieve this goal.",
+        "The most devastating formation was the Chakravyuha (wheel formation), which only Arjuna and Krishna knew how to break. When Arjuna was lured away, Drona deployed this formation. Young Abhimanyu, Arjuna's sixteen-year-old son, knew how to enter but not exit.",
+        "Abhimanyu entered alone, breaking through layer after layer. The Kaurava warriors, violating codes of combat, attacked him simultaneously. When his weapons broke, he fought with a chariot wheel. Finally, he was struck down by six warriors attacking together.",
+        "Arjuna's grief and rage were terrible. He vowed to kill Jayadratha (who had blocked the other Pandavas from supporting Abhimanyu) by sunset of the next day, or enter fire.",
+        "The battle that day was desperate. At sunset, Jayadratha seemed to have escaped. But Krishna covered the sun with his Sudarshana Chakra, creating an artificial eclipse. When Jayadratha emerged in relief, Arjuna beheaded him.",
+        "Drona continued his assault, destroying Pandava forces. To stop him, a plan was devised: since Drona was invincible while he held weapons, and would drop weapons only upon hearing of his beloved son Ashwatthama's death, an elephant named Ashwatthama was killed.",
+        "Yudhishthira, known never to lie, was asked to confirm the death. He said 'Ashwatthama is dead' loudly, and 'the elephant' softly, so Drona heard only the first part. Believing his son dead, Drona laid down his weapons and was beheaded by Dhristadyumna."
+      ],
+      "keyEvents": [
+        "Drona takes command",
+        "Chakravyuha and Abhimanyu's death",
+        "Arjuna's vow to kill Jayadratha",
+        "Krishna's strategic eclipse",
+        "Killing of Jayadratha",
+        "The lie about Ashwatthama",
+        "Death of Drona"
+      ],
+      "moralTakeaways": [
+        "Youth and bravery cannot overcome unfair odds",
+        "Even half-truths carry moral weight",
+        "Grief can drive terrible actions",
+        "Strategy sometimes triumphs over strength"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 27, "connection": "Death is certain for the born - Abhimanyu's destined end" },
+        { "chapter": 2, "verse": 37, "connection": "Either slain you will attain heaven, or victorious enjoy the earth" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Abhimanyu.jpg/600px-Abhimanyu.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "shalya-parva",
+      "number": 9,
+      "name": "Shalya Parva",
+      "nameSanskrit": "शल्यपर्व",
+      "meaning": "Book of Shalya",
+      "chapters": 64,
+      "summary": "Shalya, king of Madra and uncle of Nakula and Sahadeva, becomes the final Kaurava commander. After his death, the war essentially ends. The parva culminates in the famous mace duel between Bhima and Duryodhana, where Bhima fulfills his oath.",
+      "fullContent": [
+        "After Karna's death, the Kaurava army was demoralized. Shalya, the king of Madra and maternal uncle of Nakula and Sahadeva, was appointed commander. Despite his reluctance, bound by prior commitment to Duryodhana, he led the remaining forces.",
+        "The Pandava army, sensing victory, fought with renewed vigor. Shalya, though a great warrior, was slain by Yudhishthira himself in single combat. With Shalya's death, organized Kaurava resistance collapsed.",
+        "The remnants of the Kaurava army scattered. Duryodhana, finding himself alone with all his brothers dead, fled and hid in a lake, using his power to remain underwater. The Pandavas tracked him down.",
+        "Challenged to emerge and fight, Duryodhana proposed a duel with any one Pandava using the weapon of his choice. He chose the mace, believing himself unbeatable. Yudhishthira accepted, and Bhima stepped forward to fulfill his ancient oath.",
+        "The duel was titanic. Both were students of Balarama, both supremely skilled. They fought from morning till evening, neither gaining advantage. Finally, Krishna signaled to Bhima by striking his own thigh.",
+        "Understanding, Bhima struck Duryodhana's thighs, shattering them. This was against the rules of mace combat, which forbade strikes below the waist. Balarama was furious, but Krishna justified it as retribution for Duryodhana's gesture toward Draupadi.",
+        "Lying with broken thighs, Duryodhana cursed Krishna for the unfair victory. Krishna replied that those who did adharma could not claim the protection of dharma. The Pandavas left Duryodhana to die.",
+        "That night, the three surviving Kaurava warriors—Ashwatthama, Kritavarma, and Kripa—found Duryodhana. Ashwatthama, driven mad by grief for his father Drona, vowed revenge and was appointed commander of an army that no longer existed."
+      ],
+      "keyEvents": [
+        "Shalya becomes commander",
+        "Yudhishthira kills Shalya",
+        "Duryodhana hides in the lake",
+        "The final mace duel",
+        "Bhima breaks Duryodhana's thighs",
+        "Krishna justifies the action",
+        "Ashwatthama's vow of revenge"
+      ],
+      "moralTakeaways": [
+        "Justice may require unconventional means against unjust enemies",
+        "Oaths made in righteous anger must be fulfilled",
+        "Adharma forfeits the protection of dharma",
+        "Victory comes at terrible cost"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 4, "verse": 8, "connection": "Protection of the righteous and destruction of evildoers" },
+        { "chapter": 18, "verse": 17, "connection": "One who is free from ego is not bound by action" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Bhima_and_Duryodhana.jpg/600px-Bhima_and_Duryodhana.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    }
+  ]
+}

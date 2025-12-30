@@ -1,4 +1,4 @@
-import { Home, BookOpen, Search, Bookmark, User } from "lucide-react";
+import { Home, BookOpen, Search, Scroll, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -11,8 +11,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/" },
   { icon: BookOpen, label: "Gita", path: "/gita" },
+  { icon: Scroll, label: "Stories", path: "/stories" },
   { icon: Search, label: "Search", path: "/search" },
-  { icon: Bookmark, label: "Saved", path: "/saved" },
   { icon: User, label: "Profile", path: "/profile" },
 ];
 
