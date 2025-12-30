@@ -1,0 +1,384 @@
+{
+  "title": "Ramayana",
+  "titleSanskrit": "रामायणम्",
+  "author": "Valmiki",
+  "description": "The epic journey of Lord Rama, an embodiment of dharma, righteousness, and virtue.",
+  "totalKandas": 7,
+  "source": "Sacred-Texts Hindu Section, Valmiki Ramayana public domain translations",
+  "characters": [
+    {
+      "id": "rama",
+      "name": "Lord Rama",
+      "nameSanskrit": "श्री राम",
+      "role": "Protagonist, Prince of Ayodhya",
+      "description": "The seventh avatar of Lord Vishnu, Rama is the embodiment of dharma (righteousness). Born as the eldest son of King Dasharatha, he is renowned for his unwavering commitment to truth, duty, and moral conduct. His life exemplifies the ideal qualities of a son, husband, brother, and king.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Rama_and_Hanuman.jpg/440px-Rama_and_Hanuman.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "sita",
+      "name": "Goddess Sita",
+      "nameSanskrit": "सीता देवी",
+      "role": "Consort of Rama, Daughter of Earth",
+      "description": "Daughter of King Janaka and an incarnation of Goddess Lakshmi, Sita represents the ideal of womanly virtue, purity, and devotion. Found in a furrow while her father was ploughing, she is named Sita meaning 'furrow'. Her unwavering devotion to Rama and her patient endurance during captivity make her the embodiment of feminine strength.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sita_-_Ravivarma.jpg/440px-Sita_-_Ravivarma.jpg",
+      "imageAttribution": "Raja Ravi Varma, Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "hanuman",
+      "name": "Lord Hanuman",
+      "nameSanskrit": "हनुमान",
+      "role": "Divine Devotee, Son of Vayu",
+      "description": "The mighty Vanara (monkey) god, son of the wind god Vayu. Hanuman is the epitome of selfless devotion (bhakti), strength, and humility. His extraordinary powers, gained through divine blessings, are used solely in service to Lord Rama. He is celebrated as the ideal devotee and servant.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Hanuman_in_Terra_Cotta.jpg/440px-Hanuman_in_Terra_Cotta.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "lakshmana",
+      "name": "Lakshmana",
+      "nameSanskrit": "लक्ष्मण",
+      "role": "Brother of Rama, Avatar of Shesha",
+      "description": "The loyal younger brother of Rama and an incarnation of the divine serpent Shesha upon whom Lord Vishnu rests. Lakshmana's dedication to Rama is legendary—he accompanied Rama into exile, remaining awake for 14 years to guard his brother and sister-in-law. He represents the ideal of brotherly love and loyalty.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Lakshmana.jpg/440px-Lakshmana.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "ravana",
+      "name": "Ravana",
+      "nameSanskrit": "रावण",
+      "role": "King of Lanka, Primary Antagonist",
+      "description": "The ten-headed demon king of Lanka, Ravana is one of the most powerful beings ever. A great scholar, musician, and devotee of Lord Shiva, his immense knowledge and power were corrupted by ego and desire. His abduction of Sita leads to his eventual destruction, teaching that even the mightiest fall when driven by adharma.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Ravana_%28ca._1920%29.jpg/440px-Ravana_%28ca._1920%29.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "dasharatha",
+      "name": "King Dasharatha",
+      "nameSanskrit": "दशरथ",
+      "role": "King of Ayodhya, Father of Rama",
+      "description": "The noble king of Ayodhya and father of Rama, Bharata, Lakshmana, and Shatrughna. A righteous ruler loved by his subjects, Dasharatha's life takes a tragic turn when bound by a promise to his wife Kaikeyi, he must exile his beloved son Rama. He dies of heartbreak, unable to bear the separation.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Dashratha_-_Raja_Ravi_Varma.jpg/440px-Dashratha_-_Raja_Ravi_Varma.jpg",
+      "imageAttribution": "Raja Ravi Varma, Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "bharata",
+      "name": "Bharata",
+      "nameSanskrit": "भरत",
+      "role": "Brother of Rama, Prince of Ayodhya",
+      "description": "The second son of Dasharatha and Kaikeyi. Despite his mother's machinations that led to Rama's exile, Bharata refuses to accept the throne. He rules as Rama's regent, placing Rama's sandals on the throne as a symbol of rightful kingship, exemplifying selfless devotion and righteousness.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Bharata_Rama.jpg/440px-Bharata_Rama.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "sugriva",
+      "name": "Sugriva",
+      "nameSanskrit": "सुग्रीव",
+      "role": "King of Vanaras",
+      "description": "The king of the Vanaras (monkey people) of Kishkindha. After being exiled by his brother Vali, Sugriva forms an alliance with Rama. With Rama's help, he defeats Vali and in return, leads his Vanara army to help rescue Sita. His friendship with Rama exemplifies mutual trust and honor.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Sugriva_meets_Rama.jpg/440px-Sugriva_meets_Rama.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    }
+  ],
+  "kandas": [
+    {
+      "id": "bala-kanda",
+      "number": 1,
+      "name": "Bala Kanda",
+      "nameSanskrit": "बालकाण्ड",
+      "meaning": "Book of Youth",
+      "chapters": 77,
+      "summary": "The Bala Kanda narrates the birth and childhood of Lord Rama. It begins with the sage Valmiki learning about Rama's story from Narada and composing the epic. King Dasharatha of Ayodhya, longing for sons, performs the Putrakameshti Yajna. From the sacred fire emerges divine payasam (pudding) that his three queens consume, leading to the birth of four princes: Rama to Kausalya, Bharata to Kaikeyi, and twins Lakshmana and Shatrughna to Sumitra.",
+      "fullContent": [
+        "In the prosperous kingdom of Kosala lay the magnificent city of Ayodhya, ruled by the righteous King Dasharatha of the Solar dynasty. Though blessed with wealth, power, and the love of his people, the king's heart remained heavy, for he had no heir to continue his noble lineage.",
+        "Acting on the counsel of his wise ministers and the sage Vashishta, Dasharatha performed the Ashwamedha Yajna followed by the Putrakameshti Yajna, a sacred ritual for obtaining sons. The devas, pleased by his devotion, sent the god of fire Agni with a golden vessel containing divine payasam.",
+        "Dasharatha distributed this sacred pudding among his three queens. Queen Kausalya received half, Queen Sumitra received a quarter, and Queen Kaikeyi received the remaining quarter. In due course, Kausalya gave birth to Rama, Kaikeyi to Bharata, and Sumitra to the twins Lakshmana and Shatrughna.",
+        "The princes grew up learning the arts of warfare, governance, and Vedic knowledge under the guidance of sage Vashishta. Rama and Lakshmana developed an inseparable bond, as did Bharata and Shatrughna.",
+        "When Rama was sixteen, the great sage Vishwamitra arrived at Ayodhya seeking help. Demons Maricha and Subahu were disrupting his sacred rituals. Though heartbroken at the thought of sending his young sons to battle demons, Dasharatha, bound by dharma, allowed Rama and Lakshmana to accompany the sage.",
+        "Under Vishwamitra's tutelage, Rama received divine weapons and mantras. He destroyed the demoness Tataka and protected the sage's yajna by vanquishing Maricha and Subahu. The sage then led them to Mithila, the kingdom of the wise King Janaka.",
+        "In Mithila stood the divine bow of Lord Shiva, which no mortal could even move. King Janaka had declared that whoever could string this bow would marry his daughter Sita, herself found miraculously in a furrow while the king was ploughing a field for a yajna.",
+        "With effortless grace, Rama not only lifted the mighty bow but broke it while attempting to string it. The sound reverberated across the three worlds. Sita, watching with bated breath, placed the wedding garland around Rama's neck. The divine couple was married with great celebration, and Rama's brothers were also wed to Sita's sister and cousins."
+      ],
+      "keyEvents": [
+        "King Dasharatha performs Putrakameshti Yajna",
+        "Birth of Rama, Bharata, Lakshmana, and Shatrughna",
+        "Sage Vishwamitra takes Rama and Lakshmana",
+        "Rama kills demoness Tataka",
+        "Rama breaks Shiva's bow",
+        "Marriage of Rama and Sita"
+      ],
+      "moralTakeaways": [
+        "Patience and devotion are eventually rewarded",
+        "A true guru guides disciples through challenges to reveal their potential",
+        "Dharma (righteous duty) must guide all decisions",
+        "Divine purpose manifests through ordinary actions"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 47, "connection": "Performing duty without attachment to results - as Rama followed Vishwamitra without questioning" },
+        { "chapter": 4, "verse": 7, "connection": "Divine incarnation to establish dharma" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Rama_breaking_the_bow.jpg/600px-Rama_breaking_the_bow.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "ayodhya-kanda",
+      "number": 2,
+      "name": "Ayodhya Kanda",
+      "nameSanskrit": "अयोध्याकाण्ड",
+      "meaning": "Book of Ayodhya",
+      "chapters": 119,
+      "summary": "The Ayodhya Kanda describes the events leading to Rama's exile. King Dasharatha decides to crown Rama as the heir apparent. However, Queen Kaikeyi, influenced by her maid Manthara, invokes two boons previously granted to her by the king: that Bharata be crowned king and Rama be exiled to the forest for fourteen years.",
+      "fullContent": [
+        "Years passed, and Rama's virtues shone ever brighter. King Dasharatha, feeling the weight of his years, decided to crown Rama as Yuvaraja (crown prince). The entire kingdom rejoiced at the announcement, and preparations began for the grand coronation.",
+        "However, fate had other plans. Manthara, the hunchbacked maid of Queen Kaikeyi, poisoned her mistress's mind with jealousy and fear. She convinced Kaikeyi that Rama's coronation would reduce Bharata's status and that Kaikeyi herself would become a mere servant to Queen Kausalya.",
+        "Overcome by misguided maternal instinct, Kaikeyi entered the sulking chamber and demanded that Dasharatha fulfill two boons he had promised her long ago on the battlefield when she saved his life. With a heavy heart, she demanded that Bharata be crowned king and Rama be exiled to the Dandaka forest for fourteen years.",
+        "Dasharatha was shattered. He pleaded, begged, and offered his kingdom, his life, anything but this cruel demand. But Kaikeyi remained unmoved, citing his duty to honor his word. The king, bound by his promise and the sacred vow of a Kshatriya, had no choice but to comply.",
+        "When Rama learned of the decree, he accepted it with complete equanimity. Without a trace of anger or disappointment, he prepared to leave for the forest. His only concern was for his aged father's well-being and his people's sorrow.",
+        "Sita, the embodiment of wifely devotion, insisted on accompanying Rama. 'A wife's place is beside her husband,' she declared. 'The forest with you is heaven; a palace without you is hell.' Lakshmana too refused to stay behind, choosing to serve his brother in the wilderness.",
+        "The departure from Ayodhya was heart-wrenching. Citizens wept openly, many following the chariot until exhaustion overcame them. Dasharatha collapsed repeatedly, calling out for his beloved son. The city that had prepared for a celebration now drowned in grief.",
+        "Unable to bear the separation, King Dasharatha died of a broken heart, calling out Rama's name with his last breath. Meanwhile, Bharata, who was away at his maternal grandfather's home, returned to find his father dead and his beloved brother exiled—all because of his own mother's treachery.",
+        "Enraged and heartbroken, Bharata renounced his mother and set out for the forest to bring Rama back. At Chitrakoot, he fell at Rama's feet, begging him to return. But Rama gently refused, explaining that fulfilling their father's word was their highest duty.",
+        "Accepting Rama's decision but refusing to rule in his own name, Bharata requested Rama's sandals. He placed these sacred paduka on the throne of Ayodhya and ruled as regent for fourteen years, living as an ascetic at Nandigram, awaiting his brother's return."
+      ],
+      "keyEvents": [
+        "Dasharatha announces Rama's coronation",
+        "Manthara poisons Kaikeyi's mind",
+        "Kaikeyi demands two boons",
+        "Rama accepts exile gracefully",
+        "Sita and Lakshmana accompany Rama",
+        "Dasharatha dies of grief",
+        "Bharata's devotion - rules with Rama's sandals"
+      ],
+      "moralTakeaways": [
+        "True character is revealed in times of adversity",
+        "Honoring one's word is paramount",
+        "Jealousy and bad counsel can destroy families",
+        "Acceptance of fate with grace is the mark of wisdom",
+        "Devotion to duty transcends personal desires"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 14, "connection": "Accepting pleasure and pain with equanimity, as Rama accepted exile" },
+        { "chapter": 2, "verse": 38, "connection": "Treating success and failure equally" },
+        { "chapter": 3, "verse": 35, "connection": "Following one's own dharma, however imperfect" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Rama%27s_exile_from_Ayodhya.jpg/600px-Rama%27s_exile_from_Ayodhya.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "aranya-kanda",
+      "number": 3,
+      "name": "Aranya Kanda",
+      "nameSanskrit": "अरण्यकाण्ड",
+      "meaning": "Book of the Forest",
+      "chapters": 75,
+      "summary": "The Aranya Kanda chronicles Rama, Sita, and Lakshmana's life in the Dandaka forest. They encounter sages, establish an ashram at Panchavati, and Rama protects the forest-dwelling sages by destroying demons. The demoness Shurpanakha's advances toward Rama are rejected, leading to her mutilation by Lakshmana. She seeks revenge through her brother Ravana, who becomes obsessed with Sita.",
+      "fullContent": [
+        "Rama, Sita, and Lakshmana entered the Dandaka forest, a vast wilderness inhabited by sages and demons alike. They visited the ashrams of various rishis who blessed them and sought protection from the rakshasas who disrupted their penances.",
+        "At the ashram of Sage Agastya, Rama received divine weapons including the bow of Vishnu and inexhaustible quivers. The sage directed them to the beautiful region of Panchavati on the banks of the Godavari river, where they built a humble but lovely ashram.",
+        "Life in the forest was peaceful and spiritual. Sita tended to flowers, Lakshmana served his brother with devotion, and Rama protected the sages from demon attacks. Their fame as protectors spread throughout the forest.",
+        "One fateful day, the demoness Shurpanakha, sister of Ravana, wandered into their clearing. Struck by Rama's divine beauty, she proposed marriage. When gently refused and told that Rama was devoted solely to Sita, she turned her attention to Lakshmana, who also rejected her.",
+        "In a fit of jealous rage, Shurpanakha attempted to attack Sita. Swift as lightning, Lakshmana drew his sword and cut off her nose and ears. Howling in pain and humiliation, she fled to her brothers Khara and Dushana, demon commanders who ruled portions of the forest.",
+        "Khara and Dushana attacked with an army of fourteen thousand rakshasas. In a display of divine prowess, Rama single-handedly destroyed the entire demon army within an hour, including their commanders. The gods showered flowers from heaven in celebration.",
+        "Shurpanakha, now disfigured and defeated, flew to Lanka to her brother Ravana, the mighty ten-headed demon king. She described Sita's unparalleled beauty and planted seeds of desire in Ravana's heart while inflaming his ego with tales of his commanders' defeat.",
+        "Ravana, despite warnings from his wise brother Vibhishana, became obsessed with possessing Sita. He devised a plan with his uncle Maricha, a demon who could assume any form. Maricha, though initially reluctant and warning of doom, was threatened into compliance.",
+        "Maricha transformed into a beautiful golden deer with silver spots and pranced near Sita's ashram. Enchanted, Sita begged Rama to capture it for her. Against his better judgment, Rama pursued the deer deep into the forest, leaving Lakshmana to guard Sita.",
+        "When struck by Rama's arrow, Maricha cried out 'O Lakshmana! O Sita!' in Rama's voice. Hearing this cry, Sita panicked and forced Lakshmana to go to Rama's aid. Before leaving, Lakshmana drew a protective circle around the ashram, warning Sita never to cross it.",
+        "In the guise of a holy mendicant, Ravana appeared before Sita seeking alms. When she offered food from within the protective line, he revealed his true form and demanded she become his queen. When she refused, he seized her and flew away in his aerial chariot Pushpaka.",
+        "Jatayu, the noble vulture king and friend of Dasharatha, saw the abduction and attacked Ravana despite his old age. A fierce battle ensued, but Ravana cut off Jatayu's wings, leaving him mortally wounded. Sita dropped her ornaments as markers along the way.",
+        "Ravana imprisoned Sita in the Ashoka grove of Lanka, guarded by fearsome demonesses. Despite threats and temptations, Sita remained steadfast in her devotion to Rama, refusing even to look at Ravana."
+      ],
+      "keyEvents": [
+        "Rama receives divine weapons from Sage Agastya",
+        "Ashram established at Panchavati",
+        "Shurpanakha's advances and mutilation",
+        "Rama destroys Khara and Dushana's army",
+        "Maricha's golden deer deception",
+        "Ravana abducts Sita",
+        "Jatayu's heroic fight and fall"
+      ],
+      "moralTakeaways": [
+        "Desire and ego lead to destruction",
+        "Devotion to duty can have unexpected consequences",
+        "True love remains steadfast in adversity",
+        "Courage and loyalty are noble even in defeat",
+        "Evil ultimately consumes itself"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 62, "connection": "Attachment leads to desire, desire to anger - Shurpanakha's transformation" },
+        { "chapter": 3, "verse": 37, "connection": "Lust that arises from passion and becomes wrath" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Ravana_abducting_Sita.jpg/600px-Ravana_abducting_Sita.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "kishkindha-kanda",
+      "number": 4,
+      "name": "Kishkindha Kanda",
+      "nameSanskrit": "किष्किन्धाकाण्ड",
+      "meaning": "Book of Kishkindha",
+      "chapters": 67,
+      "summary": "Rama and Lakshmana, searching for Sita, meet the dying Jatayu who reveals Sita was taken southward. They encounter Hanuman and Sugriva on Rishyamukha mountain. Rama helps Sugriva defeat his brother Vali and regain his kingdom. In return, Sugriva pledges his army to search for Sita.",
+      "fullContent": [
+        "Returning to find the ashram empty, Rama was devastated. He wandered through the forest calling Sita's name, interrogating trees, animals, and rivers. Lakshmana, heartbroken to see his brother's pain, tried to console him while maintaining vigilance.",
+        "They found Jatayu dying on the ground. With his last breaths, the noble vulture told them of Sita's abduction by Ravana and pointed south. Rama performed the last rites for Jatayu, honoring him as a father.",
+        "Continuing south, they encountered the demon Kabandha, whose curse was lifted by Rama. Before ascending to heaven, Kabandha advised them to seek Sugriva, the exiled Vanara king, on Rishyamukha mountain.",
+        "On the mountain, they met Hanuman, Sugriva's minister. Hanuman, in the guise of a brahmin, approached them cautiously. When he revealed his true form, his wisdom, eloquence, and devotion immediately impressed Rama.",
+        "Sugriva told his tale: his brother Vali had unjustly exiled him and taken his wife. A curse prevented Vali from entering Rishyamukha. Rama promised to defeat Vali in exchange for help finding Sita. They formalized their friendship with fire as witness.",
+        "Sugriva challenged Vali to combat. During the first fight, Rama could not distinguish between the brothers and did not shoot. The second time, Sugriva wore a garland. When Vali was winning, Rama shot him from hiding.",
+        "Vali, dying, questioned Rama's righteousness in attacking from hiding. Rama explained that Vali, as king, should have protected his brother and maintained dharma. Moreover, the entire earth belonged to the Ikshvaku dynasty, giving Rama authority to punish adharma.",
+        "Sugriva was crowned king of Kishkindha. After the rainy season (during which Rama waited in anguish), Sugriva dispatched search parties in all directions. Hanuman led the southern party, receiving Rama's ring as a token of identification for Sita."
+      ],
+      "keyEvents": [
+        "Finding dying Jatayu",
+        "Meeting Hanuman and Sugriva",
+        "Alliance with Sugriva",
+        "Death of Vali",
+        "Sugriva crowned king",
+        "Search parties dispatched",
+        "Hanuman receives Rama's ring"
+      ],
+      "moralTakeaways": [
+        "True friendship involves mutual sacrifice",
+        "Injustice, even by the powerful, must be addressed",
+        "Patience in waiting is itself a form of action",
+        "Faith enables impossible tasks",
+        "Divine will works through unexpected allies"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 4, "verse": 8, "connection": "Protection of the righteous and destruction of wrongdoers" },
+        { "chapter": 9, "verse": 22, "connection": "Divine providence for devoted ones - Rama's care for those who serve him" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Sugriva_with_Rama_Lakshmana.jpg/600px-Sugriva_with_Rama_Lakshmana.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "sundara-kanda",
+      "number": 5,
+      "name": "Sundara Kanda",
+      "nameSanskrit": "सुन्दरकाण्ड",
+      "meaning": "Book of Beauty",
+      "chapters": 68,
+      "summary": "This kanda focuses on Hanuman's heroic journey to Lanka. He leaps across the ocean, overcomes obstacles, searches Lanka, and finds Sita in the Ashoka grove. He reassures her, receives her token, and wreaks havoc in Lanka before returning with news of Sita.",
+      "fullContent": [
+        "The southern search party reached the ocean's shore, despairing at the vast waters separating them from Lanka. The aged vulture Sampati, brother of Jatayu, revealed that Sita was held in Lanka, a hundred yojanas away.",
+        "Hanuman was reminded of his forgotten powers by wise Jambavan. As a child, Hanuman had tried to catch the sun, thinking it a fruit. Indra struck him with his thunderbolt, and his father Vayu, in anger, withdrew all wind from the universe. To appease Vayu, the gods blessed young Hanuman with immense powers, which he then forgot due to a sage's curse.",
+        "Remembering his divine nature, Hanuman grew to enormous size. With a great roar, he leaped from Mahendra mountain. The mountain sank into the earth from the force. Hanuman flew through the sky like an arrow.",
+        "The ocean, respecting Hanuman's mission, raised the mountain Mainaka to offer rest. Hanuman touched it briefly and continued. He overcame the serpent Surasa by entering and exiting her mouth instantly, fulfilling her boon. He killed the shadow-catching demoness Simhika.",
+        "Landing on Lanka's mountain, Hanuman shrank to cat-size and entered the golden city at night. He searched Ravana's palace, the harem, and all quarters, finding no trace of Sita. His heart sank, fearing the worst.",
+        "Finally, in the Ashoka grove, beneath a shimshupa tree, surrounded by fearsome demonesses, he found Sita—thin, sorrowful, but radiant in her steadfastness. He watched as Ravana came to threaten and tempt her, and she rejected him utterly.",
+        "Waiting for the right moment, Hanuman dropped Rama's ring before Sita and revealed himself, singing Rama's praises. Initially suspicious of demon trickery, Sita was convinced by the ring and Hanuman's sincere devotion.",
+        "Sita gave Hanuman her chudamani (crest jewel) and a message for Rama. When Hanuman offered to carry her back, she refused—her rescue must come through Rama's valor, not stealth, to properly avenge the insult.",
+        "To assess Lanka's defenses and provoke Ravana, Hanuman allowed himself to be captured after destroying the pleasure grove. Brought before Ravana, he delivered Rama's warning. When Ravana ordered his tail set on fire, Hanuman escaped and used the burning tail to set Lanka ablaze.",
+        "Leaping back across the ocean, Hanuman delivered the joyous news to Rama. The Vanara army, now knowing where Sita was held, prepared to march to war."
+      ],
+      "keyEvents": [
+        "Hanuman remembers his powers",
+        "The great leap across the ocean",
+        "Overcoming Surasa and Simhika",
+        "Finding Sita in Ashoka grove",
+        "Giving Rama's ring to Sita",
+        "Receiving Sita's chudamani",
+        "Burning of Lanka",
+        "Return with news"
+      ],
+      "moralTakeaways": [
+        "True devotion gives unlimited strength",
+        "Forgotten potential can be awakened",
+        "Faithful service requires courage and wisdom",
+        "Steadfastness in suffering is itself victory",
+        "Divine grace overcomes impossible obstacles"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 6, "verse": 22, "connection": "Established in which one is not shaken even by great sorrow - Sita's steadfastness" },
+        { "chapter": 9, "verse": 26, "connection": "Offering with devotion - Hanuman's selfless service" },
+        { "chapter": 18, "verse": 58, "connection": "By my grace you shall overcome all obstacles - Hanuman's journey" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Hanuman_fetches_the_herb-bearing_mountain%2C_in_a_print_from_the_Ravi_Varma_Press%2C_1910%27s.jpg/600px-Hanuman_fetches_the_herb-bearing_mountain%2C_in_a_print_from_the_Ravi_Varma_Press%2C_1910%27s.jpg",
+      "imageAttribution": "Ravi Varma Press, Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "yuddha-kanda",
+      "number": 6,
+      "name": "Yuddha Kanda",
+      "nameSanskrit": "युद्धकाण्ड",
+      "meaning": "Book of War",
+      "chapters": 128,
+      "summary": "The Yuddha Kanda describes the great war between Rama's forces and Ravana's demons. Nala builds a bridge across the ocean. Vibhishana defects to Rama. The battle rages with many casualties on both sides, culminating in Rama's victory over Ravana and Sita's rescue.",
+      "fullContent": [
+        "The Vanara army, millions strong, marched to the southern shore. Rama faced the impossible task of crossing the ocean with his army. He meditated on the ocean god, and when no response came, raised his bow in divine wrath.",
+        "The Ocean, appearing before Rama, explained that his nature prevented him from parting. However, Nala the Vanara architect could build a bridge, and the ocean would support it. With magical engineering, the Vanara army built a bridge of floating stones.",
+        "Meanwhile, Vibhishana, Ravana's righteous brother, could no longer support adharma. After his counsel was rejected, he defected to Rama with four followers. Though the Vanaras were suspicious, Rama accepted him, declaring that one who seeks refuge must never be turned away.",
+        "The army crossed and laid siege to Lanka. Ravana sent his warriors one by one, and one by one they fell. Indrajit, Ravana's son, was the most formidable—he rendered Rama and Lakshmana unconscious with the Nagastra.",
+        "Hanuman flew to the Himalayas for the life-giving Sanjeevani herb. Unable to identify the herb, he brought the entire mountain, and the brothers were revived. The war continued with terrible ferocity.",
+        "Lakshmana killed Indrajit after a fierce battle. Kumbhakarna, Ravana's giant brother who slept for months, was awakened and killed after devastating the Vanara army. One by one, Ravana's champions fell.",
+        "Finally, Ravana himself entered the battlefield. The gods sent their own chariot for Rama. The two warriors fought for days. Rama's arrows struck off Ravana's heads, but new ones grew. Finally, Rama used the Brahmastra, charged with mantras, which pierced Ravana's heart.",
+        "The ten-headed king fell, and even the gods mourned, for despite his sins, Ravana had been a great scholar and devotee. Vibhishana was crowned king of Lanka.",
+        "Sita was brought before Rama, but the reunion was bitter. To prove her purity after months in Ravana's custody, Sita entered fire. Agni, the fire god, returned her unharmed, declaring her pure. The gods appeared and revealed Rama's divine nature."
+      ],
+      "keyEvents": [
+        "Building of Rama Setu (bridge)",
+        "Vibhishana joins Rama",
+        "Death of Kumbhakarna",
+        "Lakshmana kills Indrajit",
+        "The final battle - Rama vs Ravana",
+        "Death of Ravana",
+        "Sita's Agni Pariksha",
+        "Vibhishana crowned king"
+      ],
+      "moralTakeaways": [
+        "Righteousness ultimately triumphs",
+        "Refuge must be given to those who seek it sincerely",
+        "Even the mightiest falls when dharma is abandoned",
+        "True purity cannot be tainted by external circumstances",
+        "Divine justice prevails, though it may take time"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 4, "verse": 7, "connection": "Divine incarnation to destroy evil" },
+        { "chapter": 4, "verse": 8, "connection": "Protection of the righteous and destruction of evildoers" },
+        { "chapter": 11, "verse": 32, "connection": "I am Time, the destroyer of worlds - Ravana's destined end" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Battle_at_Lanka%2C_Ramayana%2C_Udaipur%2C_1649-53.jpg/600px-Battle_at_Lanka%2C_Ramayana%2C_Udaipur%2C_1649-53.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    },
+    {
+      "id": "uttara-kanda",
+      "number": 7,
+      "name": "Uttara Kanda",
+      "nameSanskrit": "उत्तरकाण्ड",
+      "meaning": "Book of the Aftermath",
+      "chapters": 111,
+      "summary": "The Uttara Kanda describes events after Rama's return to Ayodhya. He is crowned king, but hearing citizens doubt Sita's purity, he painfully banishes her. In exile, Sita gives birth to twins Lava and Kusha. Years later, Sita proves her purity one final time and returns to the earth.",
+      "fullContent": [
+        "Rama, Sita, and Lakshmana returned to Ayodhya in the Pushpaka Vimana, the aerial chariot taken from Ravana. Bharata joyfully welcomed his brother, and Rama was crowned king. The kingdom prospered under his rule, entering a golden age known as Rama Rajya.",
+        "However, whispers spread among the citizens questioning Sita's purity after living in Ravana's kingdom. Though Rama knew Sita was pure, as king, he felt bound to maintain his subjects' faith in the royal house.",
+        "With agonizing reluctance, Rama asked Lakshmana to take Sita, now pregnant, to the forest near Valmiki's ashram and leave her there. Lakshmana, heartbroken, obeyed. Sita, abandoned but not broken, found refuge with the sage Valmiki.",
+        "In the ashram, Sita gave birth to twin sons, Lava and Kusha. Valmiki taught them the Ramayana, his composition, and they became accomplished warriors and singers. They did not know their own origin.",
+        "Years later, Rama performed the Ashwamedha Yajna. The sacrificial horse wandered into Valmiki's ashram, where Lava and Kusha captured it. When Rama's army came, the twins defeated every warrior including Lakshmana, Bharata, and Shatrughna, not knowing they were fighting their own family.",
+        "Valmiki brought the twins to Rama's court where they sang the Ramayana. Rama recognized them as his sons and summoned Sita. He asked her to prove her purity before the assembly.",
+        "Sita, weary of proving herself repeatedly, called upon her mother Earth. 'If I have been faithful only to Rama,' she declared, 'let the earth receive me.' The ground split open, and a divine throne rose. Bhudevi, the Earth goddess, took her daughter Sita onto her lap and descended into the earth.",
+        "Rama was inconsolable. He ruled for many more years but never remarried, keeping a golden image of Sita beside him. Eventually, he performed the final sacrifice of entering the Sarayu River, returning to his divine abode as Vishnu."
+      ],
+      "keyEvents": [
+        "Coronation of Rama",
+        "Rama Rajya - the golden age",
+        "Sita banished due to citizens' doubts",
+        "Birth of Lava and Kusha",
+        "The twins defeat Rama's brothers",
+        "Sita's final trial and return to Earth",
+        "Rama's departure to Vaikuntha"
+      ],
+      "moralTakeaways": [
+        "A ruler's duty to his people sometimes demands personal sacrifice",
+        "Virtue may go unrewarded in this world",
+        "Steadfast devotion transcends worldly justice",
+        "The divine play continues beyond mortal understanding",
+        "Even painful events serve higher purposes"
+      ],
+      "relatedGitaVerses": [
+        { "chapter": 2, "verse": 22, "connection": "The soul discards bodies as one changes garments - Sita's departure" },
+        { "chapter": 4, "verse": 9, "connection": "One who knows the divine nature of the Lord's appearance and actions is not reborn" }
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Sita_entering_the_earth.jpg/600px-Sita_entering_the_earth.jpg",
+      "imageAttribution": "Wikimedia Commons, Public Domain"
+    }
+  ]
+}
