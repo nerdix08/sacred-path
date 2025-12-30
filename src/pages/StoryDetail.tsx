@@ -3,7 +3,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { 
   ArrowLeft, BookOpen, Users, ChevronRight, 
-  Volume2, VolumeX, Pause, Play, Sparkles, Heart, Sword
+  Volume2, VolumeX, Pause, Play, Sparkles, Heart, Sword, Globe
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ramayanaKandas, ramayanaCharacters, getRamayanaKandaById } from "@/data/ramayanaData";
@@ -12,455 +12,300 @@ import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useLanguage } from "@/hooks/useLanguage";
 
-// Scene images - using Unsplash and Pexels for reliable loading
-const sceneImages: Record<string, string[]> = {
-  "bala-kanda": [
-    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // Temple/Palace
-    "https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=800&q=80", // Sad king
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Sacred fire
-    "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&q=80", // Divine light
-    "https://images.unsplash.com/photo-1604537466158-719b1972feb8?w=800&q=80", // Royal princes
-    "https://images.unsplash.com/photo-1545406130-b5c7cb67da19?w=800&q=80", // Sage
-    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", // Forest
-    "https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=800&q=80", // Bow/Archery
-    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80", // Wedding
-  ],
-  "ayodhya-kanda": [
-    "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", // Palace celebration
-    "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800&q=80", // Dark plotting
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Terrible boons
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest exile
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Mountain journey
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80", // Deep forest
-  ],
-  "aranya-kanda": [
-    "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80", // Deep forest
-    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=800&q=80", // Hermitage
-    "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80", // Sacred grove
-    "https://images.unsplash.com/photo-1507041957456-9c397ce39c97?w=800&q=80", // Dark forest
-    "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=800&q=80", // Golden deer
-  ],
-  "kishkindha-kanda": [
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Mountains
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80", // Peak
-    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80", // Sunrise mountain
-    "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80", // Alliance
-  ],
-  "sundara-kanda": [
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // Ocean
-    "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&q=80", // Leap across sea
-    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80", // Island
-    "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80", // Garden
-  ],
-  "yuddha-kanda": [
-    "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80", // Battle preparation
-    "https://images.unsplash.com/photo-1569974507005-6dc61f97fb5c?w=800&q=80", // Bridge
-    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", // War
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Victory fire
-  ],
-  "uttara-kanda": [
-    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // Return to Ayodhya
-    "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", // Coronation
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Final journey
-  ],
-  "adi-parva": [
-    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // Origins
-    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", // Forest training
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Fire ceremony
-  ],
-  "sabha-parva": [
-    "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", // Grand hall
-    "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800&q=80", // Dice game
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Exile begins
-  ],
-  "bhishma-parva": [
-    "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80", // War begins
-    "https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=800&q=80", // Arrows
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Gita discourse
-  ],
+// Import all story images
+import ayodhyaPalace from "@/assets/stories/ayodhya-palace.jpg";
+import sacredYajna from "@/assets/stories/sacred-yajna.jpg";
+import ramaBirth from "@/assets/stories/rama-birth.jpg";
+import fourPrinces from "@/assets/stories/four-princes.jpg";
+import vishwamitra from "@/assets/stories/vishwamitra.jpg";
+import shivaBow from "@/assets/stories/shiva-bow.jpg";
+import ramaSitaWedding from "@/assets/stories/rama-sita-wedding.jpg";
+import forestExile from "@/assets/stories/forest-exile.jpg";
+import goldenDeer from "@/assets/stories/golden-deer.jpg";
+import sitaAbduction from "@/assets/stories/sita-abduction.jpg";
+import hanumanLeap from "@/assets/stories/hanuman-leap.jpg";
+import hanumanSita from "@/assets/stories/hanuman-sita.jpg";
+import lankaBurning from "@/assets/stories/lanka-burning.jpg";
+import ramaSetu from "@/assets/stories/rama-setu.jpg";
+import ramaRavanaBattle from "@/assets/stories/rama-ravana-battle.jpg";
+import ramaCoronation from "@/assets/stories/rama-coronation.jpg";
+import pandavas from "@/assets/stories/pandavas.jpg";
+import diceGame from "@/assets/stories/dice-game.jpg";
+import gitaDiscourse from "@/assets/stories/gita-discourse.jpg";
+import kurukshetraWar from "@/assets/stories/kurukshetra-war.jpg";
+import bhishmaArrows from "@/assets/stories/bhishma-arrows.jpg";
+import draupadiBirth from "@/assets/stories/draupadi-birth.jpg";
+import arjunaFishEye from "@/assets/stories/arjuna-fish-eye.jpg";
+import hanumanRamaMeet from "@/assets/stories/hanuman-rama-meet.jpg";
+import jatayuFight from "@/assets/stories/jatayu-fight.jpg";
+import sitaAshram from "@/assets/stories/sita-ashram.jpg";
+
+// Language types
+type Language = 'en' | 'hi' | 'te' | 'ta' | 'sa';
+
+// Multi-language content structure
+interface MultiLangContent {
+  en: string;
+  hi: string;
+  te: string;
+  ta: string;
+  sa: string;
+}
+
+interface Scene {
+  title: MultiLangContent;
+  theme: string;
+  image: string;
+  content: MultiLangContent[];
+}
+
+// Scene images mapping
+const sceneImageMap: Record<string, string[]> = {
+  "bala-kanda": [ayodhyaPalace, sacredYajna, ramaBirth, fourPrinces, vishwamitra, shivaBow, ramaSitaWedding],
+  "ayodhya-kanda": [ayodhyaPalace, forestExile, forestExile],
+  "aranya-kanda": [forestExile, goldenDeer, jatayuFight, sitaAbduction],
+  "kishkindha-kanda": [hanumanRamaMeet, hanumanRamaMeet, ramaSetu],
+  "sundara-kanda": [hanumanLeap, hanumanSita, lankaBurning],
+  "yuddha-kanda": [ramaSetu, ramaRavanaBattle, ramaCoronation],
+  "uttara-kanda": [ramaCoronation, sitaAshram, ramaCoronation],
+  "adi-parva": [pandavas, draupadiBirth, arjunaFishEye],
+  "sabha-parva": [diceGame, diceGame, forestExile],
+  "bhishma-parva": [gitaDiscourse, kurukshetraWar, bhishmaArrows],
 };
 
-// Extended story content with more details and images
-const extendedContent: Record<string, { scenes: { title: string; content: string[]; theme: string; imageIndex?: number }[] }> = {
+// Extended story content with multi-language support
+const extendedContent: Record<string, { scenes: Scene[] }> = {
   "bala-kanda": {
     scenes: [
       {
-        title: "The Kingdom of Ayodhya",
+        title: {
+          en: "The Kingdom of Ayodhya",
+          hi: "अयोध्या का राज्य",
+          te: "అయోధ్య రాజ్యం",
+          ta: "அயோத்தி ராஜ்யம்",
+          sa: "अयोध्याराज्यम्"
+        },
         theme: "🏰",
-        imageIndex: 0,
+        image: ayodhyaPalace,
         content: [
-          "In the ancient land of Bharatavarsha, nestled along the banks of the sacred river Sarayu, stood the magnificent city of Ayodhya. Its towering walls, built of gleaming white marble, stretched for twelve yojanas in length. The city was renowned across all the three worlds for its prosperity, righteousness, and the wisdom of its rulers.",
-          "The streets were paved with precious stones, and grand mansions lined every avenue. Learned Brahmins chanted Vedic hymns at every corner, while merchants traded silks and spices from distant lands. The sound of temple bells mingled with the laughter of children, creating a symphony of peace and happiness.",
-          "At the heart of this paradise stood the royal palace of King Dasharatha, a descendant of the illustrious Solar dynasty (Suryavansha). The king was famed throughout the realm as 'Dasharatha' - he who could fight in ten directions simultaneously. No enemy had ever defeated him in battle, and his subjects loved him as a father loves his children."
+          {
+            en: "In the ancient land of Bharatavarsha, nestled along the banks of the sacred river Sarayu, stood the magnificent city of Ayodhya. Its towering walls, built of gleaming white marble, stretched for twelve yojanas in length. The city was renowned across all the three worlds for its prosperity, righteousness, and the wisdom of its rulers.",
+            hi: "प्राचीन भारतवर्ष की भूमि में, पवित्र सरयू नदी के तट पर, भव्य अयोध्या नगरी बसी थी। चमकदार सफेद संगमरमर से निर्मित इसकी ऊंची दीवारें बारह योजन तक फैली थीं। यह नगरी तीनों लोकों में अपनी समृद्धि, धार्मिकता और शासकों की बुद्धिमत्ता के लिए प्रसिद्ध थी।",
+            te: "ప్రాచీన భారతవర్షంలో, పవిత్ర సరయూ నది ఒడ్డున, అద్భుతమైన అయోధ్య నగరం ఉండేది. మెరిసే తెల్లని పాలరాతితో నిర్మించిన దాని ఎత్తైన గోడలు పన్నెండు యోజనాల వరకు విస్తరించాయి. ఈ నగరం మూడు లోకాలలో దాని సమృద్ధి, ధర్మం మరియు పాలకుల జ్ఞానానికి ప్రసిద్ధి చెందింది.",
+            ta: "பாரதவர்ஷத்தின் பண்டைய நிலத்தில், புனித சரயூ நதிக்கரையில், பிரமாண்டமான அயோத்தி நகரம் அமைந்திருந்தது. பளபளக்கும் வெள்ளை பளிங்குக் கற்களால் கட்டப்பட்ட அதன் உயர்ந்த சுவர்கள் பன்னிரண்டு யோஜனைகள் நீண்டிருந்தன. இந்த நகரம் மூன்று உலகங்களிலும் அதன் செழிப்பு, அறம் மற்றும் ஆட்சியாளர்களின் ஞானத்திற்கு புகழ் பெற்றது.",
+            sa: "भारतवर्षस्य प्राचीनभूमौ पवित्रसरयूनद्यास्तटे भव्या अयोध्यानगरी स्थिता आसीत्। उज्ज्वलश्वेतसंगमर्मरेण निर्मिताः तस्याः उच्चप्राचीराः द्वादशयोजनपर्यन्तं विस्तृताः आसन्। एषा नगरी त्रिषु लोकेषु स्वसमृद्ध्या धार्मिकतया शासकानां च प्रज्ञया विख्याता आसीत्।"
+          },
+          {
+            en: "The streets were paved with precious stones, and grand mansions lined every avenue. Learned Brahmins chanted Vedic hymns at every corner, while merchants traded silks and spices from distant lands. The sound of temple bells mingled with the laughter of children, creating a symphony of peace and happiness.",
+            hi: "सड़कें बहुमूल्य रत्नों से जड़ी थीं, और हर गली में भव्य हवेलियां खड़ी थीं। विद्वान ब्राह्मण हर कोने में वैदिक मंत्रों का उच्चारण करते थे, जबकि व्यापारी दूर देशों से रेशम और मसालों का व्यापार करते थे। मंदिर की घंटियों की ध्वनि बच्चों की हंसी के साथ मिलकर शांति और खुशी का संगीत रचती थी।",
+            te: "వీధులు విలువైన రాళ్లతో పరచబడ్డాయి, మరియు ప్రతి వీధిలో గొప్ప భవంతులు ఉన్నాయి. విద్వాంసులైన బ్రాహ్మణులు ప్రతి మూలలో వేద మంత్రాలు జపించేవారు, వ్యాపారులు దూర దేశాల నుండి పట్టు మరియు సుగంధ ద్రవ్యాలను వ్యాపారం చేసేవారు. ఆలయ గంటల శబ్దం పిల్లల నవ్వులతో కలిసి శాంతి మరియు ఆనందం యొక్క సంగీతాన్ని సృష్టించింది.",
+            ta: "தெருக்கள் விலைமதிப்பற்ற கற்களால் பதிக்கப்பட்டிருந்தன, ஒவ்வொரு சாலையிலும் பிரமாண்டமான மாளிகைகள் நிரம்பியிருந்தன. கற்றறிந்த பிராமணர்கள் ஒவ்வொரு மூலையிலும் வேத மந்திரங்களை உச்சரித்தனர், வணிகர்கள் தொலைதூர நாடுகளிலிருந்து பட்டு மற்றும் மசாலாப் பொருட்களை வர்த்தகம் செய்தனர். கோவில் மணிகளின் ஒலி குழந்தைகளின் சிரிப்போடு கலந்து அமைதி மற்றும் மகிழ்ச்சியின் இசையை உருவாக்கியது.",
+            sa: "मार्गाः रत्नैः खचिताः आसन्, प्रत्येकस्मिन् मार्गे भव्यप्रासादाः स्थिताः आसन्। विद्वांसो ब्राह्मणाः प्रत्येकस्मिन् कोणे वेदमन्त्रान् जपन्ति स्म, वणिजश्च सुदूरदेशेभ्यः पट्टवस्त्राणि गन्धद्रव्याणि च व्यापारं कुर्वन्ति स्म।"
+          },
+          {
+            en: "At the heart of this paradise stood the royal palace of King Dasharatha, a descendant of the illustrious Solar dynasty (Suryavansha). The king was famed throughout the realm as 'Dasharatha' - he who could fight in ten directions simultaneously. No enemy had ever defeated him in battle, and his subjects loved him as a father loves his children.",
+            hi: "इस स्वर्ग के केंद्र में महाराज दशरथ का राजमहल था, जो प्रतिष्ठित सूर्यवंश के वंशज थे। राजा पूरे राज्य में 'दशरथ' - जो एक साथ दस दिशाओं में युद्ध कर सकते थे - के नाम से प्रसिद्ध थे। किसी भी शत्रु ने उन्हें कभी युद्ध में पराजित नहीं किया था, और उनकी प्रजा उनसे उतना ही प्रेम करती थी जितना एक पिता अपने बच्चों से करता है।",
+            te: "ఈ స్వర్గం మధ్యలో మహారాజు దశరథుని రాజభవనం ఉండేది, ఆయన ప్రఖ్యాత సూర్యవంశానికి చెందినవాడు. రాజు రాజ్యమంతటా 'దశరథుడు' - ఒకేసారి పది దిక్కులలో యుద్ధం చేయగలవాడు - అని ప్రసిద్ధి చెందాడు. ఏ శత్రువు కూడా అతనిని యుద్ధంలో ఓడించలేదు, మరియు అతని ప్రజలు తండ్రి తన పిల్లలను ప్రేమించినట్లుగా అతనిని ప్రేమించారు.",
+            ta: "இந்த சொர்க்கத்தின் மையத்தில் மன்னர் தசரதரின் அரண்மனை நின்றது, அவர் புகழ்பெற்ற சூரிய குலத்தின் வழித்தோன்றல். மன்னர் நாடு முழுவதும் 'தசரதர்' - ஒரே நேரத்தில் பத்து திசைகளில் போரிட வல்லவர் - என்று புகழ் பெற்றார். எந்த எதிரியும் அவரை போரில் தோற்கடித்ததில்லை, அவரது குடிமக்கள் ஒரு தந்தை தன் குழந்தைகளை நேசிப்பது போல் அவரை நேசித்தனர்.",
+            sa: "एतस्य स्वर्गस्य मध्ये महाराजदशरथस्य राजप्रासादः स्थितः आसीत्, यः प्रसिद्धसूर्यवंशस्य वंशजः आसीत्। राजा सर्वत्र राज्ये 'दशरथः' - यः एकदा दशसु दिक्षु युद्धं कर्तुं शक्नोति - इति नाम्ना प्रसिद्धः आसीत्।"
+          }
         ]
       },
       {
-        title: "The King's Sorrow",
-        theme: "😢",
-        imageIndex: 1,
-        content: [
-          "Despite his countless blessings, a deep sorrow gnawed at King Dasharatha's heart. Though he had three devoted queens - the gentle Kausalya, the spirited Kaikeyi who had saved his life in battle, and the beautiful Sumitra - none had blessed him with an heir.",
-          "Night after night, the king would stand on his palace balcony, gazing at the stars and praying to his ancestors for a son. 'What use is this vast kingdom,' he would lament, 'if there is no one to inherit it? What purpose do my victories serve if the Solar dynasty ends with me?'",
-          "His wise minister Sumantra, seeing the king's distress, approached him with news of hope. 'Your Majesty, there is a sage named Rishyashringa who possesses the power to invoke the gods themselves. It is said that wherever he goes, rain follows, and barren lands become fertile. Perhaps he can help fulfill your heart's desire.'"
-        ]
-      },
-      {
-        title: "The Sacred Yajna",
+        title: {
+          en: "The Sacred Yajna",
+          hi: "पवित्र यज्ञ",
+          te: "పవిత్ర యజ్ఞం",
+          ta: "புனித யக்ஞம்",
+          sa: "पवित्रयज्ञः"
+        },
         theme: "🔥",
-        imageIndex: 2,
+        image: sacredYajna,
         content: [
-          "With renewed hope, Dasharatha invited the young sage Rishyashringa to Ayodhya. The preparations for the Ashwamedha Yajna (horse sacrifice) and the Putrakameshti Yajna (son-bestowing sacrifice) began in earnest. The entire kingdom was transformed into a vast ceremonial ground.",
-          "For many days and nights, the sacred fires burned bright. Priests chanted mantras that had been passed down since the beginning of time. The fragrance of ghee, sandalwood, and sacred herbs filled the air, rising to the heavens like a prayer made visible.",
-          "On the final day of the ceremony, as the flames leaped highest, a divine being emerged from the sacred fire. He was as bright as the sun, clad in robes of crimson and gold. In his hands, he carried a golden vessel filled with divine payasam (sacred pudding).",
-          "'I am a messenger of Lord Vishnu,' the celestial being announced. 'The Supreme Lord has heard your prayers and seen your devotion. This divine offering, when consumed by your queens, will grant you sons of extraordinary virtue and power. Through them, a great purpose shall be fulfilled.'"
+          {
+            en: "With renewed hope, Dasharatha invited the young sage Rishyashringa to Ayodhya. The preparations for the Ashwamedha Yajna (horse sacrifice) and the Putrakameshti Yajna (son-bestowing sacrifice) began in earnest. The entire kingdom was transformed into a vast ceremonial ground.",
+            hi: "नई आशा के साथ, दशरथ ने युवा ऋषि ऋष्यश्रृंग को अयोध्या आमंत्रित किया। अश्वमेध यज्ञ और पुत्रकामेष्टि यज्ञ की तैयारियां जोर-शोर से शुरू हो गईं। पूरा राज्य एक विशाल यज्ञभूमि में बदल गया।",
+            te: "కొత్త ఆశతో, దశరథుడు యువ ఋషి ఋష్యశృంగుడిని అయోధ్యకు ఆహ్వానించాడు. అశ్వమేధ యజ్ఞం మరియు పుత్రకామేష్టి యజ్ఞం కోసం సన్నాహాలు ప్రారంభమయ్యాయి. మొత్తం రాజ్యం ఒక విశాలమైన యజ్ఞ భూమిగా మారింది.",
+            ta: "புதிய நம்பிக்கையுடன், தசரதர் இளம் முனிவர் ரிஷ்யசிருங்கரை அயோத்திக்கு அழைத்தார். அஸ்வமேத யக்ஞம் மற்றும் புத்ரகாமேஷ்டி யக்ஞத்திற்கான தயாரிப்புகள் தீவிரமாகத் தொடங்கின. முழு ராஜ்யமும் ஒரு பரந்த யக்ஞ பூமியாக மாறியது.",
+            sa: "नूतनाशया सहितः दशरथः युवमुनिं ऋष्यश्रृङ्गम् अयोध्यायाम् आह्वयत्। अश्वमेधयज्ञस्य पुत्रकामेष्टियज्ञस्य च सज्जता प्रारब्धा। सम्पूर्णं राज्यं विशालयज्ञभूमौ परिवर्तितम्।"
+          },
+          {
+            en: "For many days and nights, the sacred fires burned bright. Priests chanted mantras that had been passed down since the beginning of time. The fragrance of ghee, sandalwood, and sacred herbs filled the air, rising to the heavens like a prayer made visible.",
+            hi: "कई दिनों और रातों तक, पवित्र अग्नि प्रज्वलित रही। पुजारियों ने उन मंत्रों का जाप किया जो सृष्टि के आरंभ से चले आ रहे थे। घी, चंदन और पवित्र जड़ी-बूटियों की सुगंध हवा में भर गई, जो एक दृश्य प्रार्थना की तरह स्वर्ग की ओर उठ रही थी।",
+            te: "చాలా రోజులు మరియు రాత్రులు, పవిత్ర అగ్ని ప్రకాశవంతంగా మండింది. పూజారులు సృష్టి ప్రారంభం నుండి అందించబడిన మంత్రాలను జపించారు. నేయి, చందనం మరియు పవిత్ర మూలికల సువాసన గాలిలో నిండింది, కనిపించే ప్రార్థనలా స్వర్గానికి లేచింది.",
+            ta: "பல நாட்கள் இரவுகள், புனித தீ பிரகாசமாக எரிந்தது. பூசாரிகள் படைப்பின் ஆரம்பத்திலிருந்து வழங்கப்பட்ட மந்திரங்களை ஜபித்தனர். நெய், சந்தனம் மற்றும் புனித மூலிகைகளின் நறுமணம் காற்றில் நிறைந்து, கண்ணுக்குத் தெரியும் பிரார்த்தனை போல் சொர்க்கத்தை நோக்கி எழுந்தது.",
+            sa: "बहुदिवसानि रात्रीश्च पवित्राग्निः प्रज्वलिता आसीत्। पुरोहिताः तान् मन्त्रान् जपन्ति स्म ये सृष्टेः आरम्भात् प्रचलिताः आसन्।"
+          },
+          {
+            en: "On the final day of the ceremony, as the flames leaped highest, a divine being emerged from the sacred fire. He was as bright as the sun, clad in robes of crimson and gold. In his hands, he carried a golden vessel filled with divine payasam (sacred pudding). 'I am a messenger of Lord Vishnu,' the celestial being announced. 'The Supreme Lord has heard your prayers.'",
+            hi: "समारोह के अंतिम दिन, जब अग्नि की लपटें सबसे ऊंची उठीं, एक दिव्य प्राणी पवित्र अग्नि से प्रकट हुआ। वह सूर्य की तरह चमकदार था, लाल और सुनहरे वस्त्रों में सुसज्जित। उसके हाथों में, दिव्य पायसम से भरा एक सुनहरा पात्र था। 'मैं भगवान विष्णु का दूत हूं,' उस दिव्य प्राणी ने घोषणा की। 'परम प्रभु ने आपकी प्रार्थनाएं सुन ली हैं।'",
+            te: "వేడుక చివరి రోజున, మంటలు అత్యున్నతంగా ఎగిసినప్పుడు, పవిత్ర అగ్ని నుండి ఒక దివ్య ప్రాణి ఉద్భవించాడు. అతను సూర్యుడంత ప్రకాశవంతంగా ఉన్నాడు, ఎరుపు మరియు బంగారు వస్త్రాలు ధరించాడు. అతని చేతుల్లో, దివ్య పాయసంతో నిండిన బంగారు పాత్ర ఉంది. 'నేను విష్ణు భగవానుని దూతను,' ఆ దివ్య ప్రాణి ప్రకటించాడు.",
+            ta: "விழாவின் கடைசி நாளில், தீப்பிழம்புகள் உச்சத்தை எட்டியபோது, புனித நெருப்பிலிருந்து ஒரு தெய்வீக உயிர் வெளிப்பட்டது. அவர் சூரியனைப் போல் பிரகாசமாக இருந்தார், சிவப்பு மற்றும் தங்க ஆடைகள் அணிந்திருந்தார். அவரது கைகளில், தெய்வீக பாயசம் நிறைந்த தங்கப் பாத்திரம் இருந்தது. 'நான் விஷ்ணு பகவானின் தூதன்,' என்று அந்த தெய்வீக உயிர் அறிவித்தது.",
+            sa: "समारोहस्य अन्तिमदिवसे यदा ज्वालाः उच्चतमं उत्थिताः तदा पवित्राग्नेः एकः दिव्यप्राणी आविर्भूतः। सः सूर्यवत् प्रकाशमानः आसीत्, रक्तसुवर्णवस्त्रैः आवृतः। तस्य हस्तयोः दिव्यपायसपूर्णं सुवर्णपात्रम् आसीत्।"
+          }
         ]
       },
       {
-        title: "The Divine Birth",
+        title: {
+          en: "The Divine Birth of Lord Rama",
+          hi: "भगवान राम का दिव्य जन्म",
+          te: "శ్రీరాముని దివ్య జన్మ",
+          ta: "ஸ்ரீ ராமரின் தெய்வீக பிறப்பு",
+          sa: "श्रीरामस्य दिव्यजन्म"
+        },
         theme: "✨",
-        imageIndex: 3,
+        image: ramaBirth,
         content: [
-          "King Dasharatha distributed the sacred payasam among his three queens with trembling hands. To Kausalya, the eldest and most devoted, he gave half. To Kaikeyi, who had earned his eternal gratitude, he gave a quarter. And to the gentle Sumitra, he gave the remaining quarter, which she divided into two portions.",
-          "The months that followed were filled with auspicious signs. Flowers bloomed out of season, rivers ran crystal clear, and celestial music was heard at dawn and dusk. The entire creation seemed to celebrate the coming of something divine.",
-          "On the ninth day of the bright fortnight of the month of Chaitra, under the star Punarvasu, when five planets were in exaltation, Queen Kausalya gave birth to a son of extraordinary beauty. The baby's skin glowed with a bluish tint like the petals of a blue lotus, and his eyes sparkled like stars.",
-          "The priests and sages who witnessed the birth felt a divine presence fill the room. 'This child,' whispered the great sage Vashishta, 'is no ordinary mortal. He is Dharma incarnate - righteousness itself born in human form. He shall be called Rama - he who brings joy to all.'"
+          {
+            en: "King Dasharatha distributed the sacred payasam among his three queens with trembling hands. To Kausalya, the eldest and most devoted, he gave half. To Kaikeyi, who had earned his eternal gratitude, he gave a quarter. And to the gentle Sumitra, he gave the remaining quarter, which she divided into two portions.",
+            hi: "महाराज दशरथ ने कांपते हाथों से पवित्र पायस को अपनी तीन रानियों में वितरित किया। सबसे बड़ी और सबसे समर्पित कौशल्या को उन्होंने आधा दिया। कैकेयी को, जिसने उनकी शाश्वत कृतज्ञता अर्जित की थी, उन्होंने एक चौथाई दिया। और कोमल सुमित्रा को उन्होंने शेष एक चौथाई दिया, जिसे उसने दो भागों में विभाजित कर लिया।",
+            te: "దశరథ మహారాజు వణుకుతున్న చేతులతో పవిత్ర పాయసాన్ని తన ముగ్గురు రాణులకు పంచారు. అత్యంత వృద్ధురాలు మరియు భక్తురాలు అయిన కౌసల్యకు సగం ఇచ్చారు. తన శాశ్వత కృతజ్ఞతను సంపాదించిన కైకేయికి పావు వంతు ఇచ్చారు. సౌమ్యురాలైన సుమిత్రకు మిగిలిన పావు వంతు ఇచ్చారు, దానిని ఆమె రెండు భాగాలుగా విభజించుకుంది.",
+            ta: "மன்னர் தசரதர் நடுங்கும் கைகளால் புனித பாயசத்தை தனது மூன்று ராணிகளுக்கும் பகிர்ந்தளித்தார். மூத்தவரும் மிகவும் பக்தியுள்ளவருமான கௌசல்யாவுக்கு பாதியை கொடுத்தார். தனது நித்திய நன்றியைப் பெற்ற கைகேயிக்கு கால் பகுதி கொடுத்தார். மென்மையான சுமித்திரைக்கு மீதமுள்ள கால் பகுதியை கொடுத்தார், அதை அவள் இரண்டு பகுதிகளாகப் பிரித்துக் கொண்டாள்.",
+            sa: "महाराजदशरथः कम्पमानाभ्यां हस्ताभ्यां पवित्रपायसं स्वतिसृषु राज्ञीषु वितरितवान्। ज्येष्ठायै भक्तिमत्यै कौसल्यायै अर्धं दत्तवान्।"
+          },
+          {
+            en: "On the ninth day of the bright fortnight of the month of Chaitra, under the star Punarvasu, when five planets were in exaltation, Queen Kausalya gave birth to a son of extraordinary beauty. The baby's skin glowed with a bluish tint like the petals of a blue lotus, and his eyes sparkled like stars.",
+            hi: "चैत्र मास के शुक्ल पक्ष की नवमी को, पुनर्वसु नक्षत्र के नीचे, जब पांच ग्रह उच्च स्थिति में थे, रानी कौशल्या ने असाधारण सुंदरता वाले पुत्र को जन्म दिया। शिशु की त्वचा नीले कमल की पंखुड़ियों की तरह नीली आभा से चमक रही थी, और उसकी आंखें तारों की तरह जगमगा रही थीं।",
+            te: "చైత్ర మాసం శుక్ల పక్షం నవమి రోజున, పునర్వసు నక్షత్రం కింద, ఐదు గ్రహాలు ఉచ్చ స్థితిలో ఉన్నప్పుడు, రాణి కౌసల్య అసాధారణ అందం కలిగిన కుమారుడిని ప్రసవించింది. శిశువు చర్మం నీలి కమలం రేకుల వలె నీలి వర్ణంతో ప్రకాశించింది, అతని కళ్ళు నక్షత్రాల వలె మెరిసాయి.",
+            ta: "சித்திரை மாதம் சுக்ல பக்ஷத்தின் நவமி நாளில், புனர்வசு நட்சத்திரத்தின் கீழ், ஐந்து கிரகங்கள் உச்ச நிலையில் இருந்தபோது, ராணி கௌசல்யா அசாதாரண அழகு கொண்ட மகனைப் பெற்றெடுத்தாள். குழந்தையின் தோல் நீல தாமரை இதழ்கள் போல் நீல நிறத்தில் ஒளிர்ந்தது, அவனது கண்கள் நட்சத்திரங்கள் போல் மின்னின.",
+            sa: "चैत्रमासस्य शुक्लपक्षस्य नवम्यां तिथौ पुनर्वसुनक्षत्रे पञ्चग्रहेषु उच्चस्थितेषु सत्सु राज्ञी कौसल्या असाधारणसौन्दर्ययुतं पुत्रं प्रसूतवती।"
+          },
+          {
+            en: "The priests and sages who witnessed the birth felt a divine presence fill the room. 'This child,' whispered the great sage Vashishta, 'is no ordinary mortal. He is Dharma incarnate - righteousness itself born in human form. He shall be called Rama - he who brings joy to all.'",
+            hi: "जन्म के साक्षी पुजारियों और ऋषियों ने कमरे में एक दिव्य उपस्थिति महसूस की। 'यह बालक,' महान ऋषि वशिष्ठ ने फुसफुसाया, 'कोई साधारण नश्वर नहीं है। वह धर्म का अवतार है - मानव रूप में जन्मी धार्मिकता। उसका नाम राम होगा - जो सभी को आनंद देता है।'",
+            te: "జన్మకు సాక్షులైన పూజారులు మరియు ఋషులు గదిలో దివ్య సన్నిధిని అనుభవించారు. 'ఈ బిడ్డ,' మహా ఋషి వశిష్ఠుడు గుసగుసలాడారు, 'సాధారణ మానవుడు కాదు. అతను ధర్మ స్వరూపం - మానవ రూపంలో జన్మించిన ధర్మం. అతనిని రాముడు అని పిలుస్తారు - అందరికీ ఆనందాన్ని కలిగించేవాడు.'",
+            ta: "பிறப்பைக் கண்ட பூசாரிகளும் முனிவர்களும் அறையில் ஒரு தெய்வீக இருப்பை உணர்ந்தனர். 'இந்தக் குழந்தை,' மகான் வசிஷ்டர் கிசுகிசுத்தார், 'சாதாரண மனிதன் அல்ல. அவர் தர்ம அவதாரம் - மனித வடிவில் பிறந்த அறம். அவர் ராமர் என்று அழைக்கப்படுவார் - அனைவருக்கும் மகிழ்ச்சி தருபவர்.'",
+            sa: "जन्मसाक्षिणः पुरोहिताः ऋषयश्च कक्षे दिव्यसान्निध्यम् अनुभूतवन्तः। 'एषः बालकः' इति महर्षिवशिष्ठः अकथयत् 'साधारणमर्त्यः नास्ति। सः धर्मावतारः - मानवरूपेण जातं धर्मम्।'"
+          }
         ]
       },
       {
-        title: "The Four Princes",
+        title: {
+          en: "The Four Princes Grow",
+          hi: "चार राजकुमारों का विकास",
+          te: "నలుగురు రాజకుమారుల పెరుగుదల",
+          ta: "நான்கு இளவரசர்களின் வளர்ச்சி",
+          sa: "चतुर्णां राजकुमाराणां वृद्धिः"
+        },
         theme: "👑",
-        imageIndex: 4,
+        image: fourPrinces,
         content: [
-          "Shortly after Rama's birth, the other queens also delivered their precious sons. Kaikeyi gave birth to Bharata, a child of remarkable courage and loyalty. Sumitra was blessed with twins - Lakshmana and Shatrughna - born of her two portions of the sacred offering.",
-          "From their earliest days, a mysterious bond connected the brothers. Lakshmana would not eat unless Rama had eaten first, would not sleep unless Rama slept beside him. It was as if they shared one soul in two bodies. Similarly, Shatrughna was inseparable from Bharata.",
-          "The princes grew under the tutelage of the great sage Vashishta, learning the Vedas, the arts of war, the science of governance, and the subtle wisdom of dharma. Rama excelled in everything he undertook, yet remained humble and kind. His smile could calm the most troubled heart, and his words were always true and gentle.",
-          "By the age of sixteen, Rama had mastered every weapon known to man, every scripture known to scholars, and had won the love of every citizen in Ayodhya. When he walked through the city streets, people would stop their work just to catch a glimpse of him, their eyes filling with tears of inexplicable joy."
+          {
+            en: "Shortly after Rama's birth, the other queens also delivered their precious sons. Kaikeyi gave birth to Bharata, a child of remarkable courage and loyalty. Sumitra was blessed with twins - Lakshmana and Shatrughna - born of her two portions of the sacred offering.",
+            hi: "राम के जन्म के कुछ समय बाद, अन्य रानियों ने भी अपने प्रिय पुत्रों को जन्म दिया। कैकेयी ने भरत को जन्म दिया, जो असाधारण साहस और निष्ठा वाला बालक था। सुमित्रा को जुड़वां बच्चों का आशीर्वाद मिला - लक्ष्मण और शत्रुघ्न - जो पवित्र प्रसाद के उसके दो भागों से जन्मे थे।",
+            te: "రాముని జన్మ తర్వాత కొద్దికాలానికే, ఇతర రాణులు కూడా తమ ప్రియమైన కుమారులను ప్రసవించారు. కైకేయి భరతుడిని ప్రసవించింది, అసాధారణ ధైర్యం మరియు విధేయత కలిగిన బిడ్డ. సుమిత్ర కవలలతో ఆశీర్వదించబడింది - లక్ష్మణుడు మరియు శత్రుఘ్నుడు - పవిత్ర ప్రసాదం యొక్క ఆమె రెండు భాగాల నుండి జన్మించారు.",
+            ta: "ராமரின் பிறப்புக்குப் பிறகு விரைவில், மற்ற ராணிகளும் தங்கள் அன்பான மகன்களைப் பெற்றெடுத்தனர். கைகேயி பரதனைப் பெற்றெடுத்தாள், அசாதாரண தைரியமும் விசுவாசமும் கொண்ட குழந்தை. சுமித்திரை இரட்டையர்களால் ஆசீர்வதிக்கப்பட்டாள் - லக்ஷ்மணனும் சத்ருக்னனும் - புனித பிரசாதத்தின் அவளது இரண்டு பகுதிகளிலிருந்து பிறந்தவர்கள்.",
+            sa: "रामजन्मात् किञ्चित्कालानन्तरम् अन्याः राज्ञ्यः अपि स्वप्रियपुत्रान् प्रसूतवत्यः। कैकेयी भरतं प्रसूतवती असाधारणशौर्यनिष्ठावन्तं बालकम्।"
+          },
+          {
+            en: "From their earliest days, a mysterious bond connected the brothers. Lakshmana would not eat unless Rama had eaten first, would not sleep unless Rama slept beside him. It was as if they shared one soul in two bodies. Similarly, Shatrughna was inseparable from Bharata.",
+            hi: "अपने शुरुआती दिनों से ही, भाइयों के बीच एक रहस्यमय बंधन था। लक्ष्मण तब तक नहीं खाते थे जब तक राम न खा लें, तब तक नहीं सोते थे जब तक राम उनके बगल में न सोएं। ऐसा लगता था जैसे दो शरीरों में एक आत्मा हो। इसी तरह, शत्रुघ्न भरत से अविभाज्य थे।",
+            te: "వారి మొదటి రోజుల నుండే, సోదరులను ఒక మర్మమైన బంధం అనుసంధానించింది. రాముడు తినే వరకు లక్ష్మణుడు తినేవాడు కాదు, రాముడు పక్కన నిద్రించే వరకు నిద్రపోయేవాడు కాదు. వారు రెండు శరీరాలలో ఒక ఆత్మను పంచుకున్నట్లుగా ఉండేది. అదేవిధంగా, శత్రుఘ్నుడు భరతుడి నుండి విడదీయరానివాడు.",
+            ta: "ஆரம்ப நாட்களிலிருந்தே, சகோதரர்களை ஒரு மர்மமான பிணைப்பு இணைத்தது. ராமர் சாப்பிடும் வரை லக்ஷ்மணன் சாப்பிட மாட்டான், ராமர் பக்கத்தில் தூங்கும் வரை தூங்க மாட்டான். அவர்கள் இரண்டு உடல்களில் ஒரு ஆத்மாவைப் பகிர்ந்து கொண்டது போல் இருந்தது. அதேபோல், சத்ருக்னன் பரதனிடமிருந்து பிரிக்க முடியாதவனாக இருந்தான்.",
+            sa: "प्रारम्भिकदिवसेभ्य एव भ्रातृणां मध्ये एकं रहस्यमयं बन्धनम् आसीत्। रामेण भुक्तं विना लक्ष्मणः न भुञ्जते स्म, रामेण पार्श्वे शयिते विना न स्वपिति स्म।"
+          },
+          {
+            en: "The princes grew under the tutelage of the great sage Vashishta, learning the Vedas, the arts of war, the science of governance, and the subtle wisdom of dharma. Rama excelled in everything he undertook, yet remained humble and kind. His smile could calm the most troubled heart.",
+            hi: "राजकुमार महान ऋषि वशिष्ठ के मार्गदर्शन में बड़े हुए, वेदों, युद्ध कलाओं, शासन विज्ञान और धर्म की सूक्ष्म बुद्धि सीखते हुए। राम ने जो कुछ भी किया उसमें उत्कृष्टता प्राप्त की, फिर भी विनम्र और दयालु बने रहे। उनकी मुस्कान सबसे व्याकुल हृदय को भी शांत कर सकती थी।",
+            te: "రాజకుమారులు మహా ఋషి వశిష్ఠుని మార్గదర్శకత్వంలో పెరిగారు, వేదాలు, యుద్ధ కళలు, పాలన శాస్త్రం మరియు ధర్మం యొక్క సూక్ష్మ జ్ఞానాన్ని నేర్చుకున్నారు. రాముడు తాను చేపట్టిన ప్రతిదానిలో రాణించాడు, అయినప్పటికీ వినయంగా మరియు దయగా ఉన్నాడు. అతని చిరునవ్వు అత్యంత కలత చెందిన హృదయాన్ని కూడా శాంతపరచగలదు.",
+            ta: "இளவரசர்கள் மகான் வசிஷ்டரின் வழிகாட்டுதலில் வளர்ந்தனர், வேதங்கள், போர்க் கலைகள், ஆட்சி அறிவியல் மற்றும் தர்மத்தின் நுட்பமான ஞானத்தைக் கற்றுக்கொண்டனர். ராமர் தான் மேற்கொண்ட எல்லாவற்றிலும் சிறந்து விளங்கினார், ஆனால் பணிவாகவும் இரக்கமாகவும் இருந்தார். அவரது புன்னகை மிகவும் கலங்கிய இதயத்தையும் அமைதிப்படுத்த முடியும்.",
+            sa: "राजकुमाराः महर्षिवशिष्ठस्य मार्गदर्शने वर्धिताः, वेदान् युद्धकलाः शासनविज्ञानं धर्मस्य च सूक्ष्मप्रज्ञां शिक्षमाणाः।"
+          }
         ]
       },
       {
-        title: "The Arrival of Vishwamitra",
+        title: {
+          en: "Sage Vishwamitra Arrives",
+          hi: "ऋषि विश्वामित्र का आगमन",
+          te: "విశ్వామిత్ర మహర్షి రాక",
+          ta: "விசுவாமித்திர முனிவரின் வருகை",
+          sa: "विश्वामित्रमुनेः आगमनम्"
+        },
         theme: "🧙",
-        imageIndex: 5,
+        image: vishwamitra,
         content: [
-          "One fateful day, the sage Vishwamitra arrived at the gates of Ayodhya. He was one of the most powerful beings in creation - a king who had become a Brahmarshi through thousands of years of severe penance. Devas and Asuras alike trembled before his spiritual power.",
-          "King Dasharatha received him with the highest honors, washing the sage's feet himself and offering him the finest hospitality. 'Great sage,' said the king, 'your presence sanctifies my kingdom. Ask for anything - gold, jewels, even half my realm - and it shall be yours.'",
-          "Vishwamitra smiled mysteriously. 'O King, I have no need for worldly treasures. I am performing a sacred yajna in the forest, but two demons - Maricha and Subahu - repeatedly defile my offerings with blood and filth. I need a protector, and I have come to ask for your son Rama.'",
-          "Dasharatha's heart nearly stopped. Send his beloved Rama, barely sixteen, to face demons that even the gods feared? He pleaded, he wept, he offered armies of warriors instead. But Vishwamitra was firm, and Sage Vashishta counseled the king to trust the sage's wisdom.",
-          "With a breaking heart, Dasharatha allowed Rama and Lakshmana to accompany Vishwamitra into the dangerous Dandaka forest."
+          {
+            en: "One fateful day, the sage Vishwamitra arrived at the gates of Ayodhya. He was one of the most powerful beings in creation - a king who had become a Brahmarshi through thousands of years of severe penance. Devas and Asuras alike trembled before his spiritual power.",
+            hi: "एक भाग्यशाली दिन, ऋषि विश्वामित्र अयोध्या के द्वार पर पहुंचे। वे सृष्टि के सबसे शक्तिशाली प्राणियों में से एक थे - एक राजा जो हजारों वर्षों की कठोर तपस्या के माध्यम से ब्रह्मर्षि बन गए थे। देवता और असुर दोनों उनकी आध्यात्मिक शक्ति के सामने कांपते थे।",
+            te: "ఒక అదృష్టకరమైన రోజు, విశ్వామిత్ర మహర్షి అయోధ్య ద్వారాల వద్దకు వచ్చారు. ఆయన సృష్టిలో అత్యంత శక్తివంతమైన ప్రాణులలో ఒకరు - వేల సంవత్సరాల కఠిన తపస్సు ద్వారా బ్రహ్మర్షిగా మారిన రాజు. దేవతలు మరియు అసురులు ఇద్దరూ ఆయన ఆధ్యాత్మిక శక్తి ముందు వణికారు.",
+            ta: "ஒரு விதி நிர்ணயிக்கும் நாளில், விசுவாமித்திர முனிவர் அயோத்தியின் வாயிலில் வந்து சேர்ந்தார். அவர் படைப்பில் மிகவும் சக்திவாய்ந்த உயிர்களில் ஒருவர் - ஆயிரக்கணக்கான ஆண்டுகள் கடும் தவத்தின் மூலம் பிரம்மரிஷியான ஒரு மன்னர். தேவர்களும் அசுரர்களும் அவரது ஆன்மீக சக்திக்கு முன் நடுங்கினர்.",
+            sa: "एकस्मिन् भाग्ययुक्तदिवसे विश्वामित्रमुनिः अयोध्यायाः द्वारे आगच्छत्। सः सृष्टौ शक्तिमत्तमेषु प्राणिषु एकः आसीत् - सहस्रवर्षाणां कठोरतपसा ब्रह्मर्षिः जातः राजा।"
+          },
+          {
+            en: "Vishwamitra smiled mysteriously. 'O King, I have no need for worldly treasures. I am performing a sacred yajna in the forest, but two demons - Maricha and Subahu - repeatedly defile my offerings with blood and filth. I need a protector, and I have come to ask for your son Rama.'",
+            hi: "विश्वामित्र ने रहस्यमय ढंग से मुस्कुराया। 'हे राजन, मुझे सांसारिक खजाने की कोई आवश्यकता नहीं है। मैं वन में पवित्र यज्ञ कर रहा हूं, लेकिन दो राक्षस - मारीच और सुबाहु - बार-बार मेरे प्रसाद को रक्त और गंदगी से अपवित्र करते हैं। मुझे एक रक्षक चाहिए, और मैं आपके पुत्र राम को मांगने आया हूं।'",
+            te: "విశ్వామిత్రుడు మర్మమైన చిరునవ్వు నవ్వాడు. 'ఓ రాజా, నాకు లౌకిక నిధులు అవసరం లేదు. నేను అడవిలో పవిత్ర యజ్ఞం చేస్తున్నాను, కానీ ఇద్దరు రాక్షసులు - మారీచుడు మరియు సుబాహు - పదేపదే నా అర్పణలను రక్తంతో మరియు మురికితో అపవిత్రం చేస్తున్నారు. నాకు ఒక రక్షకుడు కావాలి, మీ కుమారుడు రాముడిని అడగడానికి వచ్చాను.'",
+            ta: "விசுவாமித்திரர் மர்மமாக புன்னகைத்தார். 'அரசனே, எனக்கு உலக செல்வங்கள் தேவையில்லை. நான் காட்டில் புனித யக்ஞம் செய்கிறேன், ஆனால் இரண்டு அரக்கர்கள் - மாரீசன் மற்றும் சுபாகு - மீண்டும் மீண்டும் என் காணிக்கைகளை இரத்தத்தாலும் அழுக்காலும் கெடுக்கின்றனர். எனக்கு ஒரு பாதுகாவலர் தேவை, உங்கள் மகன் ராமரைக் கேட்க வந்தேன்.'",
+            sa: "विश्वामित्रः रहस्यात्मकं स्मितं कृत्वा अकथयत्। 'हे राजन्, मम लौकिकनिधीनां आवश्यकता नास्ति। अहं वने पवित्रयज्ञं करोमि, किन्तु द्वौ राक्षसौ - मारीचः सुबाहुश्च - पुनः पुनः मम अर्पणानि रक्तेन मलेन च अपवित्रीकुरुतः।'"
+          }
         ]
       },
       {
-        title: "The Trials in the Forest",
-        theme: "⚔️",
-        imageIndex: 6,
-        content: [
-          "The journey into the forest was Rama's first test. As they entered the wilderness, the very air seemed to grow heavy with malevolence. This was the territory of Tataka, a powerful demoness who had laid waste to entire kingdoms.",
-          "Vishwamitra turned to Rama. 'She approaches. This creature, once a beautiful yaksha woman, was cursed to become a monster. She has killed thousands. You must destroy her, Rama, for the protection of all living beings.'",
-          "Rama hesitated - his noble heart recoiled at the thought of harming a woman, even a demoness. But Vishwamitra explained that when a being chooses evil, when they use their power to harm the innocent, their original nature becomes irrelevant. Dharma required their destruction.",
-          "With a heavy heart but steady aim, Rama drew his bow. The arrow flew true, and Tataka was no more. The forest itself seemed to breathe a sigh of relief. Flowers bloomed where moments before only thorns had grown.",
-          "Pleased with Rama's skill and righteousness, Vishwamitra bestowed upon him the knowledge of divine weapons - the Brahmastra, the Vayuastra, the Agneyastra, and many more. 'Use these wisely,' the sage counseled. 'Great power requires even greater responsibility.'"
-        ]
-      },
-      {
-        title: "The Swayamvara at Mithila",
+        title: {
+          en: "The Swayamvara - Breaking of Shiva's Bow",
+          hi: "स्वयंवर - शिव धनुष का टूटना",
+          te: "స్వయంవరం - శివ ధనుస్సు విరిగింది",
+          ta: "சுயம்வரம் - சிவனின் வில்லை உடைத்தல்",
+          sa: "स्वयंवरः - शिवधनुषो भञ्जनम्"
+        },
         theme: "💕",
-        imageIndex: 7,
+        image: shivaBow,
         content: [
-          "After successfully protecting Vishwamitra's yajna, the sage led the princes to the kingdom of Mithila, ruled by the philosopher-king Janaka. There, Rama's destiny awaited him in the form of a divine bow and a princess of unparalleled beauty.",
-          "King Janaka possessed the Shiva Dhanus, Lord Shiva's own bow, which had been given to his ancestors by the god himself. The bow was so massive that three hundred men were needed just to move it. Janaka had declared that whoever could string this celestial weapon would win the hand of his daughter Sita.",
-          "Sita was no ordinary princess. She had been found by Janaka while he was ploughing a field for a sacred ritual, emerging from the earth itself like a divine blessing. Hence her name - Sita, meaning 'furrow.' She was believed to be an incarnation of Goddess Lakshmi herself.",
-          "Countless princes from across the world had tried and failed to even lift the bow. Some had injured themselves; others had left in shame. Janaka had begun to despair that his daughter would remain unmarried forever.",
-          "When Rama entered the arena where the bow lay, a hush fell over the crowd. With the grace of a dancer and the strength of a god, he lifted the massive bow as easily as a child lifts a toy. As he bent it to string it, the divine weapon shattered with a sound that echoed across the three worlds.",
-          "Sita, watching from behind a curtain, felt her heart recognize what her eyes had sought all her life. Without hesitation, she stepped forward and placed the wedding garland around Rama's neck. In that moment, two halves of one divine soul were united."
+          {
+            en: "After successfully protecting Vishwamitra's yajna, the sage led the princes to the kingdom of Mithila, ruled by the philosopher-king Janaka. There, Rama's destiny awaited him in the form of a divine bow and a princess of unparalleled beauty.",
+            hi: "विश्वामित्र के यज्ञ की सफलतापूर्वक रक्षा करने के बाद, ऋषि ने राजकुमारों को मिथिला राज्य में ले गए, जिस पर दार्शनिक-राजा जनक का शासन था। वहां, राम की नियति एक दिव्य धनुष और अद्वितीय सौंदर्य वाली राजकुमारी के रूप में उनकी प्रतीक्षा कर रही थी।",
+            te: "విశ్వామిత్రుని యజ్ఞాన్ని విజయవంతంగా రక్షించిన తర్వాత, మహర్షి రాజకుమారులను తత్వవేత్త-రాజు జనకుడు పరిపాలించే మిథిల రాజ్యానికి తీసుకెళ్ళాడు. అక్కడ, దివ్య ధనుస్సు మరియు సాటిలేని అందం కలిగిన రాజకుమారి రూపంలో రాముని విధి అతని కోసం వేచి ఉంది.",
+            ta: "விசுவாமித்திரரின் யக்ஞத்தை வெற்றிகரமாகப் பாதுகாத்த பிறகு, முனிவர் இளவரசர்களை தத்துவஞானி-மன்னர் ஜனகர் ஆட்சி செய்த மிதிலை ராஜ்யத்திற்கு அழைத்துச் சென்றார். அங்கே, ராமரின் விதி ஒரு தெய்வீக வில் மற்றும் ஒப்பற்ற அழகு கொண்ட இளவரசி வடிவில் அவருக்காகக் காத்திருந்தது.",
+            sa: "विश्वामित्रस्य यज्ञं सफलतया रक्षित्वा मुनिः राजकुमारान् तत्त्ववेत्तृराजजनकशासितं मिथिलाराज्यं नीतवान्।"
+          },
+          {
+            en: "King Janaka possessed the Shiva Dhanus, Lord Shiva's own bow, which had been given to his ancestors by the god himself. The bow was so massive that three hundred men were needed just to move it. Janaka had declared that whoever could string this celestial weapon would win the hand of his daughter Sita.",
+            hi: "राजा जनक के पास शिव धनुष था, भगवान शिव का अपना धनुष, जो स्वयं देवता ने उनके पूर्वजों को दिया था। धनुष इतना विशाल था कि केवल इसे हिलाने के लिए तीन सौ पुरुषों की आवश्यकता थी। जनक ने घोषणा की थी कि जो कोई भी इस दिव्य हथियार को चढ़ा सकेगा वह उनकी पुत्री सीता का हाथ जीतेगा।",
+            te: "రాజు జనకుడి వద్ద శివ ధనుస్సు ఉంది, శివ భగవానుని స్వంత ధనుస్సు, దేవుడే స్వయంగా తన పూర్వీకులకు ఇచ్చింది. ధనుస్సు చాలా భారీగా ఉండేది, దానిని కదిలించడానికి మూడు వందల మంది అవసరం. ఈ దివ్య ఆయుధాన్ని ఎక్కించగలిగే వారు తన కుమార్తె సీత చేతిని గెలుస్తారని జనకుడు ప్రకటించాడు.",
+            ta: "மன்னர் ஜனகரிடம் சிவ தனுஷ் இருந்தது, சிவ பெருமானின் சொந்த வில், கடவுளே தனது முன்னோர்களுக்கு கொடுத்தது. வில் மிகவும் பிரமாண்டமாக இருந்ததால் அதை நகர்த்த மட்டுமே முந்நூறு ஆண்கள் தேவைப்பட்டனர். இந்த தெய்வீக ஆயுதத்தை ஏற்றுபவர் தனது மகள் சீதையின் கையை வெல்வார் என்று ஜனகர் அறிவித்தார்.",
+            sa: "जनकराजस्य समीपे शिवधनुः आसीत्, शिवभगवतः स्वधनुः यं देवः स्वयम् एव तस्य पूर्वजेभ्यः दत्तवान्।"
+          },
+          {
+            en: "When Rama entered the arena where the bow lay, a hush fell over the crowd. With the grace of a dancer and the strength of a god, he lifted the massive bow as easily as a child lifts a toy. As he bent it to string it, the divine weapon shattered with a sound that echoed across the three worlds. Sita stepped forward and placed the wedding garland around Rama's neck.",
+            hi: "जब राम उस अखाड़े में प्रवेश किए जहां धनुष रखा था, भीड़ पर सन्नाटा छा गया। एक नर्तक की कृपा और एक देवता की शक्ति के साथ, उन्होंने विशाल धनुष को उतनी ही आसानी से उठाया जैसे एक बच्चा खिलौना उठाता है। जैसे ही उन्होंने इसे चढ़ाने के लिए झुकाया, दिव्य हथियार एक ऐसी ध्वनि के साथ टूट गया जो तीनों लोकों में गूंज उठी। सीता ने आगे बढ़कर राम के गले में वरमाला डाल दी।",
+            te: "రాముడు ధనుస్సు ఉన్న రంగంలోకి ప్రవేశించినప్పుడు, జనసమూహంపై నిశ్శబ్దం ఆవరించింది. నర్తకుని దయ మరియు దేవుని బలంతో, పిల్లవాడు బొమ్మను ఎత్తినంత సులభంగా అతను భారీ ధనుస్సును ఎత్తాడు. దానిని ఎక్కించడానికి వంచినప్పుడు, దివ్య ఆయుధం మూడు లోకాలలో ప్రతిధ్వనించిన శబ్దంతో విరిగిపోయింది. సీత ముందుకు వచ్చి రాముని మెడలో వరమాల వేసింది.",
+            ta: "ராமர் வில் இருந்த அரங்கிற்குள் நுழைந்தபோது, கூட்டத்தின் மீது அமைதி நிலவியது. ஒரு நடனக் கலைஞரின் அழகும் ஒரு கடவுளின் வலிமையும் கொண்டு, ஒரு குழந்தை பொம்மையை எடுப்பது போல் எளிதாக பிரமாண்டமான வில்லை தூக்கினார். அதை ஏற்ற வளைத்தபோது, தெய்வீக ஆயுதம் மூன்று உலகங்களிலும் எதிரொலித்த ஒலியுடன் உடைந்தது. சீதை முன்னால் வந்து ராமரின் கழுத்தில் மாலை அணிவித்தாள்.",
+            sa: "यदा रामः धनुः स्थितस्य रङ्गस्य प्रविष्टवान् तदा जनसमूहे निःशब्दता आवृता। नर्तकस्य अनुग्रहेण देवस्य बलेन च बालकः क्रीडनकं उत्थापयति इव सः विशालधनुः उत्थापितवान्।"
+          }
         ]
       },
       {
-        title: "The Grand Wedding",
+        title: {
+          en: "The Grand Wedding",
+          hi: "भव्य विवाह",
+          te: "అద్భుత వివాహం",
+          ta: "பிரமாண்ட திருமணம்",
+          sa: "भव्यविवाहः"
+        },
         theme: "💒",
-        imageIndex: 8,
+        image: ramaSitaWedding,
         content: [
-          "The news of Rama's triumph reached Ayodhya, and King Dasharatha arrived with a grand procession for the wedding. It was decided that all four brothers would marry on the same auspicious day - Rama to Sita, Lakshmana to Sita's sister Urmila, Bharata to Mandavi, and Shatrughna to Shrutakirti.",
-          "The wedding celebrations lasted for many days. The streets of Mithila were decorated with flowers and lights. Musicians played, dancers performed, and the air was filled with the fragrance of jasmine and rose. Even the gods descended from heaven to witness the union of Rama and Sita.",
-          "As the sacred fire witnessed their seven steps together, as Rama tied the mangalsutra around Sita's neck, all of creation celebrated. This was not merely a royal wedding - it was the coming together of Dharma and Devotion, of the Protector and the Protected, of Vishnu and Lakshmi in mortal form.",
-          "And so ended the Bala Kanda, the Book of Youth. Rama returned to Ayodhya with his bride, his brothers, and the love of an entire kingdom. But destiny had much more in store for the prince of Ayodhya. The seeds of future trials were already being sown, even as the wedding flowers still lay fresh upon the ground."
-        ]
-      }
-    ]
-  },
-  "ayodhya-kanda": {
-    scenes: [
-      {
-        title: "The Announcement of Coronation",
-        theme: "📯",
-        imageIndex: 0,
-        content: [
-          "Years of perfect happiness passed in Ayodhya. Rama and Sita's love grew deeper with each passing day, becoming a legend that poets sang about in distant lands. King Dasharatha, now advanced in years, felt the time had come to crown Rama as Yuvaraja - the heir apparent.",
-          "The announcement sent waves of joy through the kingdom. Citizens prepared for the grandest coronation in history. Flowers were gathered, streets were decorated, and prayers of thanksgiving rose from every home.",
-          "But fate, as it often does, had other plans..."
-        ]
-      },
-      {
-        title: "Manthara's Poison",
-        theme: "🐍",
-        imageIndex: 1,
-        content: [
-          "In Queen Kaikeyi's chambers, her aged maid Manthara watched the celebrations with bitter eyes. This hunchbacked woman had nursed a lifetime of resentments, and now she saw an opportunity to release her venom.",
-          "'My lady,' she whispered to Kaikeyi, 'do you not see what is happening? When Rama becomes king, what will become of your son Bharata? He will be a servant in his own home. And you - you who saved the king's life in battle - you will bow before Kausalya like a common maid.'",
-          "At first, Kaikeyi dismissed these words. She loved Rama as her own son. But Manthara persisted, day and night, dripping poison into her ears until doubt took root in Kaikeyi's heart."
-        ]
-      },
-      {
-        title: "The Terrible Boons",
-        theme: "😱",
-        imageIndex: 2,
-        content: [
-          "Kaikeyi remembered that long ago, after she had saved Dasharatha's life in battle, he had promised her any two boons of her choosing. She had kept them in reserve, never imagining she would use them for such a purpose.",
-          "Now, corrupted by Manthara's words, she entered the sulking chamber and refused to see the king until he granted her demands. When Dasharatha finally came to her, eager to share his joy about Rama's coronation, he found her lying on the floor, her ornaments discarded, her hair disheveled.",
-          "'What troubles you, my love?' he asked in alarm. 'Ask for anything - the sun, the moon, my very life - and I shall give it to you.'",
-          "And so she asked: 'Let Bharata be crowned king instead of Rama. And let Rama be exiled to the forest for fourteen years.'"
-        ]
-      },
-      {
-        title: "Rama's Noble Departure",
-        theme: "🚶",
-        imageIndex: 3,
-        content: [
-          "When Rama heard of his stepmother's demands, he showed no anger, no disappointment. With a calm that astonished all who witnessed it, he said, 'If this is what will bring peace to my father's heart and honor to his word, then I go gladly.'",
-          "Sita, upon hearing the news, insisted on accompanying her husband. 'Where you go, I go,' she declared. 'The forest that has you will be my palace; the palace without you would be a wilderness.'",
-          "Lakshmana, his eyes burning with righteous fury, also chose to accompany his brother. 'Let them crown Bharata,' he said, 'but they cannot separate us. I will walk beside you through every trial, every danger.'",
-          "King Dasharatha, bound by his word yet broken by grief, watched helplessly as his beloved son departed for the wilderness. As Rama's chariot disappeared beyond the city gates, the old king collapsed. Within days, unable to bear the separation, he breathed his last, calling out Rama's name."
-        ]
-      },
-      {
-        title: "The Crossing of Ganga",
-        theme: "🌊",
-        imageIndex: 4,
-        content: [
-          "Rama, Sita, and Lakshmana journeyed toward the forest, crossing the mighty Ganga with the help of the boatman Guha, who wept to see his prince in the garb of a hermit.",
-          "On the banks of the sacred river, Rama performed the rituals for his departed father, whose death he learned of from the visiting Bharata. The waters of the Ganga seemed to shimmer with divine sorrow.",
-          "At Chitrakoot, the exiled trio established their first hermitage. Here, Bharata came with the entire court, begging Rama to return. But Rama, ever faithful to his father's word, refused. Bharata, equally noble, vowed to rule only as Rama's regent, placing Rama's sandals on the throne as a symbol."
-        ]
-      },
-      {
-        title: "Into the Depths of Dandaka",
-        theme: "🌲",
-        imageIndex: 5,
-        content: [
-          "The years of exile began their slow passage. Rama, Sita, and Lakshmana moved deeper into the Dandaka forest, living among sages and protecting them from the demons that roamed these lands.",
-          "Each hermitage they visited brought new adventures - battles with rakshasas, encounters with divine beings, and lessons in the ancient wisdom of the forest sages. Sita learned the ways of the forest, while Rama and Lakshmana honed their skills protecting the innocent.",
-          "But the most dangerous trials lay ahead. Unknown to them, their presence in the forest had not gone unnoticed. In distant Lanka, a terrible power was awakening - one that would change the course of their exile and shake the very foundations of the world."
-        ]
-      }
-    ]
-  },
-  "aranya-kanda": {
-    scenes: [
-      {
-        title: "The Hermitage at Panchavati",
-        theme: "🏡",
-        imageIndex: 0,
-        content: [
-          "Deep in the Dandaka forest, Rama, Sita, and Lakshmana established their hermitage at Panchavati, a beautiful grove by the river Godavari. Here, surrounded by five sacred banyan trees, they built a humble dwelling.",
-          "The peaceful days passed in divine contentment. Sita tended to the hermitage while Rama and Lakshmana protected the local sages from demonic threats. The forest seemed to welcome them as its own children."
-        ]
-      },
-      {
-        title: "Surpanakha's Desire",
-        theme: "💔",
-        imageIndex: 1,
-        content: [
-          "One day, a beautiful woman appeared at the hermitage - it was Surpanakha, sister of the demon king Ravana, who had disguised her monstrous form. She was instantly captivated by Rama's divine beauty.",
-          "'Become my husband,' she demanded. 'I can give you pleasures beyond imagination.' But Rama gently refused, pointing to Sita as his devoted wife.",
-          "Rejected and humiliated, Surpanakha's love turned to hatred. She attempted to attack Sita, but Lakshmana intervened, cutting off her nose and ears. Shrieking in pain and rage, she fled to her brothers."
-        ]
-      },
-      {
-        title: "The Demon Army Falls",
-        theme: "⚔️",
-        imageIndex: 2,
-        content: [
-          "Surpanakha's brothers - Khara and Dushana - attacked with an army of fourteen thousand demons. But Rama, armed with divine weapons, single-handedly destroyed them all.",
-          "The news of this defeat reached Lanka, where Ravana, the ten-headed king of demons, heard of Rama's power and Sita's legendary beauty. A terrible plan began to form in his mind."
-        ]
-      },
-      {
-        title: "The Golden Deer",
-        theme: "🦌",
-        imageIndex: 3,
-        content: [
-          "Ravana's ally, the demon Maricha, took the form of a beautiful golden deer and appeared near the hermitage. Sita, enchanted by its beauty, begged Rama to capture it for her.",
-          "Rama pursued the deer deep into the forest. As he struck it with his arrow, the dying Maricha cried out in Rama's voice: 'O Sita! O Lakshmana!' - a trick to lure Lakshmana away.",
-          "Despite his misgivings, Lakshmana was forced to go search for Rama, leaving Sita alone. Before departing, he drew a protective circle around the hermitage, warning Sita not to step outside its boundary under any circumstances."
-        ]
-      },
-      {
-        title: "The Abduction of Sita",
-        theme: "😭",
-        imageIndex: 4,
-        content: [
-          "Ravana appeared, disguised as a wandering mendicant. When Sita crossed the protective line to offer him alms, he revealed his terrible true form and carried her away through the sky in his aerial chariot.",
-          "The old vulture Jatayu, friend of Dasharatha, tried valiantly to rescue Sita. Though he fought with all his strength, Ravana cut off his wings. As Jatayu lay dying, he watched helplessly as Sita disappeared toward the southern horizon.",
-          "When Rama and Lakshmana returned to find the hermitage empty, their anguish shook the very heavens. They found the dying Jatayu, who with his last breath told them the direction in which Ravana had fled. Rama performed his last rites with tears streaming down his face, calling him 'father.'"
-        ]
-      }
-    ]
-  },
-  "kishkindha-kanda": {
-    scenes: [
-      {
-        title: "Meeting Hanuman",
-        theme: "🐒",
-        imageIndex: 0,
-        content: [
-          "Searching desperately for Sita, Rama and Lakshmana came to the shores of Lake Pampa, where they encountered Hanuman, the mighty son of the Wind God, disguised as a brahmin.",
-          "Hanuman had been sent by Sugriva, the exiled monkey king, to investigate these powerful warriors. The moment Hanuman saw Rama, his heart overflowed with devotion - a love that would become legendary.",
-          "Hanuman revealed himself and carried the brothers on his shoulders to meet Sugriva, who was hiding on the mountain Rishyamukha, fearing his brother Vali who had usurped his throne."
-        ]
-      },
-      {
-        title: "The Alliance with Sugriva",
-        theme: "🤝",
-        imageIndex: 1,
-        content: [
-          "Rama and Sugriva formed an alliance of mutual aid. Rama would help Sugriva defeat Vali, and in return, Sugriva would mobilize his vast monkey army to search for Sita.",
-          "Sugriva showed Rama the ornaments that Sita had dropped during her abduction, hoping they might reach her husband. Seeing them, Rama was overcome with grief and renewed determination."
-        ]
-      },
-      {
-        title: "The Fall of Vali",
-        theme: "🏹",
-        imageIndex: 2,
-        content: [
-          "In the battle between the two monkey brothers, Rama shot Vali from behind a tree while he fought Sugriva. When the dying Vali questioned this seemingly dishonorable act, Rama explained that as a king's representative, he was bound to punish those who had wronged others - Vali had stolen Sugriva's wife and kingdom.",
-          "Vali's death restored Sugriva to his throne. His son Angada joined the monkey army, and preparations began for the great search for Sita."
-        ]
-      },
-      {
-        title: "The Great Search",
-        theme: "🔍",
-        imageIndex: 3,
-        content: [
-          "Armies of monkeys and bears spread across the four directions. The southern party, led by Angada and including Hanuman, received Rama's signet ring to give to Sita as proof of their mission.",
-          "After many adventures and near failures, they reached the southern ocean. Before them lay the vast sea, and beyond it, the island of Lanka where Sita was held captive. Who among them could cross this impossible distance?"
-        ]
-      }
-    ]
-  },
-  "sundara-kanda": {
-    scenes: [
-      {
-        title: "Hanuman's Leap",
-        theme: "🌊",
-        imageIndex: 0,
-        content: [
-          "As the monkey army stood at the ocean's edge, Jambavan, the wise king of bears, reminded Hanuman of his forgotten powers. Born of the Wind God, Hanuman could grow to any size and fly across the sky.",
-          "With a mighty roar, Hanuman expanded his body to mountainous proportions. He leaped from Mount Mahendra, soaring across the ocean toward Lanka. Sea monsters and demonesses tried to stop him, but nothing could halt his divine mission."
-        ]
-      },
-      {
-        title: "Lanka's Golden Glory",
-        theme: "🏙️",
-        imageIndex: 1,
-        content: [
-          "Hanuman reached Lanka and was astounded by its magnificence. The golden city glittered like a second sun. Its walls reached the clouds, its gardens bloomed with heavenly flowers, and its palaces housed untold riches.",
-          "Shrinking to the size of a cat, Hanuman infiltrated the demon city, searching every corner for Sita. He witnessed Ravana's might, his vast armies, and his beautiful queens - but Sita was nowhere among them."
-        ]
-      },
-      {
-        title: "Finding Sita",
-        theme: "💫",
-        imageIndex: 2,
-        content: [
-          "At last, in the Ashoka grove, Hanuman found Sita - thin from fasting, dressed in the same garments she wore when abducted, surrounded by demon guards, yet radiating an inner light that poverty and captivity could not dim.",
-          "He watched as Ravana himself came to tempt her with riches and power, threatening death if she continued to refuse him. But Sita stood firm: 'You may kill me, but I will never be yours. Rama will come, and you will face his wrath.'",
-          "After Ravana left in frustration, Hanuman revealed himself to Sita, showing her Rama's ring. Her joy at hearing that Rama lived and was coming to rescue her brought tears to both their eyes."
-        ]
-      },
-      {
-        title: "Burning of Lanka",
-        theme: "🔥",
-        imageIndex: 3,
-        content: [
-          "After delivering Rama's message and Sita's reply - her hair ornament as proof of their meeting - Hanuman allowed himself to be captured deliberately. He wanted to assess Ravana's strength.",
-          "When Ravana ordered Hanuman's tail set on fire as punishment, Hanuman used his powers to escape and leaped from building to building, setting all of Lanka ablaze. The golden city burned as the demon populace watched in terror.",
-          "His mission accomplished, Hanuman returned across the ocean. The joyous news he brought - Sita was alive, Sita was faithful, and Lanka could be conquered - filled Rama's heart with hope for the first time since her abduction."
-        ]
-      }
-    ]
-  },
-  "yuddha-kanda": {
-    scenes: [
-      {
-        title: "The Bridge to Lanka",
-        theme: "🌉",
-        imageIndex: 0,
-        content: [
-          "The monkey army, led by Rama, Lakshmana, Sugriva, and Hanuman, marched to the ocean's edge. But how could such a vast army cross the sea?",
-          "Rama prayed to the ocean god for passage. When the sea god granted permission, Nala, son of the divine architect, directed the construction of a miraculous bridge. Monkeys threw boulders that floated on the water, inscribed with Rama's name.",
-          "In five days, the bridge to Lanka was complete - a path of faith stretching across the impossible distance. The army crossed, and the war for righteousness began."
-        ]
-      },
-      {
-        title: "The Great Battle",
-        theme: "⚔️",
-        imageIndex: 1,
-        content: [
-          "The war was fierce beyond description. Ravana's demon generals - Indrajit, Kumbhakarna, Atikaya - fell one by one to the arrows of Rama and Lakshmana, but not before causing terrible destruction.",
-          "When Lakshmana was struck by Indrajit's serpent arrows and lay dying, Hanuman flew to the Himalayas and brought back an entire mountain containing the life-saving Sanjeevani herb. Such was the devotion of that great monkey warrior.",
-          "The battlefield was covered with the bodies of demons and monkeys alike. Rivers of blood flowed. But Rama's army, fighting for dharma, never lost hope."
-        ]
-      },
-      {
-        title: "The Fall of Ravana",
-        theme: "👑",
-        imageIndex: 2,
-        content: [
-          "Finally, Rama faced Ravana himself. The ten-headed demon king, wielding powers gained from Brahma himself, was a formidable opponent. Their battle shook all three worlds.",
-          "Each time Rama cut off one of Ravana's heads, it grew back. The sage Agastya appeared and taught Rama the Aditya Hridayam, a hymn to the Sun God. Empowered by this divine mantra, Rama fired the Brahmastra at Ravana's heart - the source of his power.",
-          "The great demon king fell, and all of creation rejoiced. Even the gods showered flowers from heaven. Dharma had triumphed over adharma, light over darkness, love over greed."
-        ]
-      },
-      {
-        title: "Reunion and Return",
-        theme: "❤️",
-        imageIndex: 3,
-        content: [
-          "Sita was freed at last. The couple's reunion, after months of separation and the horror of war, was bittersweet. To prove her purity during captivity, Sita walked through fire, emerging unharmed as Agni himself testified to her chastity.",
-          "Mounting the Pushpaka Vimana - Ravana's aerial chariot now claimed by Vibhishana, the righteous brother who had joined Rama - the victorious party flew north to Ayodhya.",
-          "The fourteen years of exile were complete. As the Vimana approached Ayodhya, the entire city lit lamps to welcome their beloved prince home. This day of homecoming is celebrated to this day as Diwali - the festival of lights."
-        ]
-      }
-    ]
-  },
-  "uttara-kanda": {
-    scenes: [
-      {
-        title: "The Golden Reign",
-        theme: "👑",
-        imageIndex: 0,
-        content: [
-          "Rama was crowned king of Ayodhya, and his reign came to be known as Rama Rajya - the ideal kingdom. Justice prevailed, rains came on time, crops flourished, and no one suffered from disease or poverty.",
-          "The four brothers ruled together in perfect harmony. Sita's presence brought grace and prosperity to all. Poets sang of the perfect king, the perfect queen, and the perfect kingdom."
-        ]
-      },
-      {
-        title: "The Final Trial",
-        theme: "💔",
-        imageIndex: 1,
-        content: [
-          "Yet even paradise must face its tests. Whispers spread among the people about Sita's time in Lanka. Though Rama knew her purity, as king he felt bound to address his people's doubts.",
-          "In the most tragic decision of his life, Rama sent the pregnant Sita to the forest. She found refuge in Sage Valmiki's hermitage, where she gave birth to twins - Lava and Kusha - and raised them in the wisdom of the Vedas.",
-          "Years later, the twins came to Ayodhya and sang the story of Rama before the king himself - the very Ramayana we tell today. When Rama recognized his sons and called for Sita, she chose instead to return to her mother, the Earth, from whom she had been born."
-        ]
-      },
-      {
-        title: "Ascension to Heaven",
-        theme: "✨",
-        imageIndex: 2,
-        content: [
-          "Having ruled for many thousands of years, Rama knew his earthly mission was complete. He walked into the river Sarayu, and his brothers followed, each returning to their divine origins.",
-          "Brahma, Vishnu, Shiva, and all the gods appeared to welcome them home. Rama resumed his form as Lord Vishnu, the preserver of the universe, his avatar's purpose fulfilled.",
-          "But the story of Rama - his righteousness, his love, his sacrifice - continues to guide humanity. Whenever dharma declines, the Lord promises to return. And in every heart that remembers Rama, he lives on, eternal and unchanged."
+          {
+            en: "The news of Rama's triumph reached Ayodhya, and King Dasharatha arrived with a grand procession for the wedding. It was decided that all four brothers would marry on the same auspicious day - Rama to Sita, Lakshmana to Urmila, Bharata to Mandavi, and Shatrughna to Shrutakirti.",
+            hi: "राम की जीत की खबर अयोध्या पहुंची, और राजा दशरथ विवाह के लिए एक भव्य जुलूस के साथ आए। यह तय किया गया कि चारों भाई एक ही शुभ दिन विवाह करेंगे - राम सीता से, लक्ष्मण उर्मिला से, भरत मांडवी से, और शत्रुघ्न श्रुतकीर्ति से।",
+            te: "రాముని విజయ వార్త అయోధ్యకు చేరింది, మరియు దశరథ మహారాజు వివాహం కోసం భారీ ఊరేగింపుతో వచ్చారు. నలుగురు సోదరులు ఒకే శుభ దినాన వివాహం చేసుకోవాలని నిర్ణయించారు - రాముడు సీతతో, లక్ష్మణుడు ఊర్మిళతో, భరతుడు మాండవితో, మరియు శత్రుఘ్నుడు శ్రుతకీర్తితో.",
+            ta: "ராமரின் வெற்றி செய்தி அயோத்திக்கு எட்டியது, மன்னர் தசரதர் திருமணத்திற்கு பிரமாண்டமான ஊர்வலத்துடன் வந்தார். நான்கு சகோதரர்களும் ஒரே சுபநாளில் திருமணம் செய்துகொள்ள முடிவு செய்யப்பட்டது - ராமர் சீதையுடன், லக்ஷ்மணன் ஊர்மிளாவுடன், பரதன் மாண்டவியுடன், சத்ருக்னன் ஸ்ருதகீர்த்தியுடன்.",
+            sa: "रामस्य विजयवार्ता अयोध्यां प्राप्ता, दशरथमहाराजश्च विवाहार्थं भव्यशोभायात्रया आगतवान्।"
+          },
+          {
+            en: "The wedding celebrations lasted for many days. The streets of Mithila were decorated with flowers and lights. Musicians played, dancers performed, and the air was filled with the fragrance of jasmine and rose. Even the gods descended from heaven to witness the union of Rama and Sita.",
+            hi: "विवाह समारोह कई दिनों तक चला। मिथिला की सड़कें फूलों और दीपों से सजाई गईं। संगीतकार बजाते रहे, नर्तक प्रदर्शन करते रहे, और हवा चमेली और गुलाब की सुगंध से भर गई। यहां तक कि देवता भी राम और सीता के मिलन को देखने के लिए स्वर्ग से उतरे।",
+            te: "వివాహ వేడుకలు చాలా రోజులు కొనసాగాయి. మిథిల వీధులు పువ్వులు మరియు దీపాలతో అలంకరించబడ్డాయి. సంగీతకారులు వాయించారు, నర్తకులు ప్రదర్శించారు, మరియు గాలి మల్లె మరియు గులాబీ సువాసనతో నిండిపోయింది. దేవతలు కూడా రాముడు మరియు సీత కలయికను చూడటానికి స్వర్గం నుండి దిగివచ్చారు.",
+            ta: "திருமண கொண்டாட்டங்கள் பல நாட்கள் நீடித்தன. மிதிலையின் தெருக்கள் மலர்கள் மற்றும் விளக்குகளால் அலங்கரிக்கப்பட்டன. இசைக்கலைஞர்கள் வாசித்தனர், நடனக் கலைஞர்கள் நிகழ்ச்சி நடத்தினர், காற்று மல்லிகை மற்றும் ரோஜா நறுமணத்தால் நிறைந்தது. ராமர் மற்றும் சீதையின் ஒன்றிணைப்பைக் காண சொர்க்கத்திலிருந்து கடவுள்களும் இறங்கினர்.",
+            sa: "विवाहोत्सवः बहुदिवसानि यावत् चलितवान्। मिथिलायाः मार्गाः पुष्पैः दीपैश्च अलङ्कृताः।"
+          },
+          {
+            en: "As the sacred fire witnessed their seven steps together, as Rama tied the mangalsutra around Sita's neck, all of creation celebrated. This was not merely a royal wedding - it was the coming together of Dharma and Devotion, of the Protector and the Protected, of Vishnu and Lakshmi in mortal form.",
+            hi: "जैसे ही पवित्र अग्नि ने उनके सात फेरों को देखा, जैसे ही राम ने सीता के गले में मंगलसूत्र बांधा, पूरी सृष्टि ने उत्सव मनाया। यह केवल एक शाही विवाह नहीं था - यह धर्म और भक्ति का, रक्षक और रक्षित का, नश्वर रूप में विष्णु और लक्ष्मी का मिलन था।",
+            te: "పవిత్ర అగ్ని వారి ఏడు అడుగులను చూసినప్పుడు, రాముడు సీత మెడలో మంగళసూత్రం కట్టినప్పుడు, మొత్తం సృష్టి ఆనందించింది. ఇది కేవలం రాజ వివాహం కాదు - ధర్మం మరియు భక్తి, రక్షకుడు మరియు రక్షించబడినవారు, మానవ రూపంలో విష్ణువు మరియు లక్ష్మి కలిసి రావడం.",
+            ta: "புனித நெருப்பு அவர்களின் ஏழு அடிகளுக்கு சாட்சியாக இருந்தபோது, ராமர் சீதையின் கழுத்தில் மங்கள்சூத்திரம் கட்டியபோது, படைப்பு முழுவதும் கொண்டாடியது. இது வெறும் அரச திருமணம் அல்ல - தர்மம் மற்றும் பக்தியின், பாதுகாவலர் மற்றும் பாதுகாக்கப்படுபவரின், மனித வடிவில் விஷ்ணு மற்றும் லக்ஷ்மியின் ஒன்றிணைவு.",
+            sa: "पवित्राग्निः तयोः सप्तपदानि साक्षी भूत्वा यदा रामः सीतायाः कण्ठे मङ्गलसूत्रं बद्धवान् तदा सम्पूर्णा सृष्टिः उत्सवम् अकरोत्।"
+          }
         ]
       }
     ]
@@ -476,10 +321,47 @@ const SceneDecorator = ({ theme }: { theme: string }) => (
   </div>
 );
 
+// Language selector component
+const LanguageSelector = ({ 
+  currentLang, 
+  onChangeLang 
+}: { 
+  currentLang: Language; 
+  onChangeLang: (lang: Language) => void 
+}) => {
+  const languages = [
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'hi', label: 'हिंदी', flag: '🇮🇳' },
+    { code: 'te', label: 'తెలుగు', flag: '🇮🇳' },
+    { code: 'ta', label: 'தமிழ்', flag: '🇮🇳' },
+    { code: 'sa', label: 'संस्कृत', flag: '🕉️' },
+  ];
+
+  return (
+    <div className="flex items-center gap-1 flex-wrap">
+      {languages.map((lang) => (
+        <button
+          key={lang.code}
+          onClick={() => onChangeLang(lang.code as Language)}
+          className={cn(
+            "px-2 py-1 rounded-lg text-xs font-medium transition-all",
+            currentLang === lang.code
+              ? "bg-primary text-primary-foreground"
+              : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+          )}
+        >
+          {lang.flag} {lang.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
 const StoryDetail = () => {
   const { storyId, sectionId } = useParams();
   const [activeTab, setActiveTab] = useState<'story' | 'characters'>('story');
-  const [expandedScene, setExpandedScene] = useState<number | null>(null);
+  const [expandedScene, setExpandedScene] = useState<number | null>(0);
+  const [contentLang, setContentLang] = useState<Language>('en');
   const { speak, stop, isSpeaking, pause, resume, isPaused, isSupported } = useTextToSpeech();
   const { t } = useLanguage();
 
@@ -501,6 +383,12 @@ const StoryDetail = () => {
   };
   
   const extended = sectionId ? extendedContent[sectionId] : null;
+  const sceneImages = sectionId ? sceneImageMap[sectionId] : null;
+
+  // Get content in selected language
+  const getContent = (multiLang: MultiLangContent): string => {
+    return multiLang[contentLang] || multiLang.en;
+  };
 
   // Section detail view
   if (currentSection) {
@@ -555,11 +443,20 @@ const StoryDetail = () => {
               </div>
             </div>
 
+            {/* Language Selector */}
+            <div className="p-3 rounded-xl bg-card border border-border animate-fade-in" style={{ animationDelay: '0.03s' }}>
+              <div className="flex items-center gap-2 mb-2">
+                <Globe className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-foreground">Read in your language</span>
+              </div>
+              <LanguageSelector currentLang={contentLang} onChangeLang={setContentLang} />
+            </div>
+
             {/* TTS Controls */}
             {isSupported && (
               <div className="flex items-center gap-2 animate-fade-in" style={{ animationDelay: '0.05s' }}>
                 <Button
-                  variant="saffron-outline"
+                  variant="outline"
                   size="sm"
                   onClick={() => handleSpeak(fullText)}
                   className="gap-2"
@@ -587,7 +484,7 @@ const StoryDetail = () => {
               <p className="text-sm text-muted-foreground leading-relaxed">{currentSection.summary}</p>
             </div>
 
-            {/* Extended Detailed Scenes */}
+            {/* Extended Detailed Scenes with Images */}
             {extended && extended.scenes.length > 0 && (
               <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                 <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
@@ -609,7 +506,7 @@ const StoryDetail = () => {
                         <span className="text-2xl">{scene.theme}</span>
                         <div className="text-left">
                           <span className="text-xs text-primary font-medium">Scene {idx + 1}</span>
-                          <h4 className="text-sm font-semibold text-foreground">{scene.title}</h4>
+                          <h4 className="text-sm font-semibold text-foreground">{getContent(scene.title)}</h4>
                         </div>
                       </div>
                       <ChevronRight className={cn(
@@ -621,25 +518,30 @@ const StoryDetail = () => {
                     {expandedScene === idx && (
                       <div className="px-4 pb-4 space-y-4 border-t border-border/50 pt-4">
                         {/* Scene Image */}
-                        {sectionId && sceneImages[sectionId] && scene.imageIndex !== undefined && sceneImages[sectionId][scene.imageIndex] && (
-                          <div className="relative w-full h-48 rounded-xl overflow-hidden mb-4">
-                            <img 
-                              src={sceneImages[sectionId][scene.imageIndex]} 
-                              alt={scene.title}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                            <p className="absolute bottom-3 left-3 text-white text-sm font-medium">{scene.title}</p>
-                          </div>
-                        )}
+                        <div className="relative w-full h-48 rounded-xl overflow-hidden mb-4">
+                          <img 
+                            src={scene.image} 
+                            alt={getContent(scene.title)}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          <p className="absolute bottom-3 left-3 text-white text-sm font-medium">{getContent(scene.title)}</p>
+                        </div>
+                        
                         <SceneDecorator theme={scene.theme} />
                         {scene.content.map((para, pIdx) => (
                           <p 
                             key={pIdx} 
-                            className="text-sm text-muted-foreground leading-relaxed first-letter:text-xl first-letter:font-bold first-letter:text-primary first-letter:float-left first-letter:mr-1.5"
+                            className={cn(
+                              "text-sm text-muted-foreground leading-relaxed first-letter:text-xl first-letter:font-bold first-letter:text-primary first-letter:float-left first-letter:mr-1.5",
+                              contentLang === 'sa' && "font-sanskrit",
+                              contentLang === 'hi' && "font-hindi",
+                              contentLang === 'te' && "font-telugu",
+                              contentLang === 'ta' && "font-tamil"
+                            )}
                           >
-                            {para}
+                            {getContent(para)}
                           </p>
                         ))}
                       </div>
@@ -649,10 +551,25 @@ const StoryDetail = () => {
               </div>
             )}
 
-            {/* Original Content (fallback if no extended content) */}
-            {(!extended || extended.scenes.length === 0) && (
+            {/* Fallback for sections without extended content */}
+            {(!extended || extended.scenes.length === 0) && sceneImages && (
               <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                 <h3 className="text-lg font-bold text-foreground">The Story</h3>
+                
+                {/* Show images gallery */}
+                <div className="grid grid-cols-2 gap-3">
+                  {sceneImages.slice(0, 4).map((img, idx) => (
+                    <div key={idx} className="relative aspect-video rounded-xl overflow-hidden">
+                      <img 
+                        src={img} 
+                        alt={`Scene ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+                
                 {currentSection.fullContent.map((paragraph, idx) => (
                   <p 
                     key={idx} 
@@ -793,15 +710,27 @@ const StoryDetail = () => {
               >
                 <div className="p-4 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all active:scale-[0.99]">
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-gold/20 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xl font-bold text-primary">{section.number}</span>
-                    </div>
+                    {/* Show thumbnail if available */}
+                    {sceneImageMap[section.id] && (
+                      <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                        <img 
+                          src={sceneImageMap[section.id][0]} 
+                          alt={section.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {!sceneImageMap[section.id] && (
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-gold/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xl font-bold text-primary">{section.number}</span>
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="text-xs text-primary font-medium">{sectionLabel} {section.number}</p>
                         {extendedContent[section.id] && (
                           <span className="px-1.5 py-0.5 rounded-full bg-gold/20 text-[10px] text-gold font-medium">
-                            Detailed
+                            ✨ Illustrated
                           </span>
                         )}
                       </div>
