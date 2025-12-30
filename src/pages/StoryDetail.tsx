@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ramayanaKandas, ramayanaCharacters, getRamayanaKandaById } from "@/data/ramayanaData";
 import { mahabharataParvas, mahabharataCharacters, getMahabharataParvaById } from "@/data/mahabharataData";
+import { getStoryTranslations, getTranslatedText } from "@/data/storyTranslations";
 import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -387,6 +388,7 @@ const StoryDetail = () => {
   
   const extended = sectionId ? extendedContent[sectionId] : null;
   const sceneImages = sectionId ? sceneImageMap[sectionId] : null;
+  const storyTranslations = sectionId ? getStoryTranslations(isRamayana ? 'ramayana' : 'mahabharata', sectionId) : null;
 
   // Get content in selected language
   const getContent = (multiLang: MultiLangContent): string => {
@@ -484,7 +486,15 @@ const StoryDetail = () => {
               <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
                 <span className="text-lg">📜</span> Summary
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{currentSection.summary}</p>
+              <p className={cn(
+                "text-sm text-muted-foreground leading-relaxed",
+                contentLang === 'sa' && "font-sanskrit",
+                contentLang === 'hi' && "font-hindi",
+                contentLang === 'te' && "font-telugu",
+                contentLang === 'ta' && "font-tamil"
+              )}>
+                {storyTranslations ? getTranslatedText(storyTranslations.summary, contentLang) : currentSection.summary}
+              </p>
             </div>
 
             {/* Extended Detailed Scenes with Images */}
@@ -576,9 +586,15 @@ const StoryDetail = () => {
                 {currentSection.fullContent.map((paragraph, idx) => (
                   <p 
                     key={idx} 
-                    className="text-sm text-muted-foreground leading-relaxed first-letter:text-xl first-letter:font-bold first-letter:text-primary first-letter:float-left first-letter:mr-1.5"
+                    className={cn(
+                      "text-sm text-muted-foreground leading-relaxed first-letter:text-xl first-letter:font-bold first-letter:text-primary first-letter:float-left first-letter:mr-1.5",
+                      contentLang === 'sa' && "font-sanskrit",
+                      contentLang === 'hi' && "font-hindi",
+                      contentLang === 'te' && "font-telugu",
+                      contentLang === 'ta' && "font-tamil"
+                    )}
                   >
-                    {paragraph}
+                    {storyTranslations?.fullContent[idx] ? getTranslatedText(storyTranslations.fullContent[idx], contentLang) : paragraph}
                   </p>
                 ))}
               </div>
@@ -595,7 +611,15 @@ const StoryDetail = () => {
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-gold flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                       <span className="text-xs text-white font-bold">{idx + 1}</span>
                     </div>
-                    <span className="text-sm text-muted-foreground">{event}</span>
+                    <span className={cn(
+                      "text-sm text-muted-foreground",
+                      contentLang === 'sa' && "font-sanskrit",
+                      contentLang === 'hi' && "font-hindi",
+                      contentLang === 'te' && "font-telugu",
+                      contentLang === 'ta' && "font-tamil"
+                    )}>
+                      {storyTranslations?.keyEvents[idx] ? getTranslatedText(storyTranslations.keyEvents[idx], contentLang) : event}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -610,7 +634,15 @@ const StoryDetail = () => {
                 {currentSection.moralTakeaways.map((moral, idx) => (
                   <div key={idx} className="flex items-start gap-2">
                     <span className="text-gold text-lg">✦</span>
-                    <p className="text-sm text-muted-foreground italic">{moral}</p>
+                    <p className={cn(
+                      "text-sm text-muted-foreground italic",
+                      contentLang === 'sa' && "font-sanskrit",
+                      contentLang === 'hi' && "font-hindi",
+                      contentLang === 'te' && "font-telugu",
+                      contentLang === 'ta' && "font-tamil"
+                    )}>
+                      {storyTranslations?.moralTakeaways[idx] ? getTranslatedText(storyTranslations.moralTakeaways[idx], contentLang) : moral}
+                    </p>
                   </div>
                 ))}
               </div>
