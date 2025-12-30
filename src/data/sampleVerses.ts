@@ -1,4 +1,5 @@
-import bhagavadGitaData from './bhagavad_gita.json';
+import bhagavadGitaData from "./bhagavad_gita.json";
+import gitaData from "./gitaData.json";
 
 export interface Verse {
   chapter: number;
@@ -18,24 +19,49 @@ export interface Verse {
   images?: string[];
 }
 
-// Import all verses from bhagavad_gita.json
-export const sampleVerses: Verse[] = bhagavadGitaData.map(v => ({
-  chapter: v.chapter,
-  verse: v.verse,
-  sanskrit: v.sanskrit_text,
-  transliteration: v.transliteration,
-  wordByWord: v.word_meanings || undefined,
+type GitaDataVerse = {
+  chapter: number;
+  verse: number;
   translations: {
-    english: v.translations.en,
-    hindi: v.translations.en, // Fallback to English if no Hindi
-    telugu: v.translations.en,
-    tamil: v.translations.en,
-    kannada: v.translations.en,
-  },
-  explanation: v.commentary || undefined,
-  audio: v.audio,
-  images: v.images,
-}));
+    english: string;
+    hindi?: string;
+    telugu?: string;
+    tamil?: string;
+    kannada?: string;
+  };
+};
+
+const gitaTranslationsByRef = new Map<string, GitaDataVerse["translations"]>();
+const gitaVerses = (gitaData as { verses?: GitaDataVerse[] }).verses;
+
+gitaVerses?.forEach((v) => {
+  gitaTranslationsByRef.set(`${v.chapter}:${v.verse}`, v.translations);
+});
+
+// Import all verses from bhagavad_gita.json
+export const sampleVerses: Verse[] = bhagavadGitaData.map((v) => {
+  const refKey = `${v.chapter}:${v.verse}`;
+  const t = gitaTranslationsByRef.get(refKey);
+  const english = t?.english || v.translations.en;
+
+  return {
+    chapter: v.chapter,
+    verse: v.verse,
+    sanskrit: v.sanskrit_text,
+    transliteration: v.transliteration,
+    wordByWord: v.word_meanings || undefined,
+    translations: {
+      english,
+      hindi: t?.hindi || english,
+      telugu: t?.telugu || english,
+      tamil: t?.tamil || english,
+      kannada: t?.kannada || english,
+    },
+    explanation: v.commentary || undefined,
+    audio: v.audio,
+    images: v.images,
+  };
+});
 
 // Get chapter info from the data
 export const gitaChapterData = Array.from({ length: 18 }, (_, i) => {
