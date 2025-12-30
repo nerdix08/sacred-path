@@ -15,6 +15,7 @@ import Saved from "./pages/Saved";
 import Profile from "./pages/Profile";
 import AskVidya from "./pages/AskVidya";
 import Onboarding from "./pages/Onboarding";
+import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/search" element={<Search />} />
             <Route path="/saved" element={<Saved />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/ask" element={<AskVidya />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
