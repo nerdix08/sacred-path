@@ -1,17 +1,20 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
 import { 
-  Settings, Moon, Sun, Globe, Bell, 
+  Moon, Sun, Globe, Bell, 
   BookOpen, Trophy, Flame, ChevronRight,
   HelpCircle, Bookmark, Volume2, Trash2,
-  RotateCcw, Info, Shield
+  RotateCcw, Info, Shield, Type, Palette,
+  Download, Database
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { useStreak } from "@/hooks/useStreak";
 import { useSavedVerses } from "@/hooks/useSavedVerses";
-import { useNavigate } from "react-router-dom";
+import { useLanguage, languageNames, LanguageCode } from "@/hooks/useLanguage";
+import { useReadingSettings } from "@/hooks/useReadingSettings";
 import {
   Dialog,
   DialogContent,
@@ -20,24 +23,36 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-const languages = [
-  { code: "te", name: "తెలుగు", label: "Telugu" },
-  { code: "hi", name: "हिंदी", label: "Hindi" },
-  { code: "en", name: "English", label: "English" },
-  { code: "ta", name: "தமிழ்", label: "Tamil" },
-  { code: "kn", name: "ಕನ್ನಡ", label: "Kannada" },
-  { code: "sa", name: "संस्कृतम्", label: "Sanskrit" },
+const fontColors = [
+  { id: "default", name: "Default", color: "hsl(40, 10%, 92%)" },
+  { id: "warm", name: "Warm", color: "hsl(35, 85%, 70%)" },
+  { id: "cool", name: "Cool", color: "hsl(200, 60%, 75%)" },
+  { id: "sepia", name: "Sepia", color: "hsl(30, 50%, 75%)" },
 ];
 
 const Profile = () => {
-  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(true);
   const [showLanguage, setShowLanguage] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [showFontSettings, setShowFontSettings] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  
+  const { language, setLanguage, t } = useLanguage();
+  const {
+    fontSize,
+    fontColor,
+    showSanskrit,
+    dailyShlokaEnabled,
+    offlineFavorites,
+    setFontSize,
+    setFontColor,
+    toggleSanskrit,
+    toggleDailyShloka,
+    toggleOfflineFavorites,
+    resetSettings,
+  } = useReadingSettings();
   
   const { 
     currentStreak, 
@@ -52,9 +67,6 @@ const Profile = () => {
   const { savedVerses, removeVerse, clearAll } = useSavedVerses();
 
   useEffect(() => {
-    const storedLang = localStorage.getItem("vidya_language");
-    if (storedLang) setSelectedLanguage(storedLang);
-    
     const storedTheme = localStorage.getItem("vidya_theme");
     setIsDark(storedTheme !== "light");
   }, []);
@@ -66,19 +78,19 @@ const Profile = () => {
     document.documentElement.classList.toggle("light", !isDark);
   };
 
-  const handleLanguageSelect = (code: string) => {
-    setSelectedLanguage(code);
-    localStorage.setItem("vidya_language", code);
+  const handleLanguageSelect = (code: LanguageCode) => {
+    setLanguage(code);
     setShowLanguage(false);
   };
 
   const progressPercent = (totalVersesRead / 700) * 100;
   const chapterProgress = (chaptersCompleted / 18) * 100;
 
-  const currentLang = languages.find(l => l.code === selectedLanguage);
+  const currentLang = languageNames[language];
+  const currentFontColor = fontColors.find(f => f.id === fontColor) || fontColors[0];
 
   return (
-    <AppLayout title="Settings" showStreak={false}>
+    <AppLayout title={t.settings} showStreak={false}>
       <div className="space-y-6 py-4">
         {/* Stats Cards */}
         <div className="px-4 animate-fade-in">
@@ -88,21 +100,21 @@ const Profile = () => {
                 <Flame className="w-5 h-5 text-primary" />
               </div>
               <p className="text-xl font-bold text-foreground">{currentStreak}</p>
-              <p className="text-xs text-muted-foreground">Day Streak</p>
+              <p className="text-xs text-muted-foreground">{t.dayStreak}</p>
             </div>
             <div className="p-4 rounded-xl bg-card border border-border text-center">
               <div className="w-10 h-10 rounded-lg bg-gold/20 mx-auto mb-2 flex items-center justify-center">
                 <Trophy className="w-5 h-5 text-gold" />
               </div>
               <p className="text-xl font-bold text-foreground">{longestStreak}</p>
-              <p className="text-xs text-muted-foreground">Best Streak</p>
+              <p className="text-xs text-muted-foreground">{t.bestStreak}</p>
             </div>
             <div className="p-4 rounded-xl bg-card border border-border text-center">
               <div className="w-10 h-10 rounded-lg bg-accent/30 mx-auto mb-2 flex items-center justify-center">
                 <BookOpen className="w-5 h-5 text-primary" />
               </div>
               <p className="text-xl font-bold text-foreground">{totalVersesRead}</p>
-              <p className="text-xs text-muted-foreground">Verses Read</p>
+              <p className="text-xs text-muted-foreground">{t.versesRead}</p>
             </div>
           </div>
         </div>
@@ -111,9 +123,9 @@ const Profile = () => {
         <div className="px-4 animate-fade-in" style={{ animationDelay: "0.05s" }}>
           <div className="p-4 rounded-xl bg-card border border-border">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-foreground">Today's Progress</h3>
+              <h3 className="text-sm font-medium text-foreground">{t.todaysProgress}</h3>
               <span className="text-xs text-primary font-medium">
-                {versesReadToday}/{dailyGoal} verses
+                {versesReadToday}/{dailyGoal} {t.verses.toLowerCase()}
               </span>
             </div>
             <Progress value={(versesReadToday / dailyGoal) * 100} className="h-2" />
@@ -126,18 +138,18 @@ const Profile = () => {
         {/* Gita Progress Card */}
         <div className="px-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
           <div className="p-4 rounded-xl bg-card border border-border">
-            <h3 className="text-sm font-medium text-foreground mb-3">Gita Progress</h3>
+            <h3 className="text-sm font-medium text-foreground mb-3">{t.gitaProgress}</h3>
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">Verses</span>
+                  <span className="text-muted-foreground">{t.verses}</span>
                   <span className="text-foreground font-medium">{totalVersesRead}/700</span>
                 </div>
                 <Progress value={progressPercent} className="h-2" />
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">Chapters</span>
+                  <span className="text-muted-foreground">{t.chapters}</span>
                   <span className="text-foreground font-medium">{chaptersCompleted}/18</span>
                 </div>
                 <Progress value={chapterProgress} className="h-2" />
@@ -157,7 +169,7 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <Bookmark className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">Saved Verses</span>
+              <span className="text-sm text-foreground">{t.savedVerses}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-primary font-medium">{savedVerses.length}</span>
@@ -166,25 +178,54 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* Settings List */}
-        <div className="px-4 space-y-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+        {/* Reading Experience */}
+        <div className="px-4 space-y-2 animate-fade-in" style={{ animationDelay: "0.14s" }}>
           <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
-            Preferences
+            {t.readingExperience}
           </h3>
 
-          {/* Theme Toggle */}
+          {/* Font Size */}
+          <div className="p-4 rounded-xl bg-card border border-border">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <Type className="w-5 h-5 text-muted-foreground" />
+                <span className="text-sm text-foreground">{t.fontSize}</span>
+              </div>
+              <span className="text-sm text-primary font-medium">{fontSize}px</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">Aa</span>
+              <Slider
+                value={[fontSize]}
+                onValueChange={(val) => setFontSize(val[0])}
+                min={14}
+                max={28}
+                step={2}
+                className="flex-1"
+              />
+              <span className="text-lg text-muted-foreground">Aa</span>
+            </div>
+          </div>
+
+          {/* Font Color */}
           <button
-            onClick={toggleTheme}
+            onClick={() => setShowFontSettings(true)}
             className={cn(
               "w-full flex items-center justify-between p-4 rounded-xl bg-card border border-border",
               "hover:bg-card/80 transition-colors"
             )}
           >
             <div className="flex items-center gap-3">
-              {isDark ? <Moon className="w-5 h-5 text-muted-foreground" /> : <Sun className="w-5 h-5 text-muted-foreground" />}
-              <span className="text-sm text-foreground">Appearance</span>
+              <Palette className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm text-foreground">{t.fontColor}</span>
             </div>
-            <span className="text-sm text-muted-foreground">{isDark ? "Dark" : "Light"}</span>
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-5 h-5 rounded-full border border-border"
+                style={{ backgroundColor: currentFontColor.color }}
+              />
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            </div>
           </button>
 
           {/* Language */}
@@ -197,17 +238,54 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <Globe className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">Language</span>
+              <span className="text-sm text-foreground">{t.language}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">{currentLang?.label || "English"}</span>
+              <span className="text-sm text-muted-foreground">
+                {currentLang.native} & Sanskrit
+              </span>
               <ChevronRight className="w-4 h-4 text-muted-foreground" />
             </div>
           </button>
+        </div>
 
-          {/* Notifications */}
+        {/* Interface Settings */}
+        <div className="px-4 space-y-2 animate-fade-in" style={{ animationDelay: "0.16s" }}>
+          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
+            Interface
+          </h3>
+
+          {/* Theme Toggle */}
           <button
-            onClick={() => setShowNotifications(true)}
+            onClick={toggleTheme}
+            className={cn(
+              "w-full flex items-center justify-between p-4 rounded-xl bg-card border border-border",
+              "hover:bg-card/80 transition-colors"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              {isDark ? <Moon className="w-5 h-5 text-muted-foreground" /> : <Sun className="w-5 h-5 text-muted-foreground" />}
+              <div>
+                <span className="text-sm text-foreground">{t.appearance}</span>
+                <p className="text-xs text-muted-foreground">
+                  {isDark ? "Reduces eye strain" : "Better visibility"}
+                </p>
+              </div>
+            </div>
+            <div className={cn(
+              "w-12 h-7 rounded-full transition-colors flex items-center px-1",
+              isDark ? "bg-primary" : "bg-muted"
+            )}>
+              <div className={cn(
+                "w-5 h-5 rounded-full bg-white transition-transform",
+                isDark ? "translate-x-5" : "translate-x-0"
+              )} />
+            </div>
+          </button>
+
+          {/* Daily Shloka */}
+          <button
+            onClick={toggleDailyShloka}
             className={cn(
               "w-full flex items-center justify-between p-4 rounded-xl bg-card border border-border",
               "hover:bg-card/80 transition-colors"
@@ -215,13 +293,74 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <Bell className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">Notifications</span>
+              <div>
+                <span className="text-sm text-foreground">{t.dailyShloka}</span>
+                <p className="text-xs text-muted-foreground">Daily verse reminder</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">{notificationsEnabled ? "On" : "Off"}</span>
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <div className={cn(
+              "w-12 h-7 rounded-full transition-colors flex items-center px-1",
+              dailyShlokaEnabled ? "bg-primary" : "bg-muted"
+            )}>
+              <div className={cn(
+                "w-5 h-5 rounded-full bg-white transition-transform",
+                dailyShlokaEnabled ? "translate-x-5" : "translate-x-0"
+              )} />
             </div>
           </button>
+        </div>
+
+        {/* Offline Library */}
+        <div className="px-4 space-y-2 animate-fade-in" style={{ animationDelay: "0.18s" }}>
+          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
+            {t.offlineLibrary}
+          </h3>
+
+          {/* Download Favorites */}
+          <button
+            onClick={toggleOfflineFavorites}
+            className={cn(
+              "w-full flex items-center justify-between p-4 rounded-xl bg-card border border-border",
+              "hover:bg-card/80 transition-colors"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <Download className="w-5 h-5 text-muted-foreground" />
+              <div>
+                <span className="text-sm text-foreground">{t.downloadFavorites}</span>
+                <p className="text-xs text-muted-foreground">Auto-save for offline reading</p>
+              </div>
+            </div>
+            <div className={cn(
+              "w-12 h-7 rounded-full transition-colors flex items-center px-1",
+              offlineFavorites ? "bg-primary" : "bg-muted"
+            )}>
+              <div className={cn(
+                "w-5 h-5 rounded-full bg-white transition-transform",
+                offlineFavorites ? "translate-x-5" : "translate-x-0"
+              )} />
+            </div>
+          </button>
+
+          {/* Storage Used */}
+          <div className="p-4 rounded-xl bg-card border border-border">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <Database className="w-5 h-5 text-muted-foreground" />
+                <span className="text-sm text-foreground">{t.storageUsed}</span>
+              </div>
+              <span className="text-sm text-muted-foreground">250 MB / 2 GB</span>
+            </div>
+            <Progress value={12.5} className="h-2 mb-2" />
+            <button className="text-xs text-primary hover:underline">{t.clearCache}</button>
+          </div>
+        </div>
+
+        {/* Support Section */}
+        <div className="px-4 space-y-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
+            {t.support}
+          </h3>
 
           {/* Text to Speech */}
           <button
@@ -232,17 +371,10 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <Volume2 className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">Text to Speech</span>
+              <span className="text-sm text-foreground">{t.textToSpeech}</span>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
-        </div>
-
-        {/* Support Section */}
-        <div className="px-4 space-y-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
-            Support
-          </h3>
 
           {/* Help */}
           <button
@@ -254,7 +386,7 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <HelpCircle className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">Help & Support</span>
+              <span className="text-sm text-foreground">{t.helpSupport}</span>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
@@ -268,7 +400,7 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <Info className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">About Vidya</span>
+              <span className="text-sm text-foreground">{t.aboutVidya}</span>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
@@ -282,14 +414,17 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <Shield className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">Privacy Policy</span>
+              <span className="text-sm text-foreground">{t.privacyPolicy}</span>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
 
           {/* Reset Progress */}
           <button
-            onClick={resetStats}
+            onClick={() => {
+              resetStats();
+              resetSettings();
+            }}
             className={cn(
               "w-full flex items-center justify-between p-4 rounded-xl bg-destructive/10 border border-destructive/20",
               "hover:bg-destructive/20 transition-colors"
@@ -297,7 +432,7 @@ const Profile = () => {
           >
             <div className="flex items-center gap-3">
               <RotateCcw className="w-5 h-5 text-destructive" />
-              <span className="text-sm text-destructive">Reset Progress</span>
+              <span className="text-sm text-destructive">{t.resetProgress}</span>
             </div>
           </button>
         </div>
@@ -315,19 +450,19 @@ const Profile = () => {
         <Dialog open={showLanguage} onOpenChange={setShowLanguage}>
           <DialogContent className="bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-foreground">Choose Language</DialogTitle>
+              <DialogTitle className="text-foreground">{t.chooseLanguage}</DialogTitle>
               <DialogDescription className="text-muted-foreground">
-                Select your preferred language for reading scriptures.
+                {t.selectLanguage}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2 mt-4">
-              {languages.map((lang) => (
+              {(Object.keys(languageNames) as LanguageCode[]).map((code) => (
                 <button
-                  key={lang.code}
-                  onClick={() => handleLanguageSelect(lang.code)}
+                  key={code}
+                  onClick={() => handleLanguageSelect(code)}
                   className={cn(
                     "w-full flex items-center justify-between p-3 rounded-xl border transition-all",
-                    selectedLanguage === lang.code
+                    language === code
                       ? "bg-primary/10 border-primary"
                       : "bg-background border-border hover:border-primary/50"
                   )}
@@ -335,24 +470,92 @@ const Profile = () => {
                   <div className="text-left">
                     <p className={cn(
                       "font-medium",
-                      selectedLanguage === lang.code ? "text-primary" : "text-foreground"
+                      language === code ? "text-primary" : "text-foreground"
                     )}>
-                      {lang.name}
+                      {languageNames[code].native}
                     </p>
-                    <p className="text-xs text-muted-foreground">{lang.label}</p>
+                    <p className="text-xs text-muted-foreground">{languageNames[code].english}</p>
                   </div>
                   <div className={cn(
                     "w-4 h-4 rounded-full border-2 flex items-center justify-center",
-                    selectedLanguage === lang.code
+                    language === code
                       ? "border-primary bg-primary"
                       : "border-muted-foreground"
                   )}>
-                    {selectedLanguage === lang.code && (
+                    {language === code && (
                       <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />
                     )}
                   </div>
                 </button>
               ))}
+            </div>
+            <p className="text-xs text-muted-foreground text-center mt-4">
+              📜 Sanskrit shlokas are shown in all languages
+            </p>
+          </DialogContent>
+        </Dialog>
+
+        {/* Font Color Dialog */}
+        <Dialog open={showFontSettings} onOpenChange={setShowFontSettings}>
+          <DialogContent className="bg-card border-border">
+            <DialogHeader>
+              <DialogTitle className="text-foreground">{t.fontColor}</DialogTitle>
+              <DialogDescription className="text-muted-foreground">
+                Choose a color for reading text
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3 mt-4">
+              {fontColors.map((fc) => (
+                <button
+                  key={fc.id}
+                  onClick={() => {
+                    setFontColor(fc.id);
+                    setShowFontSettings(false);
+                  }}
+                  className={cn(
+                    "w-full flex items-center justify-between p-3 rounded-xl border transition-all",
+                    fontColor === fc.id
+                      ? "bg-primary/10 border-primary"
+                      : "bg-background border-border hover:border-primary/50"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <div 
+                      className="w-8 h-8 rounded-full border border-border"
+                      style={{ backgroundColor: fc.color }}
+                    />
+                    <span className={cn(
+                      "font-medium",
+                      fontColor === fc.id ? "text-primary" : "text-foreground"
+                    )}>
+                      {fc.name}
+                    </span>
+                  </div>
+                  <div className={cn(
+                    "w-4 h-4 rounded-full border-2 flex items-center justify-center",
+                    fontColor === fc.id
+                      ? "border-primary bg-primary"
+                      : "border-muted-foreground"
+                  )}>
+                    {fontColor === fc.id && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+            {/* Preview */}
+            <div className="mt-4 p-4 rounded-xl bg-background border border-border">
+              <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+              <p 
+                className="sanskrit-text"
+                style={{ 
+                  color: currentFontColor.color,
+                  fontSize: `${fontSize}px`
+                }}
+              >
+                कर्मण्येवाधिकारस्ते मा फलेषु कदाचन
+              </p>
             </div>
           </DialogContent>
         </Dialog>
@@ -362,7 +565,7 @@ const Profile = () => {
           <DialogContent className="bg-card border-border max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-foreground flex items-center justify-between">
-                Saved Verses
+                {t.savedVerses}
                 {savedVerses.length > 0 && (
                   <Button 
                     variant="ghost" 
@@ -393,7 +596,7 @@ const Profile = () => {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span className="text-xs text-primary font-medium">
-                        Chapter {verse.chapter}, Verse {verse.verse}
+                        {t.chapter} {verse.chapter}, {t.verse} {verse.verse}
                       </span>
                       <button
                         onClick={() => removeVerse(verse.id)}
@@ -403,7 +606,12 @@ const Profile = () => {
                       </button>
                     </div>
                     {verse.sanskrit && (
-                      <p className="sanskrit-text text-sm mb-2">{verse.sanskrit}</p>
+                      <p 
+                        className="sanskrit-text text-sm mb-2"
+                        style={{ fontSize: `${fontSize}px` }}
+                      >
+                        {verse.sanskrit}
+                      </p>
                     )}
                     <p className="text-sm text-foreground">{verse.translation}</p>
                   </div>
@@ -417,7 +625,7 @@ const Profile = () => {
         <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
           <DialogContent className="bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-foreground">Notifications</DialogTitle>
+              <DialogTitle className="text-foreground">{t.notifications}</DialogTitle>
               <DialogDescription className="text-muted-foreground">
                 Manage your notification preferences.
               </DialogDescription>
@@ -449,7 +657,7 @@ const Profile = () => {
         <Dialog open={showHelp} onOpenChange={setShowHelp}>
           <DialogContent className="bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-foreground">Help & Support</DialogTitle>
+              <DialogTitle className="text-foreground">{t.helpSupport}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div className="p-4 rounded-xl bg-background border border-border">
