@@ -60,14 +60,10 @@ const VerseDetail = () => {
     images: undefined as string[] | undefined,
   };
 
-  const englishText = displayVerse.translations?.english || "";
-  const verseKey = `ch${chapterNum}_v${verseNum}`;
-  
-  // Use AI translation for non-English languages
+  // Use local translations from the verse data
   const { translation, isLoading: isTranslating } = useTranslation(
-    englishText,
-    selectedLanguage,
-    verseKey
+    displayVerse.translations,
+    selectedLanguage
   );
 
   if (!chapter) {
