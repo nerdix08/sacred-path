@@ -6,6 +6,10 @@ import { sampleVerses, getVerseById } from "@/data/sampleVerses";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Volume2, Bookmark, Share2, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useReadingSettingsContext, getFontColorStyle } from "@/contexts/ReadingSettingsContext";
+import { useSavedVerses } from "@/hooks/useSavedVerses";
+import { useToast } from "@/hooks/use-toast";
+import { useStreak } from "@/hooks/useStreak";
 
 type Language = "english" | "hindi" | "telugu" | "tamil" | "kannada";
 
@@ -22,7 +26,11 @@ const VerseDetail = () => {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("english");
   const [showExplanation, setShowExplanation] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  
+  const { fontSize, fontColor, showSanskrit, showTransliteration } = useReadingSettingsContext();
+  const { isVerseSaved, toggleVerse } = useSavedVerses();
+  const { toast } = useToast();
+  const { incrementVersesRead } = useStreak();
 
   const chapter = gitaChapters.find(c => c.number === Number(chapterNum));
   const verse = getVerseById(Number(chapterNum), Number(verseNum));
@@ -30,6 +38,8 @@ const VerseDetail = () => {
   const currentVerseNum = Number(verseNum);
   const hasNext = chapter && currentVerseNum < chapter.versesCount;
   const hasPrev = currentVerseNum > 1;
+  
+  const isBookmarked = isVerseSaved(Number(chapterNum), currentVerseNum);
 
   if (!chapter) {
     return (
@@ -58,6 +68,29 @@ const VerseDetail = () => {
       kannada: "ಈ ಶ್ಲೋಕವನ್ನು ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ. ಎಲ್ಲಾ 700 ಶ್ಲೋಕಗಳೊಂದಿಗೆ ಪೂರ್ಣ ಭಗವದ್ಗೀತೆ ಶೀಘ್ರದಲ್ಲಿ ಲಭ್ಯವಿರುತ್ತದೆ."
     }
   };
+  
+  const handleBookmark = () => {
+    const wasSaved = toggleVerse({
+      chapter: Number(chapterNum),
+      verse: currentVerseNum,
+      sanskrit: displayVerse.sanskrit,
+      translation: displayVerse.translations?.english || "",
+    });
+    
+    toast({
+      title: wasSaved ? "Verse Saved" : "Verse Removed",
+      description: wasSaved 
+        ? `Chapter ${chapterNum}, Verse ${currentVerseNum} saved to your collection`
+        : "Removed from saved verses",
+    });
+  };
+  
+  const handleNextVerse = () => {
+    incrementVersesRead();
+    navigate(`/gita/chapter/${chapter.number}/verse/${currentVerseNum + 1}`);
+  };
+  
+  const fontColorValue = getFontColorStyle(fontColor);
 
   return (
     <AppLayout title={`${chapter.number}:${currentVerseNum}`} showStreak={false}>
@@ -83,7 +116,7 @@ const VerseDetail = () => {
                 variant="ghost" 
                 size="icon-sm" 
                 className={cn(isBookmarked ? "text-primary" : "text-muted-foreground")}
-                onClick={() => setIsBookmarked(!isBookmarked)}
+                onClick={handleBookmark}
               >
                 <Bookmark className={cn("w-5 h-5", isBookmarked && "fill-current")} />
               </Button>
@@ -105,16 +138,21 @@ const VerseDetail = () => {
         </div>
 
         {/* Sanskrit Text */}
-        <div className="px-6 py-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-          <p className="sanskrit-text text-center text-2xl leading-loose text-foreground">
-            {displayVerse.sanskrit}
-          </p>
-          {displayVerse.transliteration && (
-            <p className="text-center text-sm text-muted-foreground mt-4 italic">
-              {displayVerse.transliteration}
+        {showSanskrit && (
+          <div className="px-6 py-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            <p 
+              className="sanskrit-text text-center leading-loose"
+              style={{ fontSize: `${fontSize + 4}px`, color: fontColorValue }}
+            >
+              {displayVerse.sanskrit}
             </p>
-          )}
-        </div>
+            {showTransliteration && displayVerse.transliteration && (
+              <p className="text-center text-sm text-muted-foreground mt-4 italic">
+                {displayVerse.transliteration}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Divider */}
         <div className="mx-6 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -138,7 +176,10 @@ const VerseDetail = () => {
 
         {/* Translation */}
         <div className="px-6 py-4 flex-1 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <p className="verse-text text-lg leading-relaxed text-foreground">
+          <p 
+            className="verse-text leading-relaxed"
+            style={{ fontSize: `${fontSize}px`, color: fontColorValue }}
+          >
             {displayVerse.translations?.[selectedLanguage] || displayVerse.translations?.english}
           </p>
         </div>
@@ -183,7 +224,7 @@ const VerseDetail = () => {
               variant="saffron"
               className="flex-1"
               disabled={!hasNext}
-              onClick={() => navigate(`/gita/chapter/${chapter.number}/verse/${currentVerseNum + 1}`)}
+              onClick={handleNextVerse}
             >
               Next
               <ArrowRight className="w-4 h-4 ml-2" />

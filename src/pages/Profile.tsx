@@ -7,7 +7,7 @@ import {
   BookOpen, Trophy, Flame, ChevronRight,
   HelpCircle, Bookmark, Volume2, Trash2,
   RotateCcw, Info, Shield, Type, Palette,
-  Download, Database
+  Download, Database, BellRing
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
@@ -15,6 +15,8 @@ import { useStreak } from "@/hooks/useStreak";
 import { useSavedVerses } from "@/hooks/useSavedVerses";
 import { useLanguage, languageNames, LanguageCode } from "@/hooks/useLanguage";
 import { useReadingSettings } from "@/hooks/useReadingSettings";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -35,11 +37,10 @@ const Profile = () => {
   const [showLanguage, setShowLanguage] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showFontSettings, setShowFontSettings] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   
   const { language, setLanguage, t } = useLanguage();
+  const { toast } = useToast();
   const {
     fontSize,
     fontColor,
@@ -65,17 +66,61 @@ const Profile = () => {
   } = useStreak();
   
   const { savedVerses, removeVerse, clearAll } = useSavedVerses();
+  
+  const {
+    isSupported: notificationsSupported,
+    isGranted: notificationsGranted,
+    requestPermission,
+    sendDailyShloka,
+    scheduleDailyNotification,
+  } = useNotifications();
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("vidya_theme");
     setIsDark(storedTheme !== "light");
   }, []);
+  
+  useEffect(() => {
+    // Schedule daily notifications if enabled
+    if (dailyShlokaEnabled && notificationsGranted) {
+      scheduleDailyNotification();
+    }
+  }, [dailyShlokaEnabled, notificationsGranted, scheduleDailyNotification]);
 
   const toggleTheme = () => {
     const newTheme = isDark ? "light" : "dark";
     setIsDark(!isDark);
     localStorage.setItem("vidya_theme", newTheme);
     document.documentElement.classList.toggle("light", !isDark);
+  };
+  
+  const handleToggleDailyShloka = async () => {
+    if (!dailyShlokaEnabled && notificationsSupported && !notificationsGranted) {
+      const granted = await requestPermission();
+      if (granted) {
+        toggleDailyShloka();
+        toast({
+          title: "Notifications Enabled",
+          description: "You'll receive daily shloka reminders at 7 AM",
+        });
+        // Send a test notification
+        sendDailyShloka();
+      } else {
+        toast({
+          title: "Permission Denied",
+          description: "Please enable notifications in your browser settings",
+          variant: "destructive",
+        });
+      }
+    } else {
+      toggleDailyShloka();
+      if (!dailyShlokaEnabled) {
+        toast({
+          title: "Daily Shloka Enabled",
+          description: "You'll receive daily verse reminders",
+        });
+      }
+    }
   };
 
   const handleLanguageSelect = (code: LanguageCode) => {
@@ -285,17 +330,21 @@ const Profile = () => {
 
           {/* Daily Shloka */}
           <button
-            onClick={toggleDailyShloka}
+            onClick={handleToggleDailyShloka}
             className={cn(
               "w-full flex items-center justify-between p-4 rounded-xl bg-card border border-border",
               "hover:bg-card/80 transition-colors"
             )}
           >
             <div className="flex items-center gap-3">
-              <Bell className="w-5 h-5 text-muted-foreground" />
+              <BellRing className="w-5 h-5 text-muted-foreground" />
               <div>
                 <span className="text-sm text-foreground">{t.dailyShloka}</span>
-                <p className="text-xs text-muted-foreground">Daily verse reminder</p>
+                <p className="text-xs text-muted-foreground">
+                  {notificationsSupported 
+                    ? (notificationsGranted ? "Notifications enabled" : "Tap to enable notifications")
+                    : "Daily verse reminder"}
+                </p>
               </div>
             </div>
             <div className={cn(
@@ -621,37 +670,7 @@ const Profile = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Notifications Dialog */}
-        <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
-          <DialogContent className="bg-card border-border">
-            <DialogHeader>
-              <DialogTitle className="text-foreground">{t.notifications}</DialogTitle>
-              <DialogDescription className="text-muted-foreground">
-                Manage your notification preferences.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 mt-4">
-              <button
-                onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-                className="w-full flex items-center justify-between p-3 rounded-xl bg-background border border-border"
-              >
-                <div>
-                  <p className="text-sm text-foreground">Daily Verse Reminder</p>
-                  <p className="text-xs text-muted-foreground">Get a verse notification each morning</p>
-                </div>
-                <div className={cn(
-                  "w-10 h-6 rounded-full transition-colors flex items-center px-1",
-                  notificationsEnabled ? "bg-primary" : "bg-muted"
-                )}>
-                  <div className={cn(
-                    "w-4 h-4 rounded-full bg-white transition-transform",
-                    notificationsEnabled ? "translate-x-4" : "translate-x-0"
-                  )} />
-                </div>
-              </button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        {/* Notifications info is now handled inline */}
 
         {/* Help Dialog */}
         <Dialog open={showHelp} onOpenChange={setShowHelp}>
