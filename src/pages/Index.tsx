@@ -4,16 +4,35 @@ import { StreakCard } from "@/components/home/StreakCard";
 import { ChallengeCard } from "@/components/home/ChallengeCard";
 import { QuickActions } from "@/components/home/QuickActions";
 import { useNavigate } from "react-router-dom";
+import { useStreak } from "@/hooks/useStreak";
+import { useEffect } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { currentStreak, longestStreak, versesReadToday, dailyGoal } = useStreak();
+
+  // Check if onboarding completed
+  useEffect(() => {
+    const onboarded = localStorage.getItem("vidya_onboarded");
+    if (!onboarded) {
+      navigate("/onboarding");
+    }
+  }, [navigate]);
+
+  // Get time-based greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
 
   return (
-    <AppLayout title="Vidya" streak={7}>
+    <AppLayout title="Vidya">
       <div className="space-y-6 py-4">
         {/* Greeting */}
         <div className="px-4 animate-fade-in">
-          <p className="text-sm text-muted-foreground">Good morning</p>
+          <p className="text-sm text-muted-foreground">{getGreeting()}</p>
           <h2 className="text-2xl font-semibold text-foreground">Begin your learning</h2>
         </div>
 
@@ -28,10 +47,10 @@ const Index = () => {
 
         {/* Streak & Progress */}
         <StreakCard
-          currentStreak={7}
-          longestStreak={21}
-          todayProgress={2}
-          dailyGoal={3}
+          currentStreak={currentStreak}
+          longestStreak={longestStreak}
+          todayProgress={versesReadToday}
+          dailyGoal={dailyGoal}
         />
 
         {/* Daily Challenge */}
