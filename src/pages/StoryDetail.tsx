@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { 
@@ -11,6 +11,8 @@ import { mahabharataParvas, mahabharataCharacters, getMahabharataParvaById } fro
 import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useLanguage } from "@/hooks/useLanguage";
+import { StoryNavigation } from "@/components/stories/StoryNavigation";
+import { YouTubeVideos } from "@/components/stories/YouTubeVideos";
 
 // Import all story images
 import ayodhyaPalace from "@/assets/stories/ayodhya-palace.jpg";
@@ -359,6 +361,7 @@ const LanguageSelector = ({
 
 const StoryDetail = () => {
   const { storyId, sectionId } = useParams();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'story' | 'characters'>('story');
   const [expandedScene, setExpandedScene] = useState<number | null>(0);
   const [contentLang, setContentLang] = useState<Language>('en');
@@ -612,6 +615,22 @@ const StoryDetail = () => {
                 ))}
               </div>
             </div>
+
+            {/* Story Navigation - Next/Previous Chapters */}
+            <StoryNavigation
+              currentIndex={sections.findIndex(s => s.id === sectionId)}
+              totalChapters={sections.length}
+              storyType={isRamayana ? 'ramayana' : 'mahabharata'}
+              currentId={sectionId}
+              chapters={sections}
+              onShowAllChapters={() => navigate(`/stories/${storyId}`)}
+            />
+
+            {/* YouTube Videos */}
+            <YouTubeVideos
+              storyId={sectionId}
+              storyType={isRamayana ? 'ramayana' : 'mahabharata'}
+            />
 
             {/* Related Gita Verses */}
             {currentSection.relatedGitaVerses.length > 0 && (

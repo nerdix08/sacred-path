@@ -55,11 +55,6 @@ const Index = () => {
 
         {/* Daily Challenge */}
         <ChallengeCard
-          title="18-Day Gita Journey"
-          description="Complete one chapter each day"
-          daysCompleted={5}
-          totalDays={18}
-          participants={2847}
           onJoin={() => navigate("/gita")}
         />
 

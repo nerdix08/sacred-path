@@ -269,6 +269,51 @@ const Feedback = () => {
             </form>
           )}
 
+          {/* Sources Section */}
+          <div className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-gold/5 border border-primary/20">
+            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-primary" />
+              Sources & References
+            </h3>
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-card border border-border">
+                <h4 className="text-xs font-semibold text-primary mb-1">Ramayana</h4>
+                <ul className="text-[11px] text-muted-foreground space-y-1">
+                  <li>• Valmiki Ramayana - Public Domain translations</li>
+                  <li>• Sacred-Texts.com Hindu Section</li>
+                  <li>• Wikimedia Commons (Public Domain Images)</li>
+                </ul>
+              </div>
+              <div className="p-3 rounded-lg bg-card border border-border">
+                <h4 className="text-xs font-semibold text-primary mb-1">Mahabharata</h4>
+                <ul className="text-[11px] text-muted-foreground space-y-1">
+                  <li>• Kisari Mohan Ganguli Translation (Public Domain)</li>
+                  <li>• Project Gutenberg</li>
+                  <li>• Wikisource Mahabharata Collection</li>
+                </ul>
+              </div>
+              <div className="p-3 rounded-lg bg-card border border-border">
+                <h4 className="text-xs font-semibold text-primary mb-1">Bhagavad Gita</h4>
+                <ul className="text-[11px] text-muted-foreground space-y-1">
+                  <li>• Bhagavad Gita As It Is - A.C. Bhaktivedanta Swami Prabhupada</li>
+                  <li>• Gita Supersite (IIT Kanpur)</li>
+                  <li>• Sanskrit documents collection</li>
+                </ul>
+              </div>
+              <div className="p-3 rounded-lg bg-card border border-border">
+                <h4 className="text-xs font-semibold text-primary mb-1">Images</h4>
+                <ul className="text-[11px] text-muted-foreground space-y-1">
+                  <li>• AI-Generated artistic interpretations</li>
+                  <li>• Wikimedia Commons Public Domain artwork</li>
+                  <li>• Raja Ravi Varma paintings (Public Domain)</li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-3 italic">
+              We strive to use only public domain or properly attributed content. If you find any attribution issues, please contact us.
+            </p>
+          </div>
+
           {/* Disclaimer */}
           <div className="p-4 rounded-xl bg-secondary/50 border border-border">
             <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
