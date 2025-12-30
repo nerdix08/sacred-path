@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useLanguage } from "@/hooks/useLanguage";
 import { StoryNavigation } from "@/components/stories/StoryNavigation";
-import { YouTubeVideos } from "@/components/stories/YouTubeVideos";
+// YouTubeVideos removed - keeping stories focused on text content
 
 // Import all story images
 import ayodhyaPalace from "@/assets/stories/ayodhya-palace.jpg";
@@ -626,34 +626,50 @@ const StoryDetail = () => {
               onShowAllChapters={() => navigate(`/stories/${storyId}`)}
             />
 
-            {/* YouTube Videos */}
-            <YouTubeVideos
-              storyId={sectionId}
-              storyType={isRamayana ? 'ramayana' : 'mahabharata'}
-            />
+            {/* Continue Reading - Next Part */}
+            {sections.findIndex(s => s.id === sectionId) < sections.length - 1 && (
+              <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-gold/5 border border-primary/20 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <p className="text-xs text-muted-foreground mb-2">Continue Reading</p>
+                <Link
+                  to={`/stories/${storyId}/${sections[sections.findIndex(s => s.id === sectionId) + 1].id}`}
+                  className="flex items-center justify-between p-3 rounded-lg bg-card hover:bg-card/80 transition-all hover:scale-[1.01] active:scale-[0.99] border border-border"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-primary">
+                      Next: {sections[sections.findIndex(s => s.id === sectionId) + 1].name}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                      {sections[sections.findIndex(s => s.id === sectionId) + 1].summary.slice(0, 60)}...
+                    </p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-primary" />
+                </Link>
+              </div>
+            )}
 
-            {/* Related Gita Verses */}
-            {currentSection.relatedGitaVerses.length > 0 && (
-              <div className="p-4 rounded-xl bg-card border border-border animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <h3 className="text-sm font-semibold text-foreground mb-3">📖 Related Bhagavad Gita Verses</h3>
-                <div className="space-y-3">
-                  {currentSection.relatedGitaVerses.map((ref, idx) => (
-                    <Link 
-                      key={idx}
-                      to={`/gita/chapter/${ref.chapter}/verse/${ref.verse}`}
-                      className="block p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors hover:scale-[1.01] active:scale-[0.99]"
-                    >
-                      <p className="text-sm font-medium text-primary">Chapter {ref.chapter}, Verse {ref.verse}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{ref.connection}</p>
-                    </Link>
-                  ))}
-                </div>
+            {/* Story Complete Message */}
+            {sections.findIndex(s => s.id === sectionId) === sections.length - 1 && (
+              <div className="p-4 rounded-xl bg-gradient-to-br from-gold/10 to-primary/5 border border-gold/20 text-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <span className="text-2xl mb-2 block">🙏</span>
+                <p className="text-sm font-medium text-foreground">
+                  {isRamayana ? "Ramayana" : "Mahabharata"} Complete
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  You have completed this epic. May the wisdom guide your path.
+                </p>
+                <Link
+                  to={`/stories/${storyId}`}
+                  className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  Read All {isRamayana ? "Kandas" : "Parvas"}
+                </Link>
               </div>
             )}
 
             {/* Attribution */}
             <p className="text-xs text-muted-foreground/60 text-center pt-4">
-              Content sourced from Valmiki Ramayana • Public Domain
+              Content sourced from {isRamayana ? "Valmiki Ramayana" : "Vyasa Mahabharata"} • Public Domain
             </p>
           </div>
         </div>
