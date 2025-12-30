@@ -12,6 +12,12 @@ import {
   mahabharataCharactersFromJson, 
   getMahabharataParvaByIdFast 
 } from "@/hooks/useMahabharataData";
+import { 
+  getParvaMainImage, 
+  getParvaSceneImages, 
+  getImagesForParva,
+  galleryImages 
+} from "@/hooks/useFullMahabharata";
 import { getStoryTranslations, getTranslatedText } from "@/data/storyTranslations";
 import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
@@ -66,7 +72,7 @@ interface Scene {
   content: MultiLangContent[];
 }
 
-// Scene images mapping
+// Scene images mapping - use gallery images for Mahabharata
 const sceneImageMap: Record<string, string[]> = {
   "bala-kanda": [ayodhyaPalace, sacredYajna, ramaBirth, fourPrinces, vishwamitra, shivaBow, ramaSitaWedding],
   "ayodhya-kanda": [ayodhyaPalace, forestExile, forestExile],
@@ -75,9 +81,19 @@ const sceneImageMap: Record<string, string[]> = {
   "sundara-kanda": [hanumanLeap, hanumanSita, lankaBurning],
   "yuddha-kanda": [ramaSetu, ramaRavanaBattle, ramaCoronation],
   "uttara-kanda": [ramaCoronation, sitaAshram, ramaCoronation],
-  "adi-parva": [pandavas, draupadiBirth, arjunaFishEye],
-  "sabha-parva": [diceGame, diceGame, forestExile],
-  "bhishma-parva": [gitaDiscourse, kurukshetraWar, bhishmaArrows],
+};
+
+// Get scene images for a story section - use gallery for Mahabharata parvas
+const getSceneImages = (sectionId: string): string[] => {
+  // Check if it's a Mahabharata parva
+  if (sectionId.includes('parva')) {
+    const parvaImages = getParvaSceneImages(sectionId);
+    if (parvaImages.length > 0) return parvaImages;
+    // Fallback to gallery images for this parva
+    const galleryForParva = getImagesForParva(sectionId);
+    if (galleryForParva.length > 0) return galleryForParva.map(img => img.url);
+  }
+  return sceneImageMap[sectionId] || [];
 };
 
 // Extended story content with multi-language support
