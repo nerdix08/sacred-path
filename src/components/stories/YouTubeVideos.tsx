@@ -286,26 +286,7 @@ export function YouTubeVideos({ storyId, storyType }: YouTubeVideosProps) {
         ))}
       </div>
 
-      {/* More Videos Link */}
-      <div className="px-4">
-        <a
-          href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-            storyType === 'ramayana' 
-              ? 'Ramayana ' + storyId.replace(/-/g, ' ')
-              : storyType === 'mahabharata'
-              ? 'Mahabharata ' + storyId.replace(/-/g, ' ')
-              : storyType === 'gita'
-              ? 'Bhagavad Gita ' + storyId.replace(/-/g, ' ')
-              : storyId.replace(/-/g, ' ')
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 p-3 rounded-xl border border-dashed border-primary/30 text-primary hover:bg-primary/5 transition-colors"
-        >
-          <Play className="w-4 h-4" />
-          <span className="text-sm font-medium">Find More Videos on YouTube</span>
-        </a>
-      </div>
+      {/* Note: Removed external YouTube link to keep users in-app */}
     </div>
   );
 }

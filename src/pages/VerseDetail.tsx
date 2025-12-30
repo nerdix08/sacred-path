@@ -1,16 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { gitaChapters } from "@/data/gitaChapters";
 import { getVerseById } from "@/data/sampleVerses";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Volume2, Bookmark, Share2, ChevronDown, Pause, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, Bookmark, Share2, ChevronDown, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useReadingSettingsContext, getFontColorStyle } from "@/contexts/ReadingSettingsContext";
 import { useSavedVerses } from "@/hooks/useSavedVerses";
 import { useToast } from "@/hooks/use-toast";
 import { useStreak } from "@/hooks/useStreak";
-import { Slider } from "@/components/ui/slider";
+import { CompactAudioPlayer } from "@/components/audio/CompactAudioPlayer";
 
 type Language = "english" | "hindi" | "telugu" | "tamil" | "kannada";
 
@@ -27,34 +27,11 @@ const VerseDetail = () => {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("english");
   const [showExplanation, setShowExplanation] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioProgress, setAudioProgress] = useState(0);
-  const [audioDuration, setAudioDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const { fontSize, fontColor, showSanskrit, showTransliteration } = useReadingSettingsContext();
   const { isVerseSaved, toggleVerse } = useSavedVerses();
   const { toast } = useToast();
   const { incrementVersesRead } = useStreak();
-
-  // Cleanup audio on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  // Reset audio when verse changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setAudioProgress(0);
-    }
-  }, [verseNum]);
 
   const chapter = gitaChapters.find(c => c.number === Number(chapterNum));
   const verse = getVerseById(Number(chapterNum), Number(verseNum));
@@ -95,44 +72,6 @@ const VerseDetail = () => {
     images: undefined as string[] | undefined,
   };
 
-  const handlePlayAudio = () => {
-    if (!displayVerse.audio) return;
-
-    if (isPlaying) {
-      audioRef.current?.pause();
-      setIsPlaying(false);
-    } else {
-      if (!audioRef.current) {
-        audioRef.current = new Audio(displayVerse.audio);
-        audioRef.current.onloadedmetadata = () => {
-          setAudioDuration(audioRef.current?.duration || 0);
-        };
-        audioRef.current.ontimeupdate = () => {
-          setAudioProgress(audioRef.current?.currentTime || 0);
-        };
-        audioRef.current.onended = () => {
-          setIsPlaying(false);
-          setAudioProgress(0);
-        };
-      }
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const handleSeekAudio = (value: number[]) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = value[0];
-      setAudioProgress(value[0]);
-    }
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-  
   const handleBookmark = () => {
     const wasSaved = toggleVerse({
       chapter: Number(chapterNum),
@@ -173,16 +112,6 @@ const VerseDetail = () => {
             </Button>
             
             <div className="flex items-center gap-1">
-              {displayVerse.audio && (
-                <Button 
-                  variant="ghost" 
-                  size="icon-sm" 
-                  className={cn(isPlaying ? "text-primary" : "text-muted-foreground")}
-                  onClick={handlePlayAudio}
-                >
-                  {isPlaying ? <Pause className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-                </Button>
-              )}
               <Button 
                 variant="ghost" 
                 size="icon-sm" 
@@ -211,40 +140,10 @@ const VerseDetail = () => {
           </div>
         )}
 
-        {/* Audio Player */}
+        {/* Audio Player - Compact Design */}
         {displayVerse.audio && (
           <div className="px-4 animate-fade-in">
-            <div className="p-4 rounded-xl bg-card border border-border">
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={handlePlayAudio}
-                  className={cn(
-                    "w-12 h-12 rounded-full flex items-center justify-center transition-all",
-                    isPlaying 
-                      ? "bg-primary text-primary-foreground" 
-                      : "bg-gradient-to-br from-primary/20 to-primary/5 text-primary hover:from-primary/30"
-                  )}
-                >
-                  {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
-                </button>
-                <div className="flex-1 space-y-2">
-                  <Slider
-                    value={[audioProgress]}
-                    max={audioDuration || 100}
-                    step={0.1}
-                    onValueChange={handleSeekAudio}
-                    className="cursor-pointer"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{formatTime(audioProgress)}</span>
-                    <span>{formatTime(audioDuration)}</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                Listen to Sanskrit pronunciation
-              </p>
-            </div>
+            <CompactAudioPlayer audioUrl={displayVerse.audio} />
           </div>
         )}
         {/* Verse Reference */}
