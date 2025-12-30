@@ -57,7 +57,12 @@ export function useSavedVerses() {
     return false;
   };
 
-  const removeVerse = (chapter: number, verse: number) => {
+  const removeVerse = (id: string) => {
+    const updated = savedVerses.filter(v => v.id !== id);
+    saveToStorage(updated);
+  };
+
+  const removeByChapterVerse = (chapter: number, verse: number) => {
     const updated = savedVerses.filter(
       v => !(v.chapter === chapter && v.verse === verse)
     );
@@ -72,7 +77,7 @@ export function useSavedVerses() {
 
   const toggleVerse = (verse: Omit<SavedVerse, 'id' | 'savedAt'>) => {
     if (isVerseSaved(verse.chapter, verse.verse)) {
-      removeVerse(verse.chapter, verse.verse);
+      removeByChapterVerse(verse.chapter, verse.verse);
       return false;
     } else {
       addVerse(verse);
@@ -80,12 +85,18 @@ export function useSavedVerses() {
     }
   };
 
+  const clearAll = () => {
+    saveToStorage([]);
+  };
+
   return {
     savedVerses,
     addVerse,
     removeVerse,
+    removeByChapterVerse,
     isVerseSaved,
     toggleVerse,
+    clearAll,
     count: savedVerses.length
   };
 }

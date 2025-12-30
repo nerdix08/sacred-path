@@ -1,13 +1,17 @@
 import { Bell, Settings, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useStreak } from "@/hooks/useStreak";
 
 interface TopNavProps {
   title?: string;
-  streak?: number;
   showStreak?: boolean;
 }
 
-export function TopNav({ title = "Vidya", streak = 0, showStreak = true }: TopNavProps) {
+export function TopNav({ title = "Vidya", showStreak = true }: TopNavProps) {
+  const navigate = useNavigate();
+  const { currentStreak } = useStreak();
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border safe-top">
       <div className="flex items-center justify-between px-4 h-14">
@@ -22,10 +26,10 @@ export function TopNav({ title = "Vidya", streak = 0, showStreak = true }: TopNa
         {/* Right Actions */}
         <div className="flex items-center gap-2">
           {/* Streak Counter */}
-          {showStreak && streak > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+          {showStreak && currentStreak > 0 && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 pulse-glow">
               <Flame className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-primary">{streak}</span>
+              <span className="text-sm font-semibold text-primary">{currentStreak}</span>
             </div>
           )}
 
@@ -35,7 +39,12 @@ export function TopNav({ title = "Vidya", streak = 0, showStreak = true }: TopNa
           </Button>
 
           {/* Settings */}
-          <Button variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-foreground">
+          <Button 
+            variant="ghost" 
+            size="icon-sm" 
+            className="text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/profile")}
+          >
             <Settings className="w-5 h-5" />
           </Button>
         </div>
