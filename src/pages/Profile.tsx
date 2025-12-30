@@ -7,8 +7,9 @@ import {
   BookOpen, Trophy, Flame, ChevronRight,
   HelpCircle, Bookmark, Volume2, Trash2,
   RotateCcw, Info, Shield, Type, Palette,
-  Download, Database, BellRing
+  Download, Database, BellRing, MessageCircle, AlertTriangle
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { useStreak } from "@/hooks/useStreak";
@@ -440,19 +441,23 @@ const Profile = () => {
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
 
-          {/* About */}
-          <button
+          {/* Feedback & Apologies */}
+          <Link
+            to="/feedback"
             className={cn(
-              "w-full flex items-center justify-between p-4 rounded-xl bg-card border border-border",
-              "hover:bg-card/80 transition-colors"
+              "w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20",
+              "hover:from-amber-500/20 hover:to-orange-500/20 transition-colors"
             )}
           >
             <div className="flex items-center gap-3">
-              <Info className="w-5 h-5 text-muted-foreground" />
-              <span className="text-sm text-foreground">{t.aboutVidya}</span>
+              <MessageCircle className="w-5 h-5 text-amber-600" />
+              <div>
+                <span className="text-sm text-foreground">Feedback & Apologies</span>
+                <p className="text-xs text-muted-foreground">Report mistakes, suggestions</p>
+              </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </button>
+            <ChevronRight className="w-4 h-4 text-amber-600" />
+          </Link>
 
           {/* Privacy */}
           <button
