@@ -7,7 +7,11 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ramayanaKandas, ramayanaCharacters, getRamayanaKandaById } from "@/data/ramayanaData";
-import { mahabharataParvas, mahabharataCharacters, getMahabharataParvaById } from "@/data/mahabharataData";
+import { 
+  mahabharataParvasFromJson, 
+  mahabharataCharactersFromJson, 
+  getMahabharataParvaByIdFast 
+} from "@/hooks/useMahabharataData";
 import { getStoryTranslations, getTranslatedText } from "@/data/storyTranslations";
 import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
@@ -370,12 +374,12 @@ const StoryDetail = () => {
   const { t } = useLanguage();
 
   const isRamayana = storyId === 'ramayana';
-  const sections = isRamayana ? ramayanaKandas : mahabharataParvas;
-  const characters = isRamayana ? ramayanaCharacters : mahabharataCharacters;
+  const sections = isRamayana ? ramayanaKandas : mahabharataParvasFromJson;
+  const characters = isRamayana ? ramayanaCharacters : mahabharataCharactersFromJson;
   const sectionLabel = isRamayana ? 'Kanda' : 'Parva';
 
   const currentSection = sectionId 
-    ? (isRamayana ? getRamayanaKandaById(sectionId) : getMahabharataParvaById(sectionId))
+    ? (isRamayana ? getRamayanaKandaById(sectionId) : getMahabharataParvaByIdFast(sectionId))
     : null;
 
   const handleSpeak = (text: string) => {
