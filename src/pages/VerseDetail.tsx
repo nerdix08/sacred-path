@@ -4,13 +4,14 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { gitaChapters } from "@/data/gitaChapters";
 import { getVerseById } from "@/data/sampleVerses";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Bookmark, Share2, ChevronDown, Volume2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Bookmark, Share2, ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useReadingSettingsContext, getFontColorStyle } from "@/contexts/ReadingSettingsContext";
 import { useSavedVerses } from "@/hooks/useSavedVerses";
 import { useToast } from "@/hooks/use-toast";
 import { useStreak } from "@/hooks/useStreak";
 import { CompactAudioPlayer } from "@/components/audio/CompactAudioPlayer";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Language = "english" | "hindi" | "telugu" | "tamil" | "kannada";
 
@@ -42,19 +43,6 @@ const VerseDetail = () => {
   
   const isBookmarked = isVerseSaved(Number(chapterNum), currentVerseNum);
 
-  if (!chapter) {
-    return (
-      <AppLayout title="Not Found">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
-          <p className="text-muted-foreground">Verse not found</p>
-          <Button variant="saffron-outline" className="mt-4" onClick={() => navigate("/gita")}>
-            Back to Gita
-          </Button>
-        </div>
-      </AppLayout>
-    );
-  }
-
   // Fallback if verse not in our sample data
   const displayVerse = verse || {
     chapter: Number(chapterNum),
@@ -71,6 +59,29 @@ const VerseDetail = () => {
     audio: undefined as string | undefined,
     images: undefined as string[] | undefined,
   };
+
+  const englishText = displayVerse.translations?.english || "";
+  const verseKey = `ch${chapterNum}_v${verseNum}`;
+  
+  // Use AI translation for non-English languages
+  const { translation, isLoading: isTranslating } = useTranslation(
+    englishText,
+    selectedLanguage,
+    verseKey
+  );
+
+  if (!chapter) {
+    return (
+      <AppLayout title="Not Found">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+          <p className="text-muted-foreground">Verse not found</p>
+          <Button variant="saffron-outline" className="mt-4" onClick={() => navigate("/gita")}>
+            Back to Gita
+          </Button>
+        </div>
+      </AppLayout>
+    );
+  }
 
   const handleBookmark = () => {
     const wasSaved = toggleVerse({
@@ -193,12 +204,19 @@ const VerseDetail = () => {
 
         {/* Translation */}
         <div className="px-6 py-4 flex-1 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <p 
-            className="verse-text leading-relaxed"
-            style={{ fontSize: `${fontSize}px`, color: fontColorValue }}
-          >
-            {displayVerse.translations && (displayVerse.translations[selectedLanguage] || displayVerse.translations.english)}
-          </p>
+          {isTranslating ? (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-sm">Translating to {languageLabels[selectedLanguage]}...</span>
+            </div>
+          ) : (
+            <p 
+              className="verse-text leading-relaxed"
+              style={{ fontSize: `${fontSize}px`, color: fontColorValue }}
+            >
+              {translation}
+            </p>
+          )}
         </div>
 
         {/* Explanation (expandable) */}
