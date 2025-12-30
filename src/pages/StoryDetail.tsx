@@ -12,13 +12,82 @@ import { useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useLanguage } from "@/hooks/useLanguage";
 
-// Extended story content with more details
-const extendedContent: Record<string, { scenes: { title: string; content: string[]; theme: string }[] }> = {
+// Scene images - using Unsplash and Pexels for reliable loading
+const sceneImages: Record<string, string[]> = {
+  "bala-kanda": [
+    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // Temple/Palace
+    "https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=800&q=80", // Sad king
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Sacred fire
+    "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&q=80", // Divine light
+    "https://images.unsplash.com/photo-1604537466158-719b1972feb8?w=800&q=80", // Royal princes
+    "https://images.unsplash.com/photo-1545406130-b5c7cb67da19?w=800&q=80", // Sage
+    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", // Forest
+    "https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=800&q=80", // Bow/Archery
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80", // Wedding
+  ],
+  "ayodhya-kanda": [
+    "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", // Palace celebration
+    "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800&q=80", // Dark plotting
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Terrible boons
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest exile
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Mountain journey
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80", // Deep forest
+  ],
+  "aranya-kanda": [
+    "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80", // Deep forest
+    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=800&q=80", // Hermitage
+    "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80", // Sacred grove
+    "https://images.unsplash.com/photo-1507041957456-9c397ce39c97?w=800&q=80", // Dark forest
+    "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=800&q=80", // Golden deer
+  ],
+  "kishkindha-kanda": [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Mountains
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80", // Peak
+    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80", // Sunrise mountain
+    "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80", // Alliance
+  ],
+  "sundara-kanda": [
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // Ocean
+    "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&q=80", // Leap across sea
+    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80", // Island
+    "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80", // Garden
+  ],
+  "yuddha-kanda": [
+    "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80", // Battle preparation
+    "https://images.unsplash.com/photo-1569974507005-6dc61f97fb5c?w=800&q=80", // Bridge
+    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", // War
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Victory fire
+  ],
+  "uttara-kanda": [
+    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // Return to Ayodhya
+    "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", // Coronation
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Final journey
+  ],
+  "adi-parva": [
+    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // Origins
+    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", // Forest training
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Fire ceremony
+  ],
+  "sabha-parva": [
+    "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", // Grand hall
+    "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800&q=80", // Dice game
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Exile begins
+  ],
+  "bhishma-parva": [
+    "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80", // War begins
+    "https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=800&q=80", // Arrows
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", // Gita discourse
+  ],
+};
+
+// Extended story content with more details and images
+const extendedContent: Record<string, { scenes: { title: string; content: string[]; theme: string; imageIndex?: number }[] }> = {
   "bala-kanda": {
     scenes: [
       {
         title: "The Kingdom of Ayodhya",
         theme: "🏰",
+        imageIndex: 0,
         content: [
           "In the ancient land of Bharatavarsha, nestled along the banks of the sacred river Sarayu, stood the magnificent city of Ayodhya. Its towering walls, built of gleaming white marble, stretched for twelve yojanas in length. The city was renowned across all the three worlds for its prosperity, righteousness, and the wisdom of its rulers.",
           "The streets were paved with precious stones, and grand mansions lined every avenue. Learned Brahmins chanted Vedic hymns at every corner, while merchants traded silks and spices from distant lands. The sound of temple bells mingled with the laughter of children, creating a symphony of peace and happiness.",
@@ -28,6 +97,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The King's Sorrow",
         theme: "😢",
+        imageIndex: 1,
         content: [
           "Despite his countless blessings, a deep sorrow gnawed at King Dasharatha's heart. Though he had three devoted queens - the gentle Kausalya, the spirited Kaikeyi who had saved his life in battle, and the beautiful Sumitra - none had blessed him with an heir.",
           "Night after night, the king would stand on his palace balcony, gazing at the stars and praying to his ancestors for a son. 'What use is this vast kingdom,' he would lament, 'if there is no one to inherit it? What purpose do my victories serve if the Solar dynasty ends with me?'",
@@ -37,6 +107,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Sacred Yajna",
         theme: "🔥",
+        imageIndex: 2,
         content: [
           "With renewed hope, Dasharatha invited the young sage Rishyashringa to Ayodhya. The preparations for the Ashwamedha Yajna (horse sacrifice) and the Putrakameshti Yajna (son-bestowing sacrifice) began in earnest. The entire kingdom was transformed into a vast ceremonial ground.",
           "For many days and nights, the sacred fires burned bright. Priests chanted mantras that had been passed down since the beginning of time. The fragrance of ghee, sandalwood, and sacred herbs filled the air, rising to the heavens like a prayer made visible.",
@@ -47,6 +118,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Divine Birth",
         theme: "✨",
+        imageIndex: 3,
         content: [
           "King Dasharatha distributed the sacred payasam among his three queens with trembling hands. To Kausalya, the eldest and most devoted, he gave half. To Kaikeyi, who had earned his eternal gratitude, he gave a quarter. And to the gentle Sumitra, he gave the remaining quarter, which she divided into two portions.",
           "The months that followed were filled with auspicious signs. Flowers bloomed out of season, rivers ran crystal clear, and celestial music was heard at dawn and dusk. The entire creation seemed to celebrate the coming of something divine.",
@@ -57,6 +129,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Four Princes",
         theme: "👑",
+        imageIndex: 4,
         content: [
           "Shortly after Rama's birth, the other queens also delivered their precious sons. Kaikeyi gave birth to Bharata, a child of remarkable courage and loyalty. Sumitra was blessed with twins - Lakshmana and Shatrughna - born of her two portions of the sacred offering.",
           "From their earliest days, a mysterious bond connected the brothers. Lakshmana would not eat unless Rama had eaten first, would not sleep unless Rama slept beside him. It was as if they shared one soul in two bodies. Similarly, Shatrughna was inseparable from Bharata.",
@@ -67,6 +140,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Arrival of Vishwamitra",
         theme: "🧙",
+        imageIndex: 5,
         content: [
           "One fateful day, the sage Vishwamitra arrived at the gates of Ayodhya. He was one of the most powerful beings in creation - a king who had become a Brahmarshi through thousands of years of severe penance. Devas and Asuras alike trembled before his spiritual power.",
           "King Dasharatha received him with the highest honors, washing the sage's feet himself and offering him the finest hospitality. 'Great sage,' said the king, 'your presence sanctifies my kingdom. Ask for anything - gold, jewels, even half my realm - and it shall be yours.'",
@@ -78,6 +152,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Trials in the Forest",
         theme: "⚔️",
+        imageIndex: 6,
         content: [
           "The journey into the forest was Rama's first test. As they entered the wilderness, the very air seemed to grow heavy with malevolence. This was the territory of Tataka, a powerful demoness who had laid waste to entire kingdoms.",
           "Vishwamitra turned to Rama. 'She approaches. This creature, once a beautiful yaksha woman, was cursed to become a monster. She has killed thousands. You must destroy her, Rama, for the protection of all living beings.'",
@@ -89,6 +164,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Swayamvara at Mithila",
         theme: "💕",
+        imageIndex: 7,
         content: [
           "After successfully protecting Vishwamitra's yajna, the sage led the princes to the kingdom of Mithila, ruled by the philosopher-king Janaka. There, Rama's destiny awaited him in the form of a divine bow and a princess of unparalleled beauty.",
           "King Janaka possessed the Shiva Dhanus, Lord Shiva's own bow, which had been given to his ancestors by the god himself. The bow was so massive that three hundred men were needed just to move it. Janaka had declared that whoever could string this celestial weapon would win the hand of his daughter Sita.",
@@ -101,6 +177,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Grand Wedding",
         theme: "💒",
+        imageIndex: 8,
         content: [
           "The news of Rama's triumph reached Ayodhya, and King Dasharatha arrived with a grand procession for the wedding. It was decided that all four brothers would marry on the same auspicious day - Rama to Sita, Lakshmana to Sita's sister Urmila, Bharata to Mandavi, and Shatrughna to Shrutakirti.",
           "The wedding celebrations lasted for many days. The streets of Mithila were decorated with flowers and lights. Musicians played, dancers performed, and the air was filled with the fragrance of jasmine and rose. Even the gods descended from heaven to witness the union of Rama and Sita.",
@@ -113,8 +190,9 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
   "ayodhya-kanda": {
     scenes: [
       {
-        title: "The Announcement",
+        title: "The Announcement of Coronation",
         theme: "📯",
+        imageIndex: 0,
         content: [
           "Years of perfect happiness passed in Ayodhya. Rama and Sita's love grew deeper with each passing day, becoming a legend that poets sang about in distant lands. King Dasharatha, now advanced in years, felt the time had come to crown Rama as Yuvaraja - the heir apparent.",
           "The announcement sent waves of joy through the kingdom. Citizens prepared for the grandest coronation in history. Flowers were gathered, streets were decorated, and prayers of thanksgiving rose from every home.",
@@ -124,6 +202,7 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "Manthara's Poison",
         theme: "🐍",
+        imageIndex: 1,
         content: [
           "In Queen Kaikeyi's chambers, her aged maid Manthara watched the celebrations with bitter eyes. This hunchbacked woman had nursed a lifetime of resentments, and now she saw an opportunity to release her venom.",
           "'My lady,' she whispered to Kaikeyi, 'do you not see what is happening? When Rama becomes king, what will become of your son Bharata? He will be a servant in his own home. And you - you who saved the king's life in battle - you will bow before Kausalya like a common maid.'",
@@ -133,11 +212,255 @@ const extendedContent: Record<string, { scenes: { title: string; content: string
       {
         title: "The Terrible Boons",
         theme: "😱",
+        imageIndex: 2,
         content: [
           "Kaikeyi remembered that long ago, after she had saved Dasharatha's life in battle, he had promised her any two boons of her choosing. She had kept them in reserve, never imagining she would use them for such a purpose.",
           "Now, corrupted by Manthara's words, she entered the sulking chamber and refused to see the king until he granted her demands. When Dasharatha finally came to her, eager to share his joy about Rama's coronation, he found her lying on the floor, her ornaments discarded, her hair disheveled.",
           "'What troubles you, my love?' he asked in alarm. 'Ask for anything - the sun, the moon, my very life - and I shall give it to you.'",
           "And so she asked: 'Let Bharata be crowned king instead of Rama. And let Rama be exiled to the forest for fourteen years.'"
+        ]
+      },
+      {
+        title: "Rama's Noble Departure",
+        theme: "🚶",
+        imageIndex: 3,
+        content: [
+          "When Rama heard of his stepmother's demands, he showed no anger, no disappointment. With a calm that astonished all who witnessed it, he said, 'If this is what will bring peace to my father's heart and honor to his word, then I go gladly.'",
+          "Sita, upon hearing the news, insisted on accompanying her husband. 'Where you go, I go,' she declared. 'The forest that has you will be my palace; the palace without you would be a wilderness.'",
+          "Lakshmana, his eyes burning with righteous fury, also chose to accompany his brother. 'Let them crown Bharata,' he said, 'but they cannot separate us. I will walk beside you through every trial, every danger.'",
+          "King Dasharatha, bound by his word yet broken by grief, watched helplessly as his beloved son departed for the wilderness. As Rama's chariot disappeared beyond the city gates, the old king collapsed. Within days, unable to bear the separation, he breathed his last, calling out Rama's name."
+        ]
+      },
+      {
+        title: "The Crossing of Ganga",
+        theme: "🌊",
+        imageIndex: 4,
+        content: [
+          "Rama, Sita, and Lakshmana journeyed toward the forest, crossing the mighty Ganga with the help of the boatman Guha, who wept to see his prince in the garb of a hermit.",
+          "On the banks of the sacred river, Rama performed the rituals for his departed father, whose death he learned of from the visiting Bharata. The waters of the Ganga seemed to shimmer with divine sorrow.",
+          "At Chitrakoot, the exiled trio established their first hermitage. Here, Bharata came with the entire court, begging Rama to return. But Rama, ever faithful to his father's word, refused. Bharata, equally noble, vowed to rule only as Rama's regent, placing Rama's sandals on the throne as a symbol."
+        ]
+      },
+      {
+        title: "Into the Depths of Dandaka",
+        theme: "🌲",
+        imageIndex: 5,
+        content: [
+          "The years of exile began their slow passage. Rama, Sita, and Lakshmana moved deeper into the Dandaka forest, living among sages and protecting them from the demons that roamed these lands.",
+          "Each hermitage they visited brought new adventures - battles with rakshasas, encounters with divine beings, and lessons in the ancient wisdom of the forest sages. Sita learned the ways of the forest, while Rama and Lakshmana honed their skills protecting the innocent.",
+          "But the most dangerous trials lay ahead. Unknown to them, their presence in the forest had not gone unnoticed. In distant Lanka, a terrible power was awakening - one that would change the course of their exile and shake the very foundations of the world."
+        ]
+      }
+    ]
+  },
+  "aranya-kanda": {
+    scenes: [
+      {
+        title: "The Hermitage at Panchavati",
+        theme: "🏡",
+        imageIndex: 0,
+        content: [
+          "Deep in the Dandaka forest, Rama, Sita, and Lakshmana established their hermitage at Panchavati, a beautiful grove by the river Godavari. Here, surrounded by five sacred banyan trees, they built a humble dwelling.",
+          "The peaceful days passed in divine contentment. Sita tended to the hermitage while Rama and Lakshmana protected the local sages from demonic threats. The forest seemed to welcome them as its own children."
+        ]
+      },
+      {
+        title: "Surpanakha's Desire",
+        theme: "💔",
+        imageIndex: 1,
+        content: [
+          "One day, a beautiful woman appeared at the hermitage - it was Surpanakha, sister of the demon king Ravana, who had disguised her monstrous form. She was instantly captivated by Rama's divine beauty.",
+          "'Become my husband,' she demanded. 'I can give you pleasures beyond imagination.' But Rama gently refused, pointing to Sita as his devoted wife.",
+          "Rejected and humiliated, Surpanakha's love turned to hatred. She attempted to attack Sita, but Lakshmana intervened, cutting off her nose and ears. Shrieking in pain and rage, she fled to her brothers."
+        ]
+      },
+      {
+        title: "The Demon Army Falls",
+        theme: "⚔️",
+        imageIndex: 2,
+        content: [
+          "Surpanakha's brothers - Khara and Dushana - attacked with an army of fourteen thousand demons. But Rama, armed with divine weapons, single-handedly destroyed them all.",
+          "The news of this defeat reached Lanka, where Ravana, the ten-headed king of demons, heard of Rama's power and Sita's legendary beauty. A terrible plan began to form in his mind."
+        ]
+      },
+      {
+        title: "The Golden Deer",
+        theme: "🦌",
+        imageIndex: 3,
+        content: [
+          "Ravana's ally, the demon Maricha, took the form of a beautiful golden deer and appeared near the hermitage. Sita, enchanted by its beauty, begged Rama to capture it for her.",
+          "Rama pursued the deer deep into the forest. As he struck it with his arrow, the dying Maricha cried out in Rama's voice: 'O Sita! O Lakshmana!' - a trick to lure Lakshmana away.",
+          "Despite his misgivings, Lakshmana was forced to go search for Rama, leaving Sita alone. Before departing, he drew a protective circle around the hermitage, warning Sita not to step outside its boundary under any circumstances."
+        ]
+      },
+      {
+        title: "The Abduction of Sita",
+        theme: "😭",
+        imageIndex: 4,
+        content: [
+          "Ravana appeared, disguised as a wandering mendicant. When Sita crossed the protective line to offer him alms, he revealed his terrible true form and carried her away through the sky in his aerial chariot.",
+          "The old vulture Jatayu, friend of Dasharatha, tried valiantly to rescue Sita. Though he fought with all his strength, Ravana cut off his wings. As Jatayu lay dying, he watched helplessly as Sita disappeared toward the southern horizon.",
+          "When Rama and Lakshmana returned to find the hermitage empty, their anguish shook the very heavens. They found the dying Jatayu, who with his last breath told them the direction in which Ravana had fled. Rama performed his last rites with tears streaming down his face, calling him 'father.'"
+        ]
+      }
+    ]
+  },
+  "kishkindha-kanda": {
+    scenes: [
+      {
+        title: "Meeting Hanuman",
+        theme: "🐒",
+        imageIndex: 0,
+        content: [
+          "Searching desperately for Sita, Rama and Lakshmana came to the shores of Lake Pampa, where they encountered Hanuman, the mighty son of the Wind God, disguised as a brahmin.",
+          "Hanuman had been sent by Sugriva, the exiled monkey king, to investigate these powerful warriors. The moment Hanuman saw Rama, his heart overflowed with devotion - a love that would become legendary.",
+          "Hanuman revealed himself and carried the brothers on his shoulders to meet Sugriva, who was hiding on the mountain Rishyamukha, fearing his brother Vali who had usurped his throne."
+        ]
+      },
+      {
+        title: "The Alliance with Sugriva",
+        theme: "🤝",
+        imageIndex: 1,
+        content: [
+          "Rama and Sugriva formed an alliance of mutual aid. Rama would help Sugriva defeat Vali, and in return, Sugriva would mobilize his vast monkey army to search for Sita.",
+          "Sugriva showed Rama the ornaments that Sita had dropped during her abduction, hoping they might reach her husband. Seeing them, Rama was overcome with grief and renewed determination."
+        ]
+      },
+      {
+        title: "The Fall of Vali",
+        theme: "🏹",
+        imageIndex: 2,
+        content: [
+          "In the battle between the two monkey brothers, Rama shot Vali from behind a tree while he fought Sugriva. When the dying Vali questioned this seemingly dishonorable act, Rama explained that as a king's representative, he was bound to punish those who had wronged others - Vali had stolen Sugriva's wife and kingdom.",
+          "Vali's death restored Sugriva to his throne. His son Angada joined the monkey army, and preparations began for the great search for Sita."
+        ]
+      },
+      {
+        title: "The Great Search",
+        theme: "🔍",
+        imageIndex: 3,
+        content: [
+          "Armies of monkeys and bears spread across the four directions. The southern party, led by Angada and including Hanuman, received Rama's signet ring to give to Sita as proof of their mission.",
+          "After many adventures and near failures, they reached the southern ocean. Before them lay the vast sea, and beyond it, the island of Lanka where Sita was held captive. Who among them could cross this impossible distance?"
+        ]
+      }
+    ]
+  },
+  "sundara-kanda": {
+    scenes: [
+      {
+        title: "Hanuman's Leap",
+        theme: "🌊",
+        imageIndex: 0,
+        content: [
+          "As the monkey army stood at the ocean's edge, Jambavan, the wise king of bears, reminded Hanuman of his forgotten powers. Born of the Wind God, Hanuman could grow to any size and fly across the sky.",
+          "With a mighty roar, Hanuman expanded his body to mountainous proportions. He leaped from Mount Mahendra, soaring across the ocean toward Lanka. Sea monsters and demonesses tried to stop him, but nothing could halt his divine mission."
+        ]
+      },
+      {
+        title: "Lanka's Golden Glory",
+        theme: "🏙️",
+        imageIndex: 1,
+        content: [
+          "Hanuman reached Lanka and was astounded by its magnificence. The golden city glittered like a second sun. Its walls reached the clouds, its gardens bloomed with heavenly flowers, and its palaces housed untold riches.",
+          "Shrinking to the size of a cat, Hanuman infiltrated the demon city, searching every corner for Sita. He witnessed Ravana's might, his vast armies, and his beautiful queens - but Sita was nowhere among them."
+        ]
+      },
+      {
+        title: "Finding Sita",
+        theme: "💫",
+        imageIndex: 2,
+        content: [
+          "At last, in the Ashoka grove, Hanuman found Sita - thin from fasting, dressed in the same garments she wore when abducted, surrounded by demon guards, yet radiating an inner light that poverty and captivity could not dim.",
+          "He watched as Ravana himself came to tempt her with riches and power, threatening death if she continued to refuse him. But Sita stood firm: 'You may kill me, but I will never be yours. Rama will come, and you will face his wrath.'",
+          "After Ravana left in frustration, Hanuman revealed himself to Sita, showing her Rama's ring. Her joy at hearing that Rama lived and was coming to rescue her brought tears to both their eyes."
+        ]
+      },
+      {
+        title: "Burning of Lanka",
+        theme: "🔥",
+        imageIndex: 3,
+        content: [
+          "After delivering Rama's message and Sita's reply - her hair ornament as proof of their meeting - Hanuman allowed himself to be captured deliberately. He wanted to assess Ravana's strength.",
+          "When Ravana ordered Hanuman's tail set on fire as punishment, Hanuman used his powers to escape and leaped from building to building, setting all of Lanka ablaze. The golden city burned as the demon populace watched in terror.",
+          "His mission accomplished, Hanuman returned across the ocean. The joyous news he brought - Sita was alive, Sita was faithful, and Lanka could be conquered - filled Rama's heart with hope for the first time since her abduction."
+        ]
+      }
+    ]
+  },
+  "yuddha-kanda": {
+    scenes: [
+      {
+        title: "The Bridge to Lanka",
+        theme: "🌉",
+        imageIndex: 0,
+        content: [
+          "The monkey army, led by Rama, Lakshmana, Sugriva, and Hanuman, marched to the ocean's edge. But how could such a vast army cross the sea?",
+          "Rama prayed to the ocean god for passage. When the sea god granted permission, Nala, son of the divine architect, directed the construction of a miraculous bridge. Monkeys threw boulders that floated on the water, inscribed with Rama's name.",
+          "In five days, the bridge to Lanka was complete - a path of faith stretching across the impossible distance. The army crossed, and the war for righteousness began."
+        ]
+      },
+      {
+        title: "The Great Battle",
+        theme: "⚔️",
+        imageIndex: 1,
+        content: [
+          "The war was fierce beyond description. Ravana's demon generals - Indrajit, Kumbhakarna, Atikaya - fell one by one to the arrows of Rama and Lakshmana, but not before causing terrible destruction.",
+          "When Lakshmana was struck by Indrajit's serpent arrows and lay dying, Hanuman flew to the Himalayas and brought back an entire mountain containing the life-saving Sanjeevani herb. Such was the devotion of that great monkey warrior.",
+          "The battlefield was covered with the bodies of demons and monkeys alike. Rivers of blood flowed. But Rama's army, fighting for dharma, never lost hope."
+        ]
+      },
+      {
+        title: "The Fall of Ravana",
+        theme: "👑",
+        imageIndex: 2,
+        content: [
+          "Finally, Rama faced Ravana himself. The ten-headed demon king, wielding powers gained from Brahma himself, was a formidable opponent. Their battle shook all three worlds.",
+          "Each time Rama cut off one of Ravana's heads, it grew back. The sage Agastya appeared and taught Rama the Aditya Hridayam, a hymn to the Sun God. Empowered by this divine mantra, Rama fired the Brahmastra at Ravana's heart - the source of his power.",
+          "The great demon king fell, and all of creation rejoiced. Even the gods showered flowers from heaven. Dharma had triumphed over adharma, light over darkness, love over greed."
+        ]
+      },
+      {
+        title: "Reunion and Return",
+        theme: "❤️",
+        imageIndex: 3,
+        content: [
+          "Sita was freed at last. The couple's reunion, after months of separation and the horror of war, was bittersweet. To prove her purity during captivity, Sita walked through fire, emerging unharmed as Agni himself testified to her chastity.",
+          "Mounting the Pushpaka Vimana - Ravana's aerial chariot now claimed by Vibhishana, the righteous brother who had joined Rama - the victorious party flew north to Ayodhya.",
+          "The fourteen years of exile were complete. As the Vimana approached Ayodhya, the entire city lit lamps to welcome their beloved prince home. This day of homecoming is celebrated to this day as Diwali - the festival of lights."
+        ]
+      }
+    ]
+  },
+  "uttara-kanda": {
+    scenes: [
+      {
+        title: "The Golden Reign",
+        theme: "👑",
+        imageIndex: 0,
+        content: [
+          "Rama was crowned king of Ayodhya, and his reign came to be known as Rama Rajya - the ideal kingdom. Justice prevailed, rains came on time, crops flourished, and no one suffered from disease or poverty.",
+          "The four brothers ruled together in perfect harmony. Sita's presence brought grace and prosperity to all. Poets sang of the perfect king, the perfect queen, and the perfect kingdom."
+        ]
+      },
+      {
+        title: "The Final Trial",
+        theme: "💔",
+        imageIndex: 1,
+        content: [
+          "Yet even paradise must face its tests. Whispers spread among the people about Sita's time in Lanka. Though Rama knew her purity, as king he felt bound to address his people's doubts.",
+          "In the most tragic decision of his life, Rama sent the pregnant Sita to the forest. She found refuge in Sage Valmiki's hermitage, where she gave birth to twins - Lava and Kusha - and raised them in the wisdom of the Vedas.",
+          "Years later, the twins came to Ayodhya and sang the story of Rama before the king himself - the very Ramayana we tell today. When Rama recognized his sons and called for Sita, she chose instead to return to her mother, the Earth, from whom she had been born."
+        ]
+      },
+      {
+        title: "Ascension to Heaven",
+        theme: "✨",
+        imageIndex: 2,
+        content: [
+          "Having ruled for many thousands of years, Rama knew his earthly mission was complete. He walked into the river Sarayu, and his brothers followed, each returning to their divine origins.",
+          "Brahma, Vishnu, Shiva, and all the gods appeared to welcome them home. Rama resumed his form as Lord Vishnu, the preserver of the universe, his avatar's purpose fulfilled.",
+          "But the story of Rama - his righteousness, his love, his sacrifice - continues to guide humanity. Whenever dharma declines, the Lord promises to return. And in every heart that remembers Rama, he lives on, eternal and unchanged."
         ]
       }
     ]
@@ -297,6 +620,19 @@ const StoryDetail = () => {
                     
                     {expandedScene === idx && (
                       <div className="px-4 pb-4 space-y-4 border-t border-border/50 pt-4">
+                        {/* Scene Image */}
+                        {sectionId && sceneImages[sectionId] && scene.imageIndex !== undefined && sceneImages[sectionId][scene.imageIndex] && (
+                          <div className="relative w-full h-48 rounded-xl overflow-hidden mb-4">
+                            <img 
+                              src={sceneImages[sectionId][scene.imageIndex]} 
+                              alt={scene.title}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                            <p className="absolute bottom-3 left-3 text-white text-sm font-medium">{scene.title}</p>
+                          </div>
+                        )}
                         <SceneDecorator theme={scene.theme} />
                         {scene.content.map((para, pIdx) => (
                           <p 
