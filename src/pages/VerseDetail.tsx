@@ -1,15 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { gitaChapters } from "@/data/gitaChapters";
-import { sampleVerses, getVerseById } from "@/data/sampleVerses";
+import { getVerseById } from "@/data/sampleVerses";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Volume2, Bookmark, Share2, ChevronDown } from "lucide-react";
+import { ArrowLeft, ArrowRight, Volume2, Bookmark, Share2, ChevronDown, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useReadingSettingsContext, getFontColorStyle } from "@/contexts/ReadingSettingsContext";
 import { useSavedVerses } from "@/hooks/useSavedVerses";
 import { useToast } from "@/hooks/use-toast";
 import { useStreak } from "@/hooks/useStreak";
+import { Slider } from "@/components/ui/slider";
 
 type Language = "english" | "hindi" | "telugu" | "tamil" | "kannada";
 
@@ -26,11 +27,34 @@ const VerseDetail = () => {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("english");
   const [showExplanation, setShowExplanation] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioProgress, setAudioProgress] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const { fontSize, fontColor, showSanskrit, showTransliteration } = useReadingSettingsContext();
   const { isVerseSaved, toggleVerse } = useSavedVerses();
   const { toast } = useToast();
   const { incrementVersesRead } = useStreak();
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Reset audio when verse changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      setAudioProgress(0);
+    }
+  }, [verseNum]);
 
   const chapter = gitaChapters.find(c => c.number === Number(chapterNum));
   const verse = getVerseById(Number(chapterNum), Number(verseNum));
@@ -66,7 +90,47 @@ const VerseDetail = () => {
       telugu: "ఈ శ్లోకం సిద్ధం చేయబడుతోంది. అన్ని 700 శ్లోకాలతో పూర్తి భగవద్గీత త్వరలో అందుబాటులో ఉంటుంది.",
       tamil: "இந்த சுலோகம் தயாரிக்கப்படுகிறது. அனைத்து 700 சுலோகங்களுடன் முழு பகவத் கீதை விரைவில் கிடைக்கும்.",
       kannada: "ಈ ಶ್ಲೋಕವನ್ನು ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ. ಎಲ್ಲಾ 700 ಶ್ಲೋಕಗಳೊಂದಿಗೆ ಪೂರ್ಣ ಭಗವದ್ಗೀತೆ ಶೀಘ್ರದಲ್ಲಿ ಲಭ್ಯವಿರುತ್ತದೆ."
+    },
+    audio: undefined as string | undefined,
+    images: undefined as string[] | undefined,
+  };
+
+  const handlePlayAudio = () => {
+    if (!displayVerse.audio) return;
+
+    if (isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+    } else {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(displayVerse.audio);
+        audioRef.current.onloadedmetadata = () => {
+          setAudioDuration(audioRef.current?.duration || 0);
+        };
+        audioRef.current.ontimeupdate = () => {
+          setAudioProgress(audioRef.current?.currentTime || 0);
+        };
+        audioRef.current.onended = () => {
+          setIsPlaying(false);
+          setAudioProgress(0);
+        };
+      }
+      audioRef.current.play();
+      setIsPlaying(true);
     }
+  };
+
+  const handleSeekAudio = (value: number[]) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = value[0];
+      setAudioProgress(value[0]);
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
   
   const handleBookmark = () => {
@@ -109,9 +173,16 @@ const VerseDetail = () => {
             </Button>
             
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="icon-sm" className="text-muted-foreground">
-                <Volume2 className="w-5 h-5" />
-              </Button>
+              {displayVerse.audio && (
+                <Button 
+                  variant="ghost" 
+                  size="icon-sm" 
+                  className={cn(isPlaying ? "text-primary" : "text-muted-foreground")}
+                  onClick={handlePlayAudio}
+                >
+                  {isPlaying ? <Pause className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                </Button>
+              )}
               <Button 
                 variant="ghost" 
                 size="icon-sm" 
@@ -127,8 +198,57 @@ const VerseDetail = () => {
           </div>
         </div>
 
+        {/* Verse Image */}
+        {displayVerse.images?.[0] && (
+          <div className="px-4 animate-fade-in">
+            <div className="rounded-xl overflow-hidden border border-border">
+              <img 
+                src={displayVerse.images[0]} 
+                alt={`Chapter ${chapter.number} Verse ${currentVerseNum}`}
+                className="w-full h-40 object-cover"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Audio Player */}
+        {displayVerse.audio && (
+          <div className="px-4 animate-fade-in">
+            <div className="p-4 rounded-xl bg-card border border-border">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handlePlayAudio}
+                  className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center transition-all",
+                    isPlaying 
+                      ? "bg-primary text-primary-foreground" 
+                      : "bg-gradient-to-br from-primary/20 to-primary/5 text-primary hover:from-primary/30"
+                  )}
+                >
+                  {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+                </button>
+                <div className="flex-1 space-y-2">
+                  <Slider
+                    value={[audioProgress]}
+                    max={audioDuration || 100}
+                    step={0.1}
+                    onValueChange={handleSeekAudio}
+                    className="cursor-pointer"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>{formatTime(audioProgress)}</span>
+                    <span>{formatTime(audioDuration)}</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                Listen to Sanskrit pronunciation
+              </p>
+            </div>
+          </div>
+        )}
         {/* Verse Reference */}
-        <div className="px-4 pt-6 pb-4 text-center animate-fade-in">
+        <div className="px-4 pt-4 pb-2 text-center animate-fade-in">
           <p className="text-xs text-muted-foreground uppercase tracking-widest">
             Chapter {chapter.number} • Verse {currentVerseNum}
           </p>
@@ -136,8 +256,6 @@ const VerseDetail = () => {
             {chapter.titleSanskrit}
           </p>
         </div>
-
-        {/* Sanskrit Text */}
         {showSanskrit && (
           <div className="px-6 py-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <p 
