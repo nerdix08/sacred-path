@@ -8,6 +8,7 @@ import Gita from "./pages/Gita";
 import ChapterDetail from "./pages/ChapterDetail";
 import VerseDetail from "./pages/VerseDetail";
 import Stories from "./pages/Stories";
+import StoryDetail from "./pages/StoryDetail";
 import Search from "./pages/Search";
 import Saved from "./pages/Saved";
 import Profile from "./pages/Profile";
@@ -28,12 +29,12 @@ const App = () => (
           <Route path="/gita/chapter/:chapterNum" element={<ChapterDetail />} />
           <Route path="/gita/chapter/:chapterNum/verse/:verseNum" element={<VerseDetail />} />
           <Route path="/stories" element={<Stories />} />
-          <Route path="/stories/:storyId" element={<Stories />} />
+          <Route path="/stories/:storyId" element={<StoryDetail />} />
+          <Route path="/stories/:storyId/:sectionId" element={<StoryDetail />} />
           <Route path="/search" element={<Search />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/ask" element={<AskVidya />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

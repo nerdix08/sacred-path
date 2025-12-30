@@ -114,18 +114,27 @@
 @layer base {
   * {
     @apply border-border;
+    /* Hide scrollbars globally */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
   }
 
   html {
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
     line-height: 1.6;
+    overflow-x: hidden;
   }
 }
 
