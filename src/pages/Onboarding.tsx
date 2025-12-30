@@ -38,15 +38,8 @@ const Onboarding = () => {
   if (step === "welcome") {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-between p-6 safe-top safe-bottom">
-        {/* Login button */}
-        <div className="w-full flex justify-end animate-fade-in">
-          <button 
-            onClick={handleLogin}
-            className="text-muted-foreground text-sm hover:text-primary transition-colors"
-          >
-            Log in
-          </button>
-        </div>
+        {/* Top spacer */}
+        <div className="w-full h-6" />
 
         {/* Center content */}
         <div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in" style={{ animationDelay: "0.1s" }}>
