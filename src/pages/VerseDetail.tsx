@@ -197,7 +197,7 @@ const VerseDetail = () => {
             className="verse-text leading-relaxed"
             style={{ fontSize: `${fontSize}px`, color: fontColorValue }}
           >
-            {displayVerse.translations?.[selectedLanguage] || displayVerse.translations?.english}
+            {displayVerse.translations && (displayVerse.translations[selectedLanguage] || displayVerse.translations.english)}
           </p>
         </div>
 

@@ -20,6 +20,14 @@ interface StoryCard {
   available: boolean;
 }
 
+// Import local story images
+import ramaSitaWedding from "@/assets/stories/rama-sita-wedding.jpg";
+import gitaDiscourse from "@/assets/stories/gita-discourse.jpg";
+import fourPrinces from "@/assets/stories/four-princes.jpg";
+import sacredYajna from "@/assets/stories/sacred-yajna.jpg";
+import draupadiBirth from "@/assets/stories/draupadi-birth.jpg";
+import ramaCoronation from "@/assets/stories/rama-coronation.jpg";
+
 const stories: StoryCard[] = [
   {
     id: "ramayana",
@@ -30,7 +38,7 @@ const stories: StoryCard[] = [
     chapterLabel: "Kandas",
     verses: "24,000",
     readTime: "40+ hours",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Rama_breaking_the_bow.jpg/600px-Rama_breaking_the_bow.jpg",
+    imageUrl: ramaSitaWedding,
     color: "from-amber-500/30 to-orange-600/20",
     gradient: "bg-gradient-to-br from-amber-900/40 via-orange-800/30 to-red-900/40",
     available: true,
@@ -44,7 +52,7 @@ const stories: StoryCard[] = [
     chapterLabel: "Parvas",
     verses: "100,000",
     readTime: "200+ hours",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Bhagavad_Gita%2C_Krishna%2C_Arjuna.jpg/600px-Bhagavad_Gita%2C_Krishna%2C_Arjuna.jpg",
+    imageUrl: gitaDiscourse,
     color: "from-primary/30 to-purple-600/20",
     gradient: "bg-gradient-to-br from-primary/40 via-purple-800/30 to-indigo-900/40",
     available: true,
@@ -58,7 +66,7 @@ const stories: StoryCard[] = [
     chapterLabel: "Skandhas",
     verses: "18,000",
     readTime: "50+ hours",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Krishna_and_Radha.jpg/500px-Krishna_and_Radha.jpg",
+    imageUrl: fourPrinces,
     color: "from-blue-500/30 to-purple-600/20",
     gradient: "bg-gradient-to-br from-blue-900/40 via-purple-800/30 to-pink-900/40",
     available: true,
@@ -72,7 +80,7 @@ const stories: StoryCard[] = [
     chapterLabel: "Samhitas",
     verses: "24,000",
     readTime: "45+ hours",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Shiva_as_the_Lord_of_Dance_LACMA_edit.jpg/500px-Shiva_as_the_Lord_of_Dance_LACMA_edit.jpg",
+    imageUrl: sacredYajna,
     color: "from-slate-500/30 to-blue-600/20",
     gradient: "bg-gradient-to-br from-slate-900/40 via-blue-800/30 to-indigo-900/40",
     available: true,
@@ -86,7 +94,7 @@ const stories: StoryCard[] = [
     chapterLabel: "Chapters",
     verses: "700",
     readTime: "8+ hours",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Durga_Mahisasuramardini.jpg/500px-Durga_Mahisasuramardini.jpg",
+    imageUrl: draupadiBirth,
     color: "from-red-500/30 to-pink-600/20",
     gradient: "bg-gradient-to-br from-red-900/40 via-pink-800/30 to-purple-900/40",
     available: true,
@@ -100,7 +108,7 @@ const stories: StoryCard[] = [
     chapterLabel: "Amshas",
     verses: "23,000",
     readTime: "40+ hours",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Vishnu_and_Lakshmi_on_Shesha_Nāga.jpg/500px-Vishnu_and_Lakshmi_on_Shesha_Nāga.jpg",
+    imageUrl: ramaCoronation,
     color: "from-blue-500/30 to-cyan-600/20",
     gradient: "bg-gradient-to-br from-blue-900/40 via-cyan-800/30 to-teal-900/40",
     available: true,
@@ -185,6 +193,8 @@ const Stories = () => {
                     src={story.imageUrl} 
                     alt={story.title}
                     className="w-full h-full object-cover"
+                    loading="eager"
+                    decoding="async"
                   />
                   <div className={cn("absolute inset-0", story.gradient)} />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
