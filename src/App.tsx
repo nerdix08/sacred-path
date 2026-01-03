@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import AskVidya from "./pages/AskVidya";
 import Onboarding from "./pages/Onboarding";
 import Feedback from "./pages/Feedback";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/saved" element={<Saved />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/feedback" element={<Feedback />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/ask" element={<AskVidya />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
